@@ -8,6 +8,11 @@ import { DEFAULT_SETTINGS } from '../lib/defaults'
 import type { EventSettings, Guest, Host, Invite, RsvpLog } from '../lib/types'
 import { computeStats } from './stats'
 import Dashboard from './Dashboard'
+import People from './People'
+import Reserves from './Reserves'
+import Access from './Access'
+import Icon, { type IconName } from '../lib/Icon'
+import { HOST_LABEL } from '../lib/types'
 import Invites from './Invites'
 import Reminders from './Reminders'
 import Kids from './Kids'
@@ -28,16 +33,36 @@ export interface AdminCtx {
   filter: string
 }
 
-export type Tab = 'painel' | 'convites' | 'lembretes' | 'criancas' | 'historico' | 'festa'
+export type Tab = 'inicio' | 'convites' | 'pessoas' | 'reservas' | 'criancas' | 'lembretes' | 'historico' | 'festa' | 'acesso'
 
-const TABS: { id: Tab; icon: string; label: string }[] = [
-  { id: 'painel', icon: '📊', label: 'Painel' },
-  { id: 'convites', icon: '💌', label: 'Convites' },
-  { id: 'lembretes', icon: '🔔', label: 'Lembretes' },
-  { id: 'criancas', icon: '🧸', label: 'Crianças' },
-  { id: 'historico', icon: '🕓', label: 'Histórico' },
-  { id: 'festa', icon: '⚙️', label: 'Festa' },
+const NAV: { group: string; items: { id: Tab; icon: IconName; label: string }[] }[] = [
+  { group: '', items: [{ id: 'inicio', icon: 'home', label: 'Visão geral' }] },
+  {
+    group: 'Convidados',
+    items: [
+      { id: 'convites', icon: 'mail', label: 'Convites' },
+      { id: 'pessoas', icon: 'users', label: 'Pessoas' },
+      { id: 'reservas', icon: 'inbox', label: 'Reservas' },
+      { id: 'criancas', icon: 'baby', label: 'Crianças' },
+    ],
+  },
+  {
+    group: 'Comunicação',
+    items: [
+      { id: 'lembretes', icon: 'bell', label: 'Envios e lembretes' },
+      { id: 'historico', icon: 'history', label: 'Histórico' },
+    ],
+  },
+  {
+    group: 'Configurações',
+    items: [
+      { id: 'festa', icon: 'settings', label: 'Festa' },
+      { id: 'acesso', icon: 'shield', label: 'Acesso e backup' },
+    ],
+  },
 ]
+const ALL = NAV.flatMap((g) => g.items)
+const MOBILE: Tab[] = ['inicio', 'convites', 'lembretes', 'pessoas']
 
 // Só nos testes locais com emulador: login falso de Google.
 if (import.meta.env.VITE_USE_EMULATOR === '1')
@@ -62,11 +87,15 @@ function Login({ error }: { error?: string }) {
   return (
     <div className="ad ad-login" style={{ display: 'grid' }}>
       <div className="ad-card" style={{ maxWidth: 380, textAlign: 'center', display: 'grid', gap: 14, padding: 28 }}>
-        <div className="ad-brand" style={{ padding: 0 }}>
-          Betina · 1 ano<small>Painel dos anfitriões</small>
+        <div className="ad-brand" style={{ padding: 0, justifyContent: 'center' }}>
+          <span className="logo">1</span>
+          <div style={{ textAlign: 'left' }}>
+            <b>Betina · 1 ano</b>
+            <small>Painel dos anfitriões</small>
+          </div>
         </div>
         {!firebaseConfigured && <div className="ad-note">Firebase ainda não configurado (.env.local).</div>}
-        <button className="ad-btn primary" style={{ justifyContent: 'center', padding: 12 }} onClick={login}>
+        <button className="ad-btn primary" style={{ justifyContent: 'center', height: 44 }} onClick={login}>
           Entrar com Google
         </button>
         {(error || msg) && <div className="ad-note">{error || msg}</div>}
@@ -84,8 +113,9 @@ export default function AdminApp() {
   const [logs, setLogs] = useState<RsvpLog[]>([])
   const [admins, setAdmins] = useState<{ email: string; host?: Host }[]>([])
   const [settings, setSettings] = useState<EventSettings>(DEFAULT_SETTINGS)
-  const [tab, setTab] = useState<Tab>('painel')
+  const [tab, setTab] = useState<Tab>('inicio')
   const [filter, setFilter] = useState('')
+  const [more, setMore] = useState(false)
 
   useEffect(() => onAuthStateChanged(auth, (u) => setUser(u && !u.isAnonymous ? u : null)), [])
 
@@ -125,13 +155,8 @@ export default function AdminApp() {
       <div className="ad ad-login" style={{ display: 'grid' }}>
         <div className="ad-card" style={{ maxWidth: 420, display: 'grid', gap: 12 }}>
           <b>Sem acesso para {user.email}</b>
-          <p style={{ margin: 0 }}>
-            Peça para um administrador te adicionar em <b>Festa → Administradores</b>. No primeiro acesso, crie o
-            documento <code>admins/{user.email}</code> no console do Firestore.
-          </p>
-          <button className="ad-btn" onClick={() => signOut(auth)}>
-            Sair
-          </button>
+          <p style={{ margin: 0 }}>Peça para um administrador te adicionar em <b>Acesso e backup</b>.</p>
+          <button className="ad-btn" onClick={() => signOut(auth)}>Sair</button>
         </div>
       </div>
     )
@@ -139,6 +164,7 @@ export default function AdminApp() {
   const go = (t: Tab, f = '') => {
     setTab(t)
     setFilter(f)
+    setMore(false)
     window.scrollTo({ top: 0 })
   }
   const myHost = admins.find((a) => a.email === user.email)?.host
@@ -147,47 +173,106 @@ export default function AdminApp() {
     lembretes: stats.reminders.length + stats.notSent.length,
     criancas: stats.kidsNoAge.length,
   }
+  const name = user.displayName?.split(' ')[0] || user.email?.split('@')[0] || ''
+  const demo = import.meta.env.MODE === 'demo'
+  const siteLink = demo ? (
+    <button className="ad-nav" onClick={() => navigate('/')}><Icon name="external" size={18} /> Ver site</button>
+  ) : (
+    <a className="ad-nav" href="/" target="_blank" rel="noreferrer"><Icon name="external" size={18} /> Ver site</a>
+  )
+
+  const navButton = (t: (typeof ALL)[number]) => (
+    <button key={t.id} className={`ad-nav ${tab === t.id ? 'on' : ''}`} onClick={() => go(t.id)}>
+      <Icon name={t.icon} size={18} />
+      {t.label}
+      {!!badge[t.id] && <span className="badge">{badge[t.id]}</span>}
+    </button>
+  )
 
   return (
     <div className="ad">
       <aside className="ad-side">
         <div className="ad-brand">
-          Betina · 1 ano<small>Painel dos anfitriões</small>
+          <span className="logo">1</span>
+          <div>
+            <b>Betina · 1 ano</b>
+            <small>Painel dos anfitriões</small>
+          </div>
         </div>
-        {TABS.map((t) => (
-          <button key={t.id} className={`ad-nav ${tab === t.id ? 'on' : ''}`} onClick={() => go(t.id)}>
-            <span>{t.icon}</span>
-            {t.label}
-            {!!badge[t.id] && <span className="badge">{badge[t.id]}</span>}
-          </button>
+        {NAV.map((g) => (
+          <div key={g.group} style={{ display: 'grid', gap: 2 }}>
+            {g.group && <div className="ad-group">{g.group}</div>}
+            {g.items.map(navButton)}
+          </div>
         ))}
         <div style={{ flex: 1 }} />
-        {import.meta.env.MODE === 'demo' ? (
-          <button className="ad-nav" onClick={() => navigate('/')}>🌐 Ver site</button>
-        ) : (
-          <a className="ad-nav" href="/" target="_blank" rel="noreferrer">🌐 Ver site</a>
-        )}
-        <button className="ad-nav" onClick={() => signOut(auth)}>
-          ↩ Sair <small style={{ marginLeft: 'auto', fontSize: 11 }}>{user.email?.split('@')[0]}</small>
-        </button>
+        {siteLink}
+        <div className="ad-me">
+          <span className="av">{name[0]?.toUpperCase()}</span>
+          <div>
+            <b>{name}</b>
+            <small>{myHost ? `Convidados ${myHost === 'gabriel' ? 'do' : 'da'} ${HOST_LABEL[myHost]}` : 'Administrador'}</small>
+          </div>
+          <button className="ad-icon-btn" title="Sair" aria-label="Sair" onClick={() => signOut(auth)}>
+            <Icon name="logout" size={18} />
+          </button>
+        </div>
       </aside>
+
+      <header className="ad-mobile-top">
+        <div className="ad-brand" style={{ padding: 0 }}>
+          <span className="logo" style={{ width: 30, height: 30, fontSize: 15 }}>1</span>
+          <b>{ALL.find((t) => t.id === tab)?.label}</b>
+        </div>
+        <button className="ad-icon-btn" aria-label="Sair" onClick={() => signOut(auth)}>
+          <Icon name="logout" size={18} />
+        </button>
+      </header>
+
       <main className="ad-main">
-        {tab === 'painel' && <Dashboard {...ctx} />}
+        {tab === 'inicio' && <Dashboard {...ctx} />}
         {tab === 'convites' && <Invites {...ctx} />}
-        {tab === 'lembretes' && <Reminders {...ctx} />}
+        {tab === 'pessoas' && <People {...ctx} />}
+        {tab === 'reservas' && <Reserves {...ctx} />}
         {tab === 'criancas' && <Kids {...ctx} />}
+        {tab === 'lembretes' && <Reminders {...ctx} />}
         {tab === 'historico' && <History {...ctx} />}
         {tab === 'festa' && <SettingsView {...ctx} />}
+        {tab === 'acesso' && <Access {...ctx} />}
       </main>
+
       <nav className="ad-mobile-nav">
-        {TABS.map((t) => (
-          <button key={t.id} className={tab === t.id ? 'on' : ''} onClick={() => go(t.id)}>
-            <span>{t.icon}</span>
-            {t.label}
-            {!!badge[t.id] && <i className="badge">{badge[t.id]}</i>}
-          </button>
-        ))}
+        {MOBILE.map((id) => {
+          const t = ALL.find((x) => x.id === id)!
+          return (
+            <button key={id} className={tab === id ? 'on' : ''} onClick={() => go(id)}>
+              <Icon name={t.icon} size={20} />
+              {id === 'lembretes' ? 'Lembretes' : id === 'inicio' ? 'Início' : t.label}
+              {!!badge[id] && <i className="badge">{badge[id]}</i>}
+            </button>
+          )
+        })}
+        <button className={!MOBILE.includes(tab) ? 'on' : ''} onClick={() => setMore(true)}>
+          <Icon name="menu" size={20} />
+          Mais
+        </button>
       </nav>
+
+      {more && (
+        <>
+          <div className="ad-sheet-bg" onClick={() => setMore(false)} />
+          <div className="ad-sheet">
+            {NAV.map((g) => (
+              <div key={g.group} style={{ display: 'grid', gap: 2 }}>
+                {g.group && <div className="ad-group">{g.group}</div>}
+                {g.items.map(navButton)}
+              </div>
+            ))}
+            <div className="ad-group" />
+            {siteLink}
+          </div>
+        </>
+      )}
     </div>
   )
 }

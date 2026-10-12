@@ -1,34 +1,33 @@
-/* Paleta do convite — troque aqui para casar com as cores do convite real */
+/* Identidade: cores do convite (rosa, creme, marrom-terra), tipografia limpa. */
 :root {
-  /* Paleta tirada do convite (Fazendinha) */
-  --rose: #e8609a;
-  --rose-deep: #d92f74;
-  --rose-soft: #fddae8;
-  --blush: #fff0f6;
-  --cream: #fefcf4;
-  --gold: #f1b24a;
-  --gold-soft: #fde7c3;
-  --lilac: #f49ac0;
-  --brown: #a3564c;
-  --grass: #7fb85a;
-  --ink: #4b2b2a;
-  --ink-soft: #7d5b56;
-  --ok: #3f9a4f;
-  --ok-soft: #e1f3dc;
+  --rose: #e2558f;
+  --rose-deep: #c93a76;
+  --rose-ink: #a72a60;
+  --rose-50: #fff4f8;
+  --rose-100: #fde6ef;
+  --rose-200: #f8c9dc;
+  --cream: #fffcf8;
+  --sand: #f7efe6;
+  --brown: #8a5a4f;
+  --gold: #e8a94a;
+  --ink: #2a1d22;
+  --ink-2: #5b4a50;
+  --ink-3: #8d7c82;
+  --line: #f0e3e8;
+  --ok: #2f8a4f;
+  --ok-50: #eaf6ee;
   --no: #c2484f;
-  --no-soft: #fbe1e2;
-  --maybe: #b9822b;
-  --maybe-soft: #fbefd6;
-  --line: #f6d3e1;
-  --shadow: 0 10px 30px rgba(217, 47, 116, 0.14);
-  --radius: 22px;
-  --gingham:
-    repeating-linear-gradient(0deg, rgba(247, 168, 200, 0.45) 0 28px, transparent 28px 56px),
-    repeating-linear-gradient(90deg, rgba(247, 168, 200, 0.45) 0 28px, transparent 28px 56px),
-    #fff;
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-script: 'Dancing Script', 'Brush Script MT', cursive;
-  --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --no-50: #fcecec;
+  --maybe: #a8741f;
+  --maybe-50: #fbf2e1;
+  --surface: #ffffff;
+  --shadow-sm: 0 1px 2px rgba(42, 29, 34, 0.05), 0 2px 8px rgba(42, 29, 34, 0.04);
+  --shadow: 0 8px 28px rgba(201, 58, 118, 0.12);
+  --r-sm: 10px;
+  --r: 16px;
+  --r-lg: 24px;
+  --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 *,
@@ -46,8 +45,8 @@ body {
 body {
   background: var(--cream);
   color: var(--ink);
-  font-family: var(--font-body);
-  font-size: 20px;
+  font-family: var(--font);
+  font-size: 17px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
@@ -70,9 +69,15 @@ img {
   display: block;
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
 :focus-visible {
-  outline: 3px solid var(--rose-deep);
-  outline-offset: 3px;
+  outline: 3px solid var(--rose-200);
+  outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

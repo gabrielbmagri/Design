@@ -4,7 +4,9 @@ import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { STATUS_LABEL } from '../lib/types'
 import { firstName, longDate, waLink } from '../lib/text'
-import { Countdown, GiftList, MapEmbed, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
+import Icon, { type IconName } from '../lib/Icon'
+import { Countdown, GiftList, MapEmbed, hostContacts, timeLabel } from './bits'
+import { CalendarButton, ContactButtons, PlaceActions } from './Immersion'
 
 interface Props {
   settings: EventSettings
@@ -17,13 +19,25 @@ interface Props {
   onExit: () => void
 }
 
-const MENU = [
-  { id: 'convite', icon: '💌', label: 'Convite' },
-  { id: 'quando', icon: '📅', label: 'Data e horário' },
-  { id: 'onde', icon: '📍', label: 'Local' },
-  { id: 'presentes', icon: '🎁', label: 'Sugestões de presente' },
-  { id: 'confirmacao', icon: '✅', label: 'Minha confirmação' },
+const MENU: { id: string; icon: IconName; label: string }[] = [
+  { id: 'convite', icon: 'mail', label: 'Convite' },
+  { id: 'quando', icon: 'calendar', label: 'Data e hora' },
+  { id: 'onde', icon: 'pin', label: 'Local' },
+  { id: 'presentes', icon: 'gift', label: 'Presentes' },
+  { id: 'confirmacao', icon: 'check', label: 'Minha confirmação' },
 ]
+
+function Card({ icon, title, children }: { icon: IconName; title: string; children: React.ReactNode }) {
+  return (
+    <div className="im-card">
+      <div className="im-card-head">
+        <span className="im-icon"><Icon name={icon} size={22} /></span>
+        <h3>{title}</h3>
+      </div>
+      {children}
+    </div>
+  )
+}
 
 export default function Hub({ settings, invite, me, section, onSection, onManage, onReplay, onExit }: Props) {
   const [open, setOpen] = useState(false)
@@ -32,23 +46,27 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
     setOpen(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-
-  const calendarBtn = isIOS() ? (
-    <button className="g-btn secondary" onClick={() => downloadIcs(settings)}>Salvar na minha agenda</button>
-  ) : (
-    <a className="g-btn secondary" href={googleCalendarUrl(settings)} target="_blank" rel="noreferrer">
-      Salvar na minha agenda
-    </a>
-  )
+  const contacts = hostContacts(settings, me?.host)
 
   return (
-    <div className="im" style={{ minHeight: '100dvh' }}>
+    <div className="im">
       <header className="hub-top">
-        <button className="hub-menu-btn" onClick={() => setOpen(true)} aria-expanded={open}>
-          ☰ Menu
+        <button className="hub-menu-btn" onClick={() => setOpen(true)} aria-label="Abrir menu" aria-expanded={open}>
+          <Icon name="menu" size={22} />
         </button>
-        <b style={{ color: 'var(--rose-deep)' }}>{settings.childName} · 1 ano</b>
+        <b>
+          <span>{settings.childName}</span> · 1 ano
+        </b>
+        <span style={{ width: 44 }} />
       </header>
+
+      <nav className="hub-tabs" aria-label="Seções">
+        {MENU.map((m) => (
+          <button key={m.id} className={section === m.id ? 'on' : ''} onClick={() => go(m.id)}>
+            {m.label}
+          </button>
+        ))}
+      </nav>
 
       <AnimatePresence>
         {open && (
@@ -59,28 +77,32 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 32 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 34 }}
               aria-label="Menu"
             >
-              <h3>Menu</h3>
+              <div className="head">
+                <b>{settings.title}</b>
+                <small>{longDate(settings.dateISO)}</small>
+              </div>
               {MENU.map((m) => (
                 <button key={m.id} className={section === m.id ? 'on' : ''} onClick={() => go(m.id)}>
-                  <span>{m.icon}</span>
+                  <Icon name={m.icon} size={20} />
                   {m.label}
                 </button>
               ))}
+              <hr />
               <button onClick={() => { setOpen(false); onReplay() }}>
-                <span>✨</span>Ver a história de novo
+                <Icon name="sparkle" size={20} /> Ver a história de novo
               </button>
-              {hostContacts(settings, me?.host).map((c) => (
+              {contacts.map((c) => (
                 <button key={c.host} onClick={() => window.open(waLink(c.phone, `Oi, ${c.host === 'gabriel' ? 'Gabriel' : 'Luiza'}! Tenho uma dúvida sobre o aniversário da ${settings.childName}.`), '_blank')}>
-                  <span>💬</span>{c.label}
+                  <Icon name="chat" size={20} /> {c.label}
                 </button>
               ))}
               <div style={{ flex: 1 }} />
               {me && (
-                <button onClick={() => { setOpen(false); onExit() }} style={{ background: 'transparent', boxShadow: 'none', fontSize: 17 }}>
-                  <span>↩</span>Sair (não sou {firstName(me.name)})
+                <button onClick={() => { setOpen(false); onExit() }} style={{ color: 'var(--ink-3)' }}>
+                  <Icon name="logout" size={20} /> Não sou {firstName(me.name)}
                 </button>
               )}
             </motion.nav>
@@ -91,70 +113,63 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
       <main className="hub-main">
         {section === 'convite' && (
           <>
-            {settings.inviteImage ? (
-              <div className="im-invite" style={{ margin: '0 auto', width: 'min(84vw, 380px)' }}>
+            {settings.inviteImage && (
+              <div className="im-invite" style={{ maxWidth: '100%', margin: '0 auto' }}>
                 <img src={settings.inviteImage} alt={`Convite: ${settings.title}`} />
               </div>
-            ) : (
-              <h1 className="g-title" style={{ fontSize: 'clamp(34px, 9vw, 46px)' }}>{settings.title}</h1>
             )}
-            {settings.dressCode && <p className="g-lead">{settings.dressCode}</p>}
-            <div className="im-info" style={{ textAlign: 'center' }}>
-              <div className="big" style={{ fontSize: 28 }}>{longDate(settings.dateISO)}</div>
-              <div className="muted">{timeLabel(settings)} · {settings.venueName}</div>
+            <Card icon="calendar" title={longDate(settings.dateISO)}>
+              <p>
+                {timeLabel(settings)} · {settings.venueName}
+              </p>
               <Countdown settings={settings} />
-            </div>
-            <div className="hub-actions">
-              <button className="g-btn" onClick={() => (me ? go('confirmacao') : onManage())}>
-                {me ? 'Ver minha confirmação' : 'Confirmar presença'}
-              </button>
-              <button className="g-btn secondary" onClick={() => go('onde')}>Como chegar</button>
-              <button className="g-btn secondary" onClick={() => go('presentes')}>Sugestões de presente</button>
-            </div>
+            </Card>
+            <button className="g-btn" onClick={() => (me ? go('confirmacao') : onManage())}>
+              {me ? 'Ver minha confirmação' : 'Confirmar presença'}
+            </button>
+            {settings.dressCode && <p className="g-small" style={{ textAlign: 'center' }}>{settings.dressCode}</p>}
           </>
         )}
 
         {section === 'quando' && (
-          <div className="im-info" style={{ textAlign: 'center' }}>
-            <div className="icon">📅</div>
-            <div className="big">{longDate(settings.dateISO)}</div>
-            <div className="muted">{timeLabel(settings)}</div>
+          <Card icon="calendar" title="Data e hora">
+            <p>
+              <b style={{ color: 'var(--ink)' }}>{longDate(settings.dateISO)}</b>, {timeLabel(settings)}
+            </p>
             <Countdown settings={settings} />
-            {calendarBtn}
-          </div>
+            <CalendarButton settings={settings} />
+          </Card>
         )}
 
         {section === 'onde' && (
-          <div className="im-info" style={{ textAlign: 'center' }}>
-            <div className="icon">📍</div>
-            <div className="big">{settings.venueName}</div>
-            <div className="muted">{settings.address}</div>
+          <Card icon="pin" title="Local">
+            <p>
+              <b style={{ color: 'var(--ink)' }}>{settings.venueName}</b>
+              <br />
+              {settings.address}
+            </p>
             <MapEmbed settings={settings} />
-            <a className="g-btn" href={mapsUrl(settings)} target="_blank" rel="noreferrer">Abrir no Google Maps</a>
-            <a className="g-btn secondary" href={wazeUrl(settings)} target="_blank" rel="noreferrer">Ir com Waze</a>
-          </div>
+            <PlaceActions settings={settings} />
+          </Card>
         )}
 
         {section === 'presentes' && (
-          <div className="im-info">
-            <div className="icon" style={{ textAlign: 'center' }}>🎁</div>
-            <p className="muted" style={{ margin: 0, textAlign: 'center' }}>{settings.giftNote}</p>
+          <Card icon="gift" title="Sugestões de presente">
+            <p>{settings.giftNote}</p>
             <GiftList settings={settings} />
-            {settings.pix && <p className="muted" style={{ textAlign: 'center' }}>Pix: <b>{settings.pix}</b></p>}
-          </div>
+            {settings.pix && <p>Pix: <b>{settings.pix}</b></p>}
+          </Card>
         )}
 
         {section === 'confirmacao' && (
-          <div className="im-info" style={{ textAlign: 'center' }}>
-            <div className="icon">✅</div>
+          <Card icon="check" title={invite ? 'Respostas do seu convite' : 'Confirme sua presença'}>
             {invite ? (
               <>
-                <div className="big" style={{ fontSize: 28 }}>Respostas do seu convite</div>
-                <div style={{ display: 'grid', gap: 10 }}>
+                <div>
                   {invite.guests.map((g) => (
-                    <div key={g.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '12px 14px', background: 'var(--blush)', borderRadius: 16 }}>
-                      <b style={{ textAlign: 'left' }}>{g.name}</b>
-                      <span className={`hub-pill ${g.status}`}>{STATUS_LABEL[g.status]}</span>
+                    <div key={g.id} className="hub-status">
+                      <b style={{ fontWeight: 600 }}>{g.name}</b>
+                      <span className={`pill ${g.status}`}>{STATUS_LABEL[g.status]}</span>
                     </div>
                   ))}
                 </div>
@@ -162,12 +177,12 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
               </>
             ) : (
               <>
-                <div className="big" style={{ fontSize: 28 }}>Confirme sua presença</div>
-                <p className="muted">Digite seu nome para encontrar seu convite.</p>
+                <p>Digite seu nome para encontrar seu convite.</p>
                 <button className="g-btn" onClick={onManage}>Confirmar presença</button>
               </>
             )}
-          </div>
+            <ContactButtons settings={settings} me={me} />
+          </Card>
         )}
       </main>
     </div>

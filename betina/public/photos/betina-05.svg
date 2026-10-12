@@ -1,8 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
-<defs><pattern id="g" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="#fff"/><rect width="40" height="80" fill="#f7a8c8" opacity=".35"/><rect width="80" height="40" fill="#f7a8c8" opacity=".35"/></pattern></defs>
-<rect width="800" height="1000" fill="url(#g)"/>
-<rect x="70" y="90" width="660" height="820" rx="70" fill="#fdf1d8"/>
-<text x="400" y="520" font-size="260" text-anchor="middle">🐰</text>
-<text x="400" y="690" font-family="Georgia,serif" font-weight="700" font-size="48" text-anchor="middle" fill="#d92f74">Foto 5 da Betina</text>
-<text x="400" y="750" font-family="Arial,sans-serif" font-size="26" text-anchor="middle" fill="#a3564c">em breve</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde6ef"/><stop offset="1" stop-color="#f3bcd2"/></linearGradient></defs>
+<rect width="600" height="800" fill="url(#g)"/>
+<path d="M300 430s-70-44-70-100a40 40 0 0 1 70-26 40 40 0 0 1 70 26c0 56-70 100-70 100z" fill="none" stroke="#c93a76" stroke-width="6" stroke-linejoin="round" opacity=".55"/>
+<text x="300" y="500" font-family="Helvetica,Arial,sans-serif" font-weight="700" font-size="26" text-anchor="middle" fill="#a72a60" opacity=".7">Foto 5 · em breve</text>
 </svg>

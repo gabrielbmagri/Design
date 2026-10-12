@@ -39,7 +39,10 @@ export default function Kids({ stats, settings }: AdminCtx) {
   return (
     <>
       <div className="ad-head">
-        <h1>Crianças</h1>
+        <div>
+          <h1>Crianças</h1>
+          <p>Base das lembrancinhas e de quem não paga (até {settings.childFreeMaxAge} anos).</p>
+        </div>
       </div>
       <div className="ad-grid" style={{ marginBottom: 14 }}>
         <div className="ad-card ad-kpi"><div className="n">{stats.kidsGoing.length}</div><div className="l">Lembrancinhas (confirmadas)</div><div className="s">{stats.kidsExpected.length} se todos vierem</div></div>

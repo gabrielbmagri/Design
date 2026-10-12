@@ -1,56 +1,36 @@
 import { useEffect, useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
+import Icon, { type IconName } from '../lib/Icon'
 import type { EventSettings } from '../lib/types'
 import { fmtTime, parseISODate } from '../lib/text'
 
-export function Carousel({ photos, interval = 3800 }: { photos: string[]; interval?: number }) {
-  const [i, setI] = useState(0)
-  useEffect(() => {
-    if (photos.length < 2) return
-    const t = setInterval(() => setI((x) => (x + 1) % photos.length), interval)
-    return () => clearInterval(t)
-  }, [photos.length, interval])
-  // pré-carrega a próxima foto
-  useEffect(() => {
-    const next = photos[(i + 1) % photos.length]
-    if (next) new Image().src = next
-  }, [i, photos])
+/** Fotos passando da direita para a esquerda, sem parar, de ponta a ponta da tela. */
+export function Marquee({ photos }: { photos: string[] }) {
   if (!photos.length) return null
+  // repete a lista para o movimento não ter "buraco" (a animação anda 50%)
+  const base = photos.length < 4 ? [...photos, ...photos, ...photos] : photos
+  const loop = [...base, ...base]
   return (
-    <div className="g-carousel" aria-hidden="true">
-      <AnimatePresence initial={false}>
-        <motion.img
-          key={photos[i]}
-          src={photos[i]}
-          alt=""
-          initial={{ opacity: 0, scale: 1.08 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ opacity: { duration: 1.2 }, scale: { duration: interval / 1000 + 1.2, ease: 'linear' } }}
-        />
-      </AnimatePresence>
-      <div className="g-dots">
-        {photos.map((_, k) => (
-          <span key={k} className={k === i ? 'on' : ''} />
+    <div className="g-marquee" aria-hidden="true">
+      <div className="g-marquee-track" style={{ ['--marquee-dur' as string]: `${base.length * 6}s` }}>
+        {loop.map((src, i) => (
+          <img key={i} src={src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
         ))}
       </div>
     </div>
   )
 }
 
-const FARM = ['🐷', '🐮', '🐴', '🐔', '🐰', '🌼', '🐑', '🤠', '💗']
-
-export function Sparkles({ count = 26 }: { count?: number }) {
+export function Sparkles({ count = 18 }: { count?: number }) {
   const items = useMemo(
     () =>
       Array.from({ length: count }, (_, k) => ({
         k,
-        emoji: k % 3 === 0 ? FARM[k % FARM.length] : '',
         left: Math.random() * 100,
         top: Math.random() * 100,
         delay: Math.random() * 4,
-        dur: 2.6 + Math.random() * 3,
-        size: 0.6 + Math.random() * 1.2,
+        dur: 2.8 + Math.random() * 3,
+        size: 0.5 + Math.random() * 0.9,
       })),
     [count],
   )
@@ -59,17 +39,14 @@ export function Sparkles({ count = 26 }: { count?: number }) {
       {items.map((s) => (
         <i
           key={s.k}
-          className={s.emoji ? 'emoji' : ''}
           style={{
             left: `${s.left}%`,
             top: `${s.top}%`,
             animationDelay: `${s.delay}s`,
-            animationDuration: `${s.emoji ? s.dur * 2.2 : s.dur}s`,
+            animationDuration: `${s.dur}s`,
             transform: `scale(${s.size})`,
           }}
-        >
-          {s.emoji || null}
-        </i>
+        />
       ))}
     </div>
   )
@@ -98,7 +75,7 @@ export function Countdown({ settings }: { settings: EventSettings }) {
     return () => clearInterval(t)
   }, [])
   const diff = Math.max(0, target - now)
-  if (!diff) return <p className="muted">É hoje! 🎉</p>
+  if (!diff) return <p>É hoje!</p>
   const d = Math.floor(diff / 864e5)
   const h = Math.floor((diff / 36e5) % 24)
   const m = Math.floor((diff / 6e4) % 60)
@@ -188,8 +165,8 @@ export function mapEmbedUrl(s: EventSettings) {
 export function MapEmbed({ settings }: { settings: EventSettings }) {
   if (import.meta.env.MODE === 'demo')
     return (
-      <div className="im-map" style={{ display: 'grid', placeItems: 'center', padding: 16, textAlign: 'center', color: 'var(--ink-soft)', fontWeight: 700 }}>
-        🗺️ Aqui aparece o mapa do Google com o salão marcado (só no site publicado).
+      <div className="im-map" style={{ display: 'grid', placeItems: 'center', padding: 16, textAlign: 'center', color: 'var(--ink-3)', fontWeight: 600, fontSize: 15 }}>
+        Aqui aparece o mapa do Google com o salão marcado (só no site publicado).
       </div>
     )
   return (
@@ -215,11 +192,11 @@ export function hostContacts(s: EventSettings, host?: 'gabriel' | 'luiza') {
   return mine.length ? mine : all
 }
 
-const GIFT_ICONS: [RegExp, string][] = [
-  [/livr/i, '📚'], [/educativ|quebra|bloco/i, '🧩'], [/anima/i, '🐮'], [/bonec/i, '🧸'],
-  [/sapat|cal[cç]ad|t[eê]nis/i, '👟'], [/roup|vestid|body/i, '👗'],
+const GIFT_ICONS: [RegExp, IconName][] = [
+  [/livr/i, 'book'], [/educativ|quebra|bloco/i, 'puzzle'], [/anima/i, 'star'], [/bonec/i, 'heart'],
+  [/sapat|cal[cç]ad|t[eê]nis/i, 'shoe'], [/roup|vestid|body/i, 'shirt'],
 ]
-const giftIcon = (title: string) => GIFT_ICONS.find(([re]) => re.test(title))?.[1] ?? '🎁'
+const giftIcon = (title: string): IconName => GIFT_ICONS.find(([re]) => re.test(title))?.[1] ?? 'gift'
 
 export function GiftList({ settings, animate = false }: { settings: EventSettings; animate?: boolean }) {
   const groups: { name: string; items: EventSettings['gifts'] }[] = []
@@ -233,26 +210,28 @@ export function GiftList({ settings, animate = false }: { settings: EventSetting
   return (
     <div className="im-gifts">
       {groups.map((grp) => (
-        <div key={grp.name} style={{ display: 'grid', gap: 10 }}>
-          {grp.name && <h3 className="im-gift-group">{grp.name}:</h3>}
+        <div key={grp.name}>
+          {grp.name && <h4 className="im-gift-group">{grp.name}</h4>}
           {grp.items.map((g) => {
             const k = i++
             return (
               <motion.div
                 className="im-gift"
                 key={k}
-                initial={animate ? { opacity: 0, x: -30 } : false}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={animate ? { opacity: 0, y: 12 } : false}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: (k % 6) * 0.08 }}
+                transition={{ delay: (k % 6) * 0.06 }}
               >
-                <span style={{ fontSize: 28 }}>{giftIcon(g.title)}</span>
+                <span className="im-icon"><Icon name={giftIcon(g.title)} size={18} /></span>
                 <div>
                   <b>{g.title}</b>
                   {g.detail && <span>{g.detail}</span>}
                   {g.link && (
                     <div>
-                      <a href={g.link} target="_blank" rel="noreferrer">Ver sugestão →</a>
+                      <a href={g.link} target="_blank" rel="noreferrer" style={{ color: 'var(--rose-deep)', fontWeight: 700, fontSize: 14 }}>
+                        Ver sugestão
+                      </a>
                     </div>
                   )}
                 </div>

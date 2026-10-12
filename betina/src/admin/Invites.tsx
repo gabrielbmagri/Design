@@ -6,6 +6,7 @@ import { normalize } from '../lib/text'
 import { clearSent, markSent, parseBulk, saveInvite, setArchived, setGuestStatus, setReserve, type InviteDraft } from './ops'
 import { inviteLink, inviteWa } from './messages'
 import { isFreeChild } from './stats'
+import Icon from '../lib/Icon'
 
 type F = 'all' | 'gabriel' | 'luiza' | 'yes' | 'no' | 'open' | 'reserve' | 'notsent' | 'archived'
 
@@ -22,7 +23,7 @@ const FILTERS: { id: F; label: string }[] = [
 ]
 
 export default function Invites(ctx: AdminCtx) {
-  const { invites, guests, settings, user, filter } = ctx
+  const { invites, guests, settings, user, filter, myHost } = ctx
   const [f, setF] = useState<F>('all')
   const [host, setHost] = useState<Host | ''>('')
   const [q, setQ] = useState('')
@@ -31,6 +32,10 @@ export default function Invites(ctx: AdminCtx) {
   const [copied, setCopied] = useState('')
 
   useEffect(() => {
+    if (filter === 'new') {
+      setEditing({ label: '', host: myHost || 'gabriel', phone: '', notes: '', tags: [], reserve: false, members: [{ name: '', isChild: false, age: null, phone: '' }] })
+      return
+    }
     if (!filter) return
     const [a, b] = filter.split(':')
     setF(a as F)
@@ -89,15 +94,21 @@ export default function Invites(ctx: AdminCtx) {
   return (
     <>
       <div className="ad-head">
-        <h1>Convites</h1>
+        <div>
+          <h1>Convites</h1>
+          <p>Cada convite agrupa as pessoas que respondem juntas.</p>
+        </div>
         <div className="ad-row">
-          <button className="ad-btn" onClick={() => setBulk(true)}>Importar lista</button>
-          <button className="ad-btn primary" onClick={openNew}>+ Novo convite</button>
+          <button className="ad-btn" onClick={() => setBulk(true)}><Icon name="upload" size={16} /> Importar lista</button>
+          <button className="ad-btn primary" onClick={openNew}><Icon name="plus" size={16} /> Novo convite</button>
         </div>
       </div>
 
       <div className="ad-filters">
-        <input className="ad-input" style={{ maxWidth: 280 }} placeholder="Buscar nome, telefone, etiqueta…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <label className="ad-search">
+          <Icon name="search" size={16} />
+          <input className="ad-input" placeholder="Buscar nome, telefone, etiqueta" value={q} onChange={(e) => setQ(e.target.value)} />
+        </label>
         {FILTERS.map((x) => (
           <button key={x.id} className={`ad-chip ${f === x.id ? 'on' : ''}`} onClick={() => { setF(x.id); setHost('') }}>
             {x.label}
@@ -121,7 +132,7 @@ export default function Invites(ctx: AdminCtx) {
                 <span className={`ad-tag ${i.host}`}>{HOST_LABEL[i.host]}</span>
                 {i.reserve && <span className="ad-tag reserve">reserva</span>}
                 {(i.tags ?? []).map((t) => <span key={t} className="ad-tag">{t}</span>)}
-                <span style={{ marginLeft: 'auto', color: 'var(--muted)', fontSize: 13 }}>
+                <span className="ad-meta">
                   {i.phone || 'sem telefone'}
                   {i.sentAt ? ` · enviado ${i.sentAt.toDate().toLocaleDateString('pt-BR')}` : !i.reserve ? ' · não enviado' : ''}
                   {i.reminderCount ? ` · ${i.reminderCount} lembrete(s)` : ''}
@@ -133,7 +144,7 @@ export default function Invites(ctx: AdminCtx) {
                     {g.name}
                     {g.isChild && (
                       <small title={isFreeChild(g, settings) ? 'não paga' : ''}>
-                        🧸{g.age != null ? `${g.age}a` : '?'}{isFreeChild(g, settings) ? ' isenta' : ''}
+                        · criança {g.age != null ? `${g.age}a` : '?'}{isFreeChild(g, settings) ? ', não paga' : ''}
                       </small>
                     )}
                     <select
@@ -146,7 +157,7 @@ export default function Invites(ctx: AdminCtx) {
                   </span>
                 ))}
               </div>
-              {i.notes && <div style={{ fontSize: 13, color: 'var(--muted)' }}>📝 {i.notes}</div>}
+              {i.notes && <div style={{ fontSize: 13, color: 'var(--muted)' }}>Obs.: {i.notes}</div>}
               <div className="ad-row">
                 {!i.reserve && !i.archived && (
                   <a className="ad-btn sm wa" href={inviteWa(settings, i, mem)} target="_blank" rel="noreferrer" onClick={() => !i.sentAt && markSent(i)}>
@@ -186,7 +197,7 @@ export default function Invites(ctx: AdminCtx) {
   )
 }
 
-function InviteEditor({ draft, existing, by, onClose }: { draft: InviteDraft; existing: Guest[]; by: string; onClose: () => void }) {
+export function InviteEditor({ draft, existing, by, onClose }: { draft: InviteDraft; existing: Guest[]; by: string; onClose: () => void }) {
   const [d, setD] = useState<InviteDraft>(draft)
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')

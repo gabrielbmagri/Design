@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react'
-import { deleteDoc, doc, serverTimestamp, setDoc } from 'firebase/firestore'
-import { db } from '../lib/firebase'
 import type { AdminCtx } from './AdminApp'
-import type { EventSettings, Host } from '../lib/types'
-import { HOST_LABEL, STATUS_LABEL } from '../lib/types'
-import { download, exportBackup, saveSettings } from './ops'
-import { isFreeChild } from './stats'
+import type { EventSettings } from '../lib/types'
+import { saveSettings } from './ops'
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -16,12 +12,19 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   )
 }
 
-export default function SettingsView({ settings, admins, user, invites, guests }: AdminCtx) {
+const SUBS = [
+  ['info', 'Informações'],
+  ['mensagens', 'Textos e WhatsApp'],
+  ['fotos', 'Fotos e história'],
+  ['presentes', 'Presentes'],
+  ['regras', 'Regras'],
+] as const
+
+export default function SettingsView({ settings }: AdminCtx) {
+  const [sub, setSub] = useState<(typeof SUBS)[number][0]>('info')
   const [s, setS] = useState<EventSettings>(settings)
   const [dirty, setDirty] = useState(false)
   const [msg, setMsg] = useState('')
-  const [newAdmin, setNewAdmin] = useState('')
-  const [newHost, setNewHost] = useState<Host>('luiza')
 
   useEffect(() => {
     if (!dirty) setS(settings)
@@ -45,45 +48,32 @@ export default function SettingsView({ settings, admins, user, invites, guests }
     setTimeout(() => setMsg(''), 3000)
   }
 
-  const backup = async () => {
-    const data = await exportBackup()
-    download(`betina-backup-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(data, null, 2), 'application/json')
-  }
 
-  const csv = () => {
-    const inv = new Map(invites.map((i) => [i.id, i]))
-    const rows = [['Convite', 'Nome', 'De', 'Reserva', 'Criança', 'Idade', 'Paga', 'Status', 'Respondido por', 'Telefone', 'Enviado em']]
-    for (const g of guests.filter((x) => !x.removed)) {
-      const i = inv.get(g.inviteId)
-      if (!i || i.archived) continue
-      rows.push([
-        i.label, g.name, HOST_LABEL[g.host], i.reserve ? 'sim' : '', g.isChild ? 'sim' : '', g.age == null ? '' : String(g.age),
-        isFreeChild(g, s) ? 'não' : 'sim', STATUS_LABEL[g.status], g.respondedBy ?? '', i.memberPhones?.[g.id] || i.phone || '',
-        i.sentAt ? i.sentAt.toDate().toLocaleDateString('pt-BR') : '',
-      ])
-    }
-    const body = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(';')).join('\n')
-    download('convidados-betina.csv', '﻿' + body, 'text/csv')
-  }
 
-  const addAdmin = async () => {
-    const email = newAdmin.trim().toLowerCase()
-    if (!email.includes('@')) return
-    await setDoc(doc(db, 'admins', email), { host: newHost, addedBy: user.email, at: serverTimestamp() })
-    setNewAdmin('')
-  }
+
+
+
 
   return (
     <>
       <div className="ad-head">
-        <h1>Festa</h1>
+        <div>
+          <h1>Festa</h1>
+          <p>O que aparece no site e nas mensagens. Salve para publicar na hora.</p>
+        </div>
         <div className="ad-row">
           {msg && <span style={{ color: '#1d6b47', fontWeight: 800 }}>{msg}</span>}
           <button className="ad-btn primary" disabled={!dirty} onClick={save}>Salvar alterações</button>
         </div>
       </div>
 
+      <nav className="ad-subtabs">
+        {SUBS.map(([id, l]) => (
+          <button key={id} className={sub === id ? 'on' : ''} onClick={() => setSub(id)}>{l}</button>
+        ))}
+      </nav>
       <div style={{ display: 'grid', gap: 14 }}>
+        {sub === 'info' && (
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
           <h3>Informações</h3>
           <Field label="Título">{text('title')}</Field>
@@ -110,7 +100,9 @@ export default function SettingsView({ settings, admins, user, invites, guests }
             <input type="checkbox" checked={s.rsvpOpen} onChange={(e) => set('rsvpOpen', e.target.checked)} /> Confirmações abertas no site
           </label>
         </div>
+        )}
 
+        {sub === 'regras' && (
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
           <h3>Regras</h3>
           <div className="ad-grid">
@@ -119,7 +111,9 @@ export default function SettingsView({ settings, admins, user, invites, guests }
             <Field label="Lembrar após (dias)">{text('reminderDays', 'number')}</Field>
           </div>
         </div>
+        )}
 
+        {sub === 'mensagens' && (
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
           <h3>Mensagens</h3>
           <Field label="Depois de confirmar">{area('welcomeYes', 2)}</Field>
@@ -131,10 +125,12 @@ export default function SettingsView({ settings, admins, user, invites, guests }
           <Field label="Mensagem do convite (WhatsApp)">{area('inviteMessage', 8)}</Field>
           <Field label="Mensagem de lembrete (WhatsApp)">{area('reminderMessage', 7)}</Field>
         </div>
+        )}
 
+        {sub === 'fotos' && (
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
           <Field label="Imagem do convite">{text('inviteImage')}</Field>
-          <h3>Fotos do carrossel (endereços)</h3>
+          <h3>Fotos do carrossel (uma por linha)</h3>
           <textarea className="ad-textarea" rows={5} value={s.carousel.join('\n')} onChange={(e) => set('carousel', e.target.value.split('\n').map((x) => x.trim()).filter(Boolean))} />
           <h3>História (uma foto + texto por capítulo)</h3>
           {s.story.map((c, i) => (
@@ -146,7 +142,9 @@ export default function SettingsView({ settings, admins, user, invites, guests }
           ))}
           <button className="ad-btn" onClick={() => set('story', [...s.story, { photo: '', text: '' }])}>+ Capítulo</button>
         </div>
+        )}
 
+        {sub === 'presentes' && (
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
           <h3>Sugestões de presente</h3>
           <Field label="Texto">{area('giftNote', 2)}</Field>
@@ -162,40 +160,8 @@ export default function SettingsView({ settings, admins, user, invites, guests }
           <button className="ad-btn" onClick={() => set('gifts', [...s.gifts, { group: s.gifts[s.gifts.length - 1]?.group ?? '', title: '' }])}>+ Presente</button>
           <Field label="Chave Pix (opcional)">{text('pix')}</Field>
         </div>
+        )}
 
-        <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
-          <h3>Administradores</h3>
-          {admins.map((a) => (
-            <div key={a.email} className="ad-row">
-              <span style={{ flex: 1 }}>{a.email}</span>
-              <select className="ad-select" style={{ width: 140 }} value={a.host ?? ''} onChange={(e) => setDoc(doc(db, 'admins', a.email), { host: e.target.value || null }, { merge: true })}>
-                <option value="">—</option>
-                <option value="gabriel">Gabriel</option>
-                <option value="luiza">Luiza</option>
-              </select>
-              {a.email !== user.email && <button className="ad-btn sm danger" onClick={() => confirm(`Remover ${a.email}?`) && deleteDoc(doc(db, 'admins', a.email))}>Remover</button>}
-            </div>
-          ))}
-          <div className="ad-row">
-            <input className="ad-input" style={{ flex: 1 }} placeholder="email@gmail.com" value={newAdmin} onChange={(e) => setNewAdmin(e.target.value)} />
-            <select className="ad-select" style={{ width: 140 }} value={newHost} onChange={(e) => setNewHost(e.target.value as Host)}>
-              <option value="gabriel">Gabriel</option>
-              <option value="luiza">Luiza</option>
-            </select>
-            <button className="ad-btn" onClick={addAdmin}>Adicionar</button>
-          </div>
-        </div>
-
-        <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
-          <h3>Backup</h3>
-          <p style={{ margin: 0, color: 'var(--muted)' }}>
-            Baixe uma cópia completa (convites, convidados e histórico). Recomendado uma vez por semana.
-          </p>
-          <div className="ad-row">
-            <button className="ad-btn" onClick={backup}>Baixar backup (JSON)</button>
-            <button className="ad-btn" onClick={csv}>Baixar planilha (CSV/Excel)</button>
-          </div>
-        </div>
       </div>
     </>
   )

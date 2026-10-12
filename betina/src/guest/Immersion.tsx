@@ -2,10 +2,13 @@ import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { useRef, type ReactNode } from 'react'
 import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
-import { firstName, joinNames, longDate } from '../lib/text'
+import { firstName, joinNames, longDate, waLink } from '../lib/text'
+import Icon, { type IconName } from '../lib/Icon'
 import type { Outcome } from './GuestApp'
-import { Countdown, GiftList, MapEmbed, Sparkles, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
-import { waLink } from '../lib/text'
+import {
+  Countdown, GiftList, MapEmbed, Sparkles, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl,
+  placeLabel, timeLabel, wazeUrl,
+} from './bits'
 
 interface Props {
   settings: EventSettings
@@ -15,35 +18,95 @@ interface Props {
   onFinish: () => void
 }
 
-const reveal = {
-  initial: { opacity: 0, y: 50, scale: 0.96 },
-  whileInView: { opacity: 1, y: 0, scale: 1 },
-  viewport: { once: true, amount: 0.35 },
-  transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-} as const
+const ease = [0.22, 1, 0.36, 1] as const
 
 function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   return (
-    <motion.div {...reveal} transition={{ ...reveal.transition, delay }} style={{ width: '100%' }}>
+    <motion.div
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.7, ease, delay }}
+      style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+    >
       {children}
     </motion.div>
   )
 }
 
-function StoryChapter({ photo, text, index }: { photo: string; text: string; index: number }) {
-  const ref = useRef<HTMLDivElement>(null)
+function Chapter({ photo, text, index }: { photo: string; text: string; index: number }) {
+  const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], [60, -60])
-  const rotate = useTransform(scrollYProgress, [0, 1], [index % 2 ? 4 : -4, index % 2 ? -3 : 3])
+  const y = useTransform(scrollYProgress, [0, 1], [40, -40])
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1, 0.98])
   return (
     <section className="im-section" ref={ref}>
-      <motion.div className="im-photo" style={{ y, rotate }} {...reveal}>
+      <motion.div className="im-photo" style={{ y, scale }}>
         <img src={photo} alt={`Foto da Betina ${index + 1}`} loading="lazy" />
       </motion.div>
-      <Reveal delay={0.15}>
-        <p className="im-story-text">{text}</p>
+      <Reveal delay={0.1}>
+        <p className="im-story">{text}</p>
       </Reveal>
     </section>
+  )
+}
+
+function InfoCard({ icon, title, children }: { icon: IconName; title: string; children: ReactNode }) {
+  return (
+    <section className="im-section" style={{ paddingBlock: 40 }}>
+      <Reveal>
+        <div className="im-card">
+          <div className="im-card-head">
+            <span className="im-icon"><Icon name={icon} size={22} /></span>
+            <h3>{title}</h3>
+          </div>
+          {children}
+        </div>
+      </Reveal>
+    </section>
+  )
+}
+
+export function CalendarButton({ settings }: { settings: EventSettings }) {
+  return isIOS() ? (
+    <button className="g-btn ghost" onClick={() => downloadIcs(settings)}>
+      <Icon name="calendar" size={18} /> Salvar na agenda
+    </button>
+  ) : (
+    <a className="g-btn ghost" href={googleCalendarUrl(settings)} target="_blank" rel="noreferrer">
+      <Icon name="calendar" size={18} /> Salvar na agenda
+    </a>
+  )
+}
+
+export function PlaceActions({ settings }: { settings: EventSettings }) {
+  return (
+    <div className="im-actions">
+      <a className="g-btn" href={mapsUrl(settings)} target="_blank" rel="noreferrer">
+        <Icon name="map" size={18} /> Google Maps
+      </a>
+      <a className="g-btn outline" href={wazeUrl(settings)} target="_blank" rel="noreferrer">
+        Waze
+      </a>
+    </div>
+  )
+}
+
+export function ContactButtons({ settings, me }: { settings: EventSettings; me: Guest | null }) {
+  return (
+    <>
+      {hostContacts(settings, me?.host).map((c) => (
+        <a
+          key={c.host}
+          className="g-btn outline"
+          href={waLink(c.phone, `Oi, ${c.host === 'gabriel' ? 'Gabriel' : 'Luiza'}! Tenho uma dúvida sobre o aniversário da ${settings.childName}.`)}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Icon name="chat" size={18} /> {c.label}
+        </a>
+      ))}
+    </>
   )
 }
 
@@ -51,192 +114,125 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 })
   const going = invite?.guests.filter((g) => g.status === 'yes').map((g) => firstName(g.name)) ?? []
-  const story = settings.story
 
   const hero = (() => {
     if (outcome === 'yes')
       return {
-        eyebrow: going.length > 1 ? `${joinNames(going)}, presença confirmada!` : 'Presença confirmada!',
-        title: 'Estamos muito felizes!',
+        eyebrow: going.length > 1 ? `${joinNames(going)} confirmados` : 'Presença confirmada',
+        title: 'Que alegria ter você com a gente!',
         msg: settings.welcomeYes,
       }
     if (outcome === 'no') return { eyebrow: 'Resposta recebida', title: 'Obrigado por avisar', msg: settings.welcomeNo }
-    if (outcome === 'maybe') return { eyebrow: 'Sem pressa', title: 'Combinado!', msg: settings.welcomeMaybe }
+    if (outcome === 'maybe') return { eyebrow: 'Sem pressa', title: 'Tudo bem, combinado', msg: settings.welcomeMaybe }
     return {
-      eyebrow: me ? `Oi, ${firstName(me.name)}!` : 'Seja bem-vindo',
+      eyebrow: me ? `Oi, ${firstName(me.name)}` : 'Você está convidado',
       title: settings.title,
       msg: settings.subtitle,
     }
   })()
 
-  const inviteSection = settings.inviteImage ? (
-    <section className="im-section" key="invite">
-      <Reveal>
-        <p className="g-eyebrow">O seu convite</p>
-      </Reveal>
-      <motion.div
-        className="im-invite"
-        initial={{ opacity: 0, rotate: -8, scale: 0.85, y: 60 }}
-        whileInView={{ opacity: 1, rotate: -2, scale: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ type: 'spring', stiffness: 70, damping: 14 }}
-      >
-        <img src={settings.inviteImage} alt={`Convite: ${settings.title}`} />
-      </motion.div>
-      <Reveal delay={0.2}>
-        <p className="im-script">{settings.subtitle}</p>
-      </Reveal>
-    </section>
-  ) : null
-
-  const blocks: ReactNode[] = [
-    <section className="im-section" key="date">
-      <Reveal>
-        <div className="im-info">
-          <div className="icon">📅</div>
-          <p className="g-eyebrow">Quando</p>
-          <div className="big">{longDate(settings.dateISO)}</div>
-          <div className="muted">{timeLabel(settings)}</div>
-          <Countdown settings={settings} />
-          {isIOS() ? (
-            <button className="g-btn secondary" onClick={() => downloadIcs(settings)}>
-              Salvar na minha agenda
-            </button>
-          ) : (
-            <a className="g-btn secondary" href={googleCalendarUrl(settings)} target="_blank" rel="noreferrer">
-              Salvar na minha agenda
-            </a>
-          )}
-        </div>
-      </Reveal>
-    </section>,
-    <section className="im-section" key="place">
-      <Reveal>
-        <div className="im-info">
-          <div className="icon">📍</div>
-          <p className="g-eyebrow">Onde</p>
-          <div className="big">{settings.venueName}</div>
-          <div className="muted">{settings.address}</div>
-          <MapEmbed settings={settings} />
-          <a className="g-btn" href={mapsUrl(settings)} target="_blank" rel="noreferrer">
-            Abrir no Google Maps
-          </a>
-          <a className="g-btn secondary" href={wazeUrl(settings)} target="_blank" rel="noreferrer">
-            Ir com Waze
-          </a>
-        </div>
-      </Reveal>
-    </section>,
-    <section className="im-section" key="gifts">
-      <Reveal>
-        <div className="im-info">
-          <div className="icon">🎁</div>
-          <p className="g-eyebrow">Sugestões de presente</p>
-          <p className="muted" style={{ margin: 0 }}>
-            {settings.giftNote}
-          </p>
-          <GiftList settings={settings} animate />
-          {settings.pix && <p className="muted">Pix: <b>{settings.pix}</b></p>}
-        </div>
-      </Reveal>
-    </section>,
+  const cards: ReactNode[] = [
+    <InfoCard key="when" icon="calendar" title="Quando">
+      <p>
+        <b style={{ color: 'var(--ink)' }}>{longDate(settings.dateISO)}</b>, {timeLabel(settings)}
+      </p>
+      <Countdown settings={settings} />
+      <CalendarButton settings={settings} />
+    </InfoCard>,
+    <InfoCard key="where" icon="pin" title="Onde">
+      <p>
+        <b style={{ color: 'var(--ink)' }}>{settings.venueName}</b>
+        <br />
+        {settings.address}
+      </p>
+      <MapEmbed settings={settings} />
+      <PlaceActions settings={settings} />
+    </InfoCard>,
+    <InfoCard key="gifts" icon="gift" title="Sugestões de presente">
+      <p>{settings.giftNote}</p>
+      <GiftList settings={settings} animate />
+      {settings.pix && <p>Pix: <b>{settings.pix}</b></p>}
+    </InfoCard>,
   ]
-
   if (settings.dressCode)
-    blocks.push(
-      <section className="im-section" key="dress">
-        <Reveal>
-          <div className="im-info">
-            <div className="icon">🤠</div>
-            <p className="g-eyebrow">Dica de traje</p>
-            <div className="big" style={{ fontSize: 28 }}>
-              {settings.dressCode}
-            </div>
-          </div>
-        </Reveal>
-      </section>,
+    cards.push(
+      <InfoCard key="dress" icon="shirt" title="Dica de traje">
+        <p>{settings.dressCode}</p>
+      </InfoCard>,
     )
 
-  // intercala capítulos da história com as informações
   const sequence: ReactNode[] = []
-  const max = Math.max(story.length, blocks.length)
+  const max = Math.max(settings.story.length, cards.length)
   for (let i = 0; i < max; i++) {
-    if (story[i]) sequence.push(<StoryChapter key={`s${i}`} index={i} photo={story[i].photo} text={story[i].text} />)
-    if (blocks[i]) sequence.push(blocks[i])
+    const c = settings.story[i]
+    if (c) sequence.push(<Chapter key={`s${i}`} index={i} photo={c.photo} text={c.text} />)
+    if (cards[i]) sequence.push(cards[i])
   }
 
   return (
     <main className="im">
-      <motion.div
-        style={{
-          scaleX: progress,
-          transformOrigin: '0 50%',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 5,
-          zIndex: 30,
-          background: 'linear-gradient(90deg, var(--rose), var(--gold), var(--lilac))',
-        }}
-      />
+      <motion.div className="im-progress" style={{ scaleX: progress }} />
+      <div className="im-glow" />
       <Sparkles />
-      <div className="im-gingham-edge" style={{ top: 5 }} />
-      <div className="im-gingham-edge" style={{ bottom: 0 }} />
 
-      <section className="im-section" style={{ minHeight: '100dvh' }}>
+      <section className="im-section im-hero">
         <motion.div
-          className="im-hero-badge"
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: 'spring', stiffness: 120, damping: 12, delay: 0.2 }}
+          className="im-badge"
+          initial={{ scale: 0.4, opacity: 0, rotate: -12 }}
+          animate={{ scale: 1, opacity: 1, rotate: 0 }}
+          transition={{ type: 'spring', stiffness: 140, damping: 14, delay: 0.15 }}
         >
           1
         </motion.div>
-        <motion.p className="g-eyebrow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
+        <motion.p className="g-eyebrow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
           {hero.eyebrow}
         </motion.p>
         <motion.h1
           className="g-title"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.7 }}
+          transition={{ delay: 0.65, duration: 0.6, ease }}
         >
           {hero.title}
         </motion.h1>
-        <motion.div
-          className="im-msg"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.7 }}
-        >
+        <motion.p className="im-msg" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85, duration: 0.6, ease }}>
           {hero.msg}
-        </motion.div>
-        <motion.div className="im-scroll-hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}>
+        </motion.p>
+        <motion.div className="im-scroll" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.6 }}>
           Deslize para baixo
-          <span>↓</span>
+          <Icon name="chevronDown" size={22} />
         </motion.div>
       </section>
 
-      {inviteSection}
+      {settings.inviteImage && (
+        <section className="im-section">
+          <motion.div
+            className="im-invite"
+            initial={{ opacity: 0, y: 40, rotate: -3 }}
+            whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.9, ease }}
+          >
+            <img src={settings.inviteImage} alt={`Convite: ${settings.title}`} />
+          </motion.div>
+          <Reveal delay={0.1}>
+            <p className="g-small">{placeLabel(settings)}</p>
+          </Reveal>
+        </section>
+      )}
+
       {sequence}
 
-      <section className="im-section">
+      <section className="im-section" style={{ paddingBottom: 96 }}>
         <Reveal>
-          <h2 className="g-title" style={{ fontSize: 'clamp(34px, 9vw, 48px)' }}>
-            Esperamos você! 💗
-          </h2>
+          <h2 className="g-h2">Esperamos você!</h2>
         </Reveal>
-        <Reveal delay={0.2}>
-          <div style={{ display: 'grid', gap: 12 }}>
-            <button className="g-btn gold" onClick={onFinish}>
-              Ver o convite completo
+        <Reveal delay={0.1}>
+          <div style={{ display: 'grid', gap: 10, width: '100%' }}>
+            <button className="g-btn" onClick={onFinish}>
+              Ver convite completo <Icon name="arrowRight" size={18} />
             </button>
-            {hostContacts(settings, me?.host).map((c) => (
-              <a key={c.host} className="g-btn wa" href={waLink(c.phone, `Oi, ${c.host === 'gabriel' ? 'Gabriel' : 'Luiza'}! Tenho uma dúvida sobre o aniversário da ${settings.childName}.`)} target="_blank" rel="noreferrer">
-                💬 {c.label}
-              </a>
-            ))}
+            <ContactButtons settings={settings} me={me} />
           </div>
         </Reveal>
       </section>

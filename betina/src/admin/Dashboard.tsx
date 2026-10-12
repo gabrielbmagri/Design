@@ -1,107 +1,159 @@
 import type { AdminCtx } from './AdminApp'
-import { HOST_LABEL } from '../lib/types'
-import { shortDate } from '../lib/text'
+import { HOST_LABEL, STATUS_LABEL } from '../lib/types'
+import { firstName, parseISODate, shortDate } from '../lib/text'
+import Icon, { type IconName } from '../lib/Icon'
 import type { HostStats } from './stats'
 
-function Kpi({ n, l, s, onClick }: { n: number | string; l: string; s?: string; onClick?: () => void }) {
+const DAY = 864e5
+const daysUntil = (iso: string) => Math.ceil((parseISODate(iso).getTime() - Date.now()) / DAY)
+
+function Kpi({ label, n, of, sub, onClick }: { label: string; n: number | string; of?: string; sub?: string; onClick?: () => void }) {
+  const Tag = onClick ? 'button' : 'div'
   return (
-    <button className="ad-card ad-kpi" style={{ textAlign: 'left', cursor: onClick ? 'pointer' : 'default' }} onClick={onClick}>
-      <div className="n">{n}</div>
-      <div className="l">{l}</div>
-      {s && <div className="s">{s}</div>}
-    </button>
+    <Tag className="ad-card ad-kpi" onClick={onClick} style={onClick ? { cursor: 'pointer' } : undefined}>
+      <span className="l">{label}</span>
+      <span className="n">
+        {n}
+        {of && <small> {of}</small>}
+      </span>
+      {sub && <span className="s">{sub}</span>}
+    </Tag>
   )
 }
 
-function HostCard({ h, onReserves }: { h: HostStats; onReserves: () => void }) {
+function HostRow({ h }: { h: HostStats }) {
   const pct = (x: number) => `${Math.min(100, (x / Math.max(h.cap, 1)) * 100)}%`
   const color = h.host === 'gabriel' ? 'var(--gab)' : 'var(--lui)'
   return (
-    <div className="ad-card">
+    <div style={{ padding: '6px 0' }}>
       <div className="ad-row" style={{ justifyContent: 'space-between' }}>
-        <h3 style={{ margin: 0, color }}>Convidados de {HOST_LABEL[h.host]}</h3>
-        <b>
-          {h.invited}/{h.cap}
-        </b>
+        <b style={{ color }}>{HOST_LABEL[h.host]}</b>
+        <span style={{ color: 'var(--muted)', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
+          {h.invited} de {h.cap} · {h.free >= 0 ? `${h.free} vagas` : `${-h.free} acima`}
+        </span>
       </div>
       <div className="ad-bar">
-        <span style={{ width: pct(h.confirmed), background: '#2f9e6a' }} />
-        <span style={{ width: pct(h.maybe), background: '#e0a93a' }} />
-        <span style={{ width: pct(h.waiting), background: '#c9bcc2' }} />
+        <span style={{ width: pct(h.confirmed), background: 'var(--ok)' }} />
+        <span style={{ width: pct(h.maybe), background: 'var(--gold)' }} />
+        <span style={{ width: pct(h.waiting), background: '#d9cdd2' }} />
       </div>
       <div className="ad-legend">
-        <span><i style={{ background: '#2f9e6a' }} />{h.confirmed} confirmados</span>
-        <span><i style={{ background: '#e0a93a' }} />{h.maybe} talvez</span>
-        <span><i style={{ background: '#c9bcc2' }} />{h.waiting} sem resposta</span>
-        <span>✕ {h.declined} recusaram</span>
-        {h.freeKids > 0 && <span>🧸 {h.freeKids} crianças isentas (fora da conta)</span>}
-      </div>
-      <div className="ad-row" style={{ marginTop: 12, justifyContent: 'space-between' }}>
-        <span style={{ fontWeight: 800, color: h.free > 0 ? '#1d6b47' : h.free < 0 ? '#b3333b' : undefined }}>
-          {h.free > 0 ? `${h.free} vagas livres` : h.free < 0 ? `${-h.free} acima do limite` : 'Lista completa'}
-        </span>
-        {h.free > 0 && h.reserves > 0 && (
-          <button className="ad-btn sm" onClick={onReserves}>
-            Chamar reserva ({h.reserves})
-          </button>
-        )}
+        <span><i style={{ background: 'var(--ok)' }} />{h.confirmed} confirmados</span>
+        <span><i style={{ background: 'var(--gold)' }} />{h.maybe} talvez</span>
+        <span><i style={{ background: '#d9cdd2' }} />{h.waiting} sem resposta</span>
+        {h.declined > 0 && <span>{h.declined} não vão</span>}
       </div>
     </div>
   )
 }
 
-export default function Dashboard({ stats, settings, go, logs }: AdminCtx) {
+export default function Dashboard({ stats, settings, go, logs, user }: AdminCtx) {
   const t = stats.totals
-  const recent = logs.slice(0, 6)
+  const toParty = daysUntil(settings.dateISO)
+  const toDeadline = daysUntil(settings.rsvpDeadlineISO)
+  const answered = t.people ? Math.round(((t.confirmed + t.declined) / t.people) * 100) : 0
+  const name = firstName(user.displayName || '')
+
+  const actions: { icon: IconName; title: string; sub: string; onClick: () => void }[] = []
+  if (stats.reminders.length)
+    actions.push({ icon: 'bell', title: `Lembrar ${stats.reminders.length} convite(s)`, sub: `Sem resposta há mais de ${settings.reminderDays} dias`, onClick: () => go('lembretes') })
+  if (stats.notSent.length)
+    actions.push({ icon: 'mail', title: `Enviar ${stats.notSent.length} convite(s)`, sub: 'Ainda não foram mandados pelo WhatsApp', onClick: () => go('lembretes') })
+  for (const h of stats.hosts)
+    if (h.free > 0 && h.reserves > 0)
+      actions.push({ icon: 'inbox', title: `${HOST_LABEL[h.host]} tem ${h.free} vaga(s) livre(s)`, sub: `${h.reserves} pessoa(s) na reserva para chamar`, onClick: () => go('reservas') })
+  if (stats.kidsNoAge.length)
+    actions.push({ icon: 'baby', title: `${stats.kidsNoAge.length} criança(s) sem idade`, sub: 'Define quem paga e a contagem de lembrancinhas', onClick: () => go('criancas') })
+
   return (
     <>
       <div className="ad-head">
-        <h1>Painel</h1>
-        <span style={{ color: 'var(--muted)', fontWeight: 700 }}>
-          Festa em {shortDate(settings.dateISO)} · prazo de resposta {shortDate(settings.rsvpDeadlineISO)}
-        </span>
-      </div>
-
-      {(stats.reminders.length > 0 || stats.notSent.length > 0) && (
-        <div className="ad-note" style={{ marginBottom: 14, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          {stats.reminders.length > 0 && <span>🔔 <b>{stats.reminders.length}</b> convites precisam de lembrete.</span>}
-          {stats.notSent.length > 0 && <span>✉️ <b>{stats.notSent.length}</b> convites ainda não foram enviados.</span>}
-          <button className="ad-btn sm primary" onClick={() => go('lembretes')}>Ver lembretes</button>
+        <div>
+          <h1>{name ? `Oi, ${name}` : 'Olá'}</h1>
+          <p>
+            {toParty > 0 ? `Faltam ${toParty} dias para a festa` : toParty === 0 ? 'A festa é hoje!' : 'A festa já passou'}
+            {toDeadline >= 0 && ` · prazo de resposta em ${toDeadline} dias (${shortDate(settings.rsvpDeadlineISO)})`}
+          </p>
         </div>
-      )}
-
-      <div className="ad-grid" style={{ marginBottom: 14 }}>
-        <Kpi n={t.payingConfirmed} l="Confirmados (pagantes)" s={`${t.confirmed} pessoas no total`} onClick={() => go('convites', 'yes')} />
-        <Kpi n={t.paying} l="Contam no limite" s={`de ${t.cap} (${settings.capPerHost} + ${settings.capPerHost})`} />
-        <Kpi n={t.pending + t.maybe} l="Aguardando resposta" s={`${t.maybe} disseram talvez`} onClick={() => go('convites', 'open')} />
-        <Kpi n={t.declined} l="Não vão" onClick={() => go('convites', 'no')} />
-        <Kpi n={stats.kidsGoing.length} l="Lembrancinhas" s={`crianças confirmadas · ${stats.kidsExpected.length} previstas`} onClick={() => go('criancas')} />
-        <Kpi n={stats.kidsFree.length} l={`Crianças até ${settings.childFreeMaxAge} anos`} s="não pagam" onClick={() => go('criancas')} />
-        <Kpi n={`${t.sent}/${t.invites}`} l="Convites enviados" onClick={() => go('lembretes')} />
-        <Kpi n={t.reserves} l="Na reserva" onClick={() => go('convites', 'reserve')} />
+        <button className="ad-btn primary" onClick={() => go('convites', 'new')}>
+          <Icon name="plus" size={16} /> Novo convite
+        </button>
       </div>
 
-      <div className="ad-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', marginBottom: 14 }}>
-        {stats.hosts.map((h) => (
-          <HostCard key={h.host} h={h} onReserves={() => go('convites', `reserve:${h.host}`)} />
-        ))}
+      <div className="ad-grid" style={{ marginBottom: 16 }}>
+        <Kpi label="Confirmados" n={t.payingConfirmed} of={`/ ${t.cap}`} sub={`${t.confirmed} pessoas, contando crianças`} onClick={() => go('pessoas', 'yes')} />
+        <Kpi label="Aguardando resposta" n={t.pending + t.maybe} sub={t.maybe ? `${t.maybe} disseram talvez` : undefined} onClick={() => go('pessoas', 'open')} />
+        <Kpi label="Não vão" n={t.declined} onClick={() => go('pessoas', 'no')} />
+        <Kpi label="Responderam" n={`${answered}%`} sub={`${t.sent} de ${t.invites} convites enviados`} />
       </div>
 
-      <div className="ad-card">
-        <div className="ad-row" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
-          <h3 style={{ margin: 0 }}>Últimas respostas</h3>
-          <button className="ad-btn sm" onClick={() => go('historico')}>Ver tudo</button>
-        </div>
-        {recent.length === 0 && <div className="ad-empty">Ninguém respondeu ainda.</div>}
-        {recent.map((l) => (
-          <div key={l.id} className="ad-row" style={{ padding: '6px 0', borderTop: '1px solid var(--border)' }}>
-            <span className={`ad-tag st-${l.status}`}>{{ yes: 'vai', no: 'não vai', maybe: 'talvez', pending: 'limpou' }[l.status]}</span>
-            <b>{l.guestName}</b>
-            <span style={{ color: 'var(--muted)', fontSize: 13 }}>
-              por {l.by} · {l.at?.toDate().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
-            </span>
+      <div className="ad-cols">
+        <div style={{ display: 'grid', gap: 16 }}>
+          <div className="ad-card">
+            <div className="ad-card-head">
+              <h3>Próximas ações</h3>
+            </div>
+            <div className="ad-actions">
+              {actions.length === 0 && (
+                <div className="ad-action" style={{ cursor: 'default' }}>
+                  <span className="ic ok"><Icon name="check" size={18} /></span>
+                  <div>
+                    <b>Tudo em dia</b>
+                    <small>Nenhum lembrete ou envio pendente agora.</small>
+                  </div>
+                </div>
+              )}
+              {actions.map((a) => (
+                <button key={a.title} className="ad-action" onClick={a.onClick}>
+                  <span className="ic"><Icon name={a.icon} size={18} /></span>
+                  <div>
+                    <b>{a.title}</b>
+                    <small>{a.sub}</small>
+                  </div>
+                  <Icon name="chevronRight" size={18} />
+                </button>
+              ))}
+            </div>
           </div>
-        ))}
+
+          <div className="ad-card">
+            <div className="ad-card-head">
+              <h3>Divisão de convidados</h3>
+              <span style={{ color: 'var(--muted)', fontSize: 12 }}>crianças até {settings.childFreeMaxAge} anos não contam</span>
+            </div>
+            {stats.hosts.map((h) => <HostRow key={h.host} h={h} />)}
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gap: 16 }}>
+          <div className="ad-card">
+            <div className="ad-card-head">
+              <h3>Crianças</h3>
+              <button className="ad-btn sm" onClick={() => go('criancas')}>Ver</button>
+            </div>
+            <div className="ad-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+              <div className="ad-kpi"><span className="l">Lembrancinhas</span><span className="n">{stats.kidsGoing.length}</span><span className="s">{stats.kidsExpected.length} previstas</span></div>
+              <div className="ad-kpi"><span className="l">Não pagam</span><span className="n">{stats.kidsFree.length}</span><span className="s">até {settings.childFreeMaxAge} anos</span></div>
+            </div>
+          </div>
+
+          <div className="ad-card">
+            <div className="ad-card-head">
+              <h3>Últimas respostas</h3>
+              <button className="ad-btn sm" onClick={() => go('historico')}>Histórico</button>
+            </div>
+            {logs.length === 0 && <div className="ad-empty" style={{ padding: 12 }}>Ninguém respondeu ainda.</div>}
+            {logs.slice(0, 6).map((l) => (
+              <div key={l.id} className="ad-row" style={{ padding: '8px 0', borderTop: '1px solid var(--border)', flexWrap: 'nowrap' }}>
+                <span className={`ad-tag st-${l.status}`}>{STATUS_LABEL[l.status]}</span>
+                <b style={{ fontWeight: 600, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{l.guestName}</b>
+                <span style={{ color: 'var(--muted)', fontSize: 12, whiteSpace: 'nowrap' }}>
+                  {l.at?.toDate().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   )

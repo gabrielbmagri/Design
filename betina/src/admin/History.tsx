@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { AdminCtx } from './AdminApp'
 import { STATUS_LABEL } from '../lib/types'
 import { normalize } from '../lib/text'
+import Icon from '../lib/Icon'
 
 export default function History({ logs }: AdminCtx) {
   const [q, setQ] = useState('')
@@ -9,12 +10,15 @@ export default function History({ logs }: AdminCtx) {
   return (
     <>
       <div className="ad-head">
-        <h1>Histórico</h1>
-        <input className="ad-input" style={{ maxWidth: 260 }} placeholder="Buscar…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <div>
+          <h1>Histórico</h1>
+          <p>Toda resposta fica registrada aqui. Ninguém consegue apagar ou editar este histórico.</p>
+        </div>
+        <label className="ad-search">
+          <Icon name="search" size={16} />
+          <input className="ad-input" placeholder="Buscar pessoa" value={q} onChange={(e) => setQ(e.target.value)} />
+        </label>
       </div>
-      <p style={{ color: 'var(--muted)', marginTop: -6 }}>
-        Toda resposta fica registrada aqui para sempre — ninguém consegue apagar ou editar este histórico.
-      </p>
       <div className="ad-scroll">
         <table className="ad-table">
           <thead>

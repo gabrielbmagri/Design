@@ -15,10 +15,10 @@ export const DEFAULT_SETTINGS: EventSettings = {
   address: 'Av. Dr. Luiz Guimarães, 669 – Centro, Nova Iguaçu – RJ',
   mapsUrl: 'https://share.google/ic7mYwxZPlUNpQ9vC',
   wazeUrl: '',
-  dressCode: 'Seu chapéu de cowboy é bem-vindo! 🤠',
+  dressCode: 'Seu chapéu de cowboy é bem-vindo!',
   rsvpDeadlineISO: '2026-10-26',
   rsvpOpen: true,
-  welcomeYes: 'Que alegria! A Betina vai ficar muito feliz com você na fazendinha. 🐷💗',
+  welcomeYes: 'Que alegria! A Betina vai ficar muito feliz com você na fazendinha.',
   welcomeNo: 'Que pena! Vamos sentir sua falta — obrigado por avisar com tanto carinho.',
   welcomeMaybe: 'Tudo bem! Volte aqui e responda quando souber — as porteiras continuam abertas.',
   story: [

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import type { EventSettings } from '../lib/types'
-import { firstName, fmtTime, parseISODate } from '../lib/text'
-import { Carousel } from './bits'
+import { firstName } from '../lib/text'
+import Icon from '../lib/Icon'
+import { Marquee } from './bits'
 
 interface Props {
   settings: EventSettings
@@ -16,41 +17,26 @@ interface Props {
 
 export default function Welcome({ settings, busy, error, saved, onSearch, onContinue, onForget, onVisitor }: Props) {
   const [name, setName] = useState('')
-  const rest = settings.title.replace(settings.childName, '').trim()
-  const d = parseISODate(settings.dateISO)
-  const month = d.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')
 
   return (
     <main className="g-screen">
-      <div className="g-paper">
-      <Carousel photos={settings.carousel} />
-      <div className="g-center" style={{ paddingTop: 12, paddingBottom: 0, gap: 14 }}>
+      <Marquee photos={settings.carousel} />
+      <div className="g-body" style={{ gap: 20, paddingTop: 4 }}>
         <div style={{ display: 'grid', gap: 6 }}>
+          <p className="g-eyebrow">Aniversário de 1 ano</p>
           <h1 className="g-title">
-            <span className="g-title-main">{settings.childName}</span>
-            {rest && <span className="g-title-sub">{rest.charAt(0).toUpperCase() + rest.slice(1)}</span>}
+            {saved ? (
+              <>Que bom te ver, <span className="accent">{firstName(saved.name)}</span></>
+            ) : (
+              <>Confirme sua presença na festa da <span className="accent">{settings.childName}</span></>
+            )}
           </h1>
-          {settings.subtitle && <p className="g-script">{settings.subtitle}</p>}
-          <div className="g-datebar" aria-label={`Dia ${d.getDate()} de ${month}, ${fmtTime(settings.timeStart)}`}>
-            <div style={{ textAlign: 'center' }}>
-              <b>{String(d.getDate()).padStart(2, '0')}</b>
-              <div style={{ fontSize: 15 }}>{month}</div>
-            </div>
-            <span />
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 15 }}>às</div>
-              <b>{fmtTime(settings.timeStart).toUpperCase()}</b>
-            </div>
-          </div>
         </div>
 
         {saved ? (
-          <div className="g-card" style={{ display: 'grid', gap: 12 }}>
-            <p className="g-label" style={{ margin: 0 }}>
-              Que bom te ver de novo, {firstName(saved.name)}! 💗
-            </p>
+          <div style={{ display: 'grid', gap: 4 }}>
             <button className="g-btn" onClick={onContinue} disabled={busy}>
-              {busy ? <span className="g-spinner" /> : 'Abrir meu convite'}
+              {busy ? <span className="g-spinner" /> : <>Abrir meu convite <Icon name="arrowRight" size={18} /></>}
             </button>
             <button className="g-link" onClick={onForget}>
               Não sou {firstName(saved.name)}
@@ -58,45 +44,43 @@ export default function Welcome({ settings, busy, error, saved, onSearch, onCont
           </div>
         ) : (
           <form
-            className="g-card"
+            style={{ display: 'grid', gap: 12 }}
             onSubmit={(e) => {
               e.preventDefault()
               if (name.trim().length >= 2) onSearch(name)
             }}
           >
-            <label className="g-label" htmlFor="nome">
-              Digite seu nome
+            <label className="g-field" htmlFor="nome">
+              <span className="g-label">Seu nome ou celular</span>
+              <input
+                id="nome"
+                className="g-input"
+                placeholder="Ex.: Maria"
+                autoComplete="given-name"
+                autoCapitalize="words"
+                enterKeyHint="search"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </label>
-            <input
-              id="nome"
-              className="g-input"
-              placeholder="Ex.: Maria"
-              autoComplete="given-name"
-              autoCapitalize="words"
-              enterKeyHint="search"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <p className="g-help">Pode ser só o primeiro nome, ou o número do seu celular.</p>
-            <div style={{ height: 16 }} />
             <button className="g-btn" type="submit" disabled={busy || name.trim().length < 2}>
-              {busy ? <span className="g-spinner" /> : 'Encontrar meu convite'}
+              {busy ? <span className="g-spinner" /> : <>Continuar <Icon name="arrowRight" size={18} /></>}
             </button>
           </form>
         )}
 
         {error && (
           <div className="g-error" role="alert">
-            {error}
+            <Icon name="help" size={18} style={{ marginTop: 1 }} />
+            <span>{error}</span>
           </div>
         )}
-      </div>
-      </div>
 
-      <div className="g-subtle">
-        <button className="g-link" style={{ background: 'rgba(255,255,255,.85)', borderRadius: 99, padding: '10px 18px' }} onClick={onVisitor}>
-          Só quero ver as informações da festa
-        </button>
+        <div style={{ marginTop: 'auto', textAlign: 'center' }}>
+          <button className="g-link" onClick={onVisitor}>
+            Ver informações da festa
+          </button>
+        </div>
       </div>
     </main>
   )
