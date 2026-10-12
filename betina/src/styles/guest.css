@@ -39,7 +39,7 @@
 
 .g-title {
   margin: 0;
-  font-size: 32px;
+  font-size: clamp(26px, 7.8vw, 32px);
   line-height: 1.12;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -1383,4 +1383,35 @@
   border-style: dashed;
   border-color: var(--rose-200);
   background: var(--rose-50);
+}
+
+/* bichinhos caindo devagar (tela de entrada) */
+.im-animals.down span {
+  bottom: auto;
+  top: -40px;
+  animation-name: float-down;
+}
+
+@keyframes float-down {
+  0% {
+    transform: translate(0, 0) rotate(8deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.38;
+  }
+  50% {
+    transform: translate(var(--sway), 55vh) rotate(-8deg);
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(0, 110vh) rotate(6deg);
+    opacity: 0;
+  }
+}
+
+.g-marquee {
+  z-index: 1;
 }

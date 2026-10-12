@@ -247,7 +247,7 @@ export function GiftList({ settings, animate = false }: { settings: EventSetting
 const ANIMALS = ['🐷', '🐮', '🐴', '🐔', '🐰', '🐑', '🐥', '🌼']
 
 /** Bichinhos da fazenda subindo devagar, com balanço, ao fundo. */
-export function FloatingAnimals({ count = 12 }: { count?: number }) {
+export function FloatingAnimals({ count = 12, direction = 'up' }: { count?: number; direction?: 'up' | 'down' }) {
   const items = useMemo(
     () =>
       Array.from({ length: count }, (_, k) => ({
@@ -262,7 +262,7 @@ export function FloatingAnimals({ count = 12 }: { count?: number }) {
     [count],
   )
   return (
-    <div className="im-animals" aria-hidden="true">
+    <div className={`im-animals ${direction === 'down' ? 'down' : ''}`} aria-hidden="true">
       {items.map((s) => (
         <span
           key={s.k}

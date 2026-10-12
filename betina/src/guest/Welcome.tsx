@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { EventSettings } from '../lib/types'
 import { firstName } from '../lib/text'
 import Icon from '../lib/Icon'
-import { Marquee } from './bits'
+import { FloatingAnimals, Marquee } from './bits'
 
 interface Props {
   settings: EventSettings
@@ -20,15 +20,16 @@ export default function Welcome({ settings, busy, error, saved, onSearch, onCont
 
   return (
     <main className="g-screen">
+      <FloatingAnimals count={10} direction="down" />
       <Marquee photos={settings.carousel} />
-      <div className="g-body" style={{ gap: 20, paddingTop: 4 }}>
+      <div className="g-body" style={{ gap: 20, paddingTop: 4, position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'grid', gap: 6 }}>
-          <p className="g-eyebrow">Aniversário de 1 ano</p>
+          <p className="g-eyebrow">Primeiro aninho da Bê</p>
           <h1 className="g-title">
             {saved ? (
               <>Que bom te ver, <span className="accent">{firstName(saved.name)}</span></>
             ) : (
-              <>Confirme sua presença na festa da <span className="accent">{settings.childName}</span></>
+              <>Confirme sua presença na <span className="im-shine">fazendinha da {settings.childName}</span></>
             )}
           </h1>
         </div>
