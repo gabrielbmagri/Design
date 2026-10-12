@@ -27,8 +27,8 @@ export const DEFAULT_SETTINGS: EventSettings = {
     { label: '31 de outubro de 2025 · 15h', photo: photo('nascimento'), text: 'No Instituto Fernandes Figueira, nasceu a Betina. Naquele instante, tudo ganhou uma cor nova.' },
     { label: 'Os primeiros dias', photo: photo('primeiros-dias'), text: 'Noites em claro, colo sem fim e um amor que a gente nem sabia que cabia no peito.' },
     { label: 'Os primeiros sorrisos', photo: photo('primeiros-sorrisos'), text: 'Veio o primeiro sorriso e, com ele, a certeza de que os dias iam ficar mais leves.' },
-    { label: 'Descobertas', photo: ph(4), text: 'Mãozinhas curiosas, gargalhadas, as primeiras palavrinhas. Cada descoberta virou uma pequena conquista.' },
-    { label: 'Gabriel e Luíza', photo: ph(5), text: 'Ver a Betina crescer cheia de curiosidade e carinho por todo mundo é o maior presente que a vida nos deu.' },
+    { label: 'Descobertas', photo: photo('descobertas'), text: 'Mãozinhas curiosas, gargalhadas, as primeiras palavrinhas. Cada descoberta virou uma pequena conquista.' },
+    { label: 'Gabriel e Luíza', photo: photo('gabriel-e-luiza'), text: 'Ver a Betina crescer cheia de curiosidade e carinho por todo mundo é o maior presente que a vida nos deu.' },
     { label: '1 aninho', photo: ph(1), text: 'Chegou a hora de celebrar o primeiro ano da Betina na fazendinha. E a festa só fica completa com você.' },
   ],
   birthISO: '2025-10-31T15:00',
@@ -36,7 +36,7 @@ export const DEFAULT_SETTINGS: EventSettings = {
   letter:
     'Obrigado por fazer parte da vida da Betina. Cada pessoa convidada para esta festa tem um pedacinho dessa história: num colo, numa visita, numa mensagem, numa oração. Queremos muito viver esse dia ao seu lado.',
   letterSign: 'Com amor, Gabriel e Luíza',
-  carousel: [photo('primeiros-sorrisos'), photo('nascimento'), photo('primeiros-dias')],
+  carousel: [photo('primeiros-sorrisos'), photo('nascimento'), photo('descobertas'), photo('primeiros-dias'), photo('gabriel-e-luiza')],
   gifts: [
     { group: 'Betina adora', title: 'Livros' },
     { group: 'Betina adora', title: 'Brinquedos educativos' },
