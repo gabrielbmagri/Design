@@ -1,0 +1,82 @@
+rules_version = '2';
+
+// Modelo de segurança
+// - settings/event ........ leitura pública, escrita só admin
+// - guests/{id} ........... convidado (sem telefone). Leitura pública limitada;
+//                           o convidado só pode alterar a própria resposta.
+// - invites/{id} .......... dados internos do convite (telefones, notas, envio). Só admin.
+// - rsvpLog/{id} .......... histórico de respostas. Só cria — ninguém edita nem apaga,
+//                           nem o admin. É a garantia de que nenhuma confirmação se perde.
+// - admins/{email} ........ quem pode entrar no painel (criado pelo console na 1ª vez).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email != null
+        && request.auth.token.email_verified == true
+        && exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+
+    function rsvpOpen() {
+      let path = /databases/$(database)/documents/settings/event;
+      return !exists(path) || get(path).data.get('rsvpOpen', true) != false;
+    }
+
+    function validStatus(s) {
+      return s in ['pending', 'yes', 'no', 'maybe'];
+    }
+
+    function validAge(a) {
+      return a == null || (a is int && a >= 0 && a <= 17);
+    }
+
+    match /admins/{email} {
+      allow read: if signedIn() && request.auth.token.email == email || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /settings/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /invites/{id} {
+      allow read, write: if isAdmin();
+    }
+
+    match /guests/{id} {
+      allow get: if isAdmin() || (signedIn() && resource.data.active == true);
+      allow list: if isAdmin() || (signedIn() && request.query.limit <= 30 && resource.data.active == true);
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() || (
+        signedIn()
+        && resource.data.active == true
+        && rsvpOpen()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'age', 'respondedAt', 'respondedBy', 'updatedAt', 'ageFromGuest'])
+        && validStatus(request.resource.data.status)
+        && validAge(request.resource.data.get('age', null))
+        && request.resource.data.updatedAt == request.time
+      );
+    }
+
+    match /rsvpLog/{id} {
+      allow read: if isAdmin();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['guestId', 'guestName', 'inviteId', 'status', 'age', 'by', 'source', 'at'])
+        && validStatus(request.resource.data.status)
+        && request.resource.data.at == request.time
+        && request.resource.data.by is string && request.resource.data.by.size() <= 80
+        && validAge(request.resource.data.get('age', null))
+        && request.resource.data.source in ['guest', 'admin']
+        && (request.resource.data.source == 'guest' || isAdmin())
+        && exists(/databases/$(database)/documents/guests/$(request.resource.data.guestId));
+      allow update, delete: if false;
+    }
+  }
+}

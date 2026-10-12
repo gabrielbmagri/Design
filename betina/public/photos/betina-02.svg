@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde8d7"/><stop offset="1" stop-color="#f6b99a"/></linearGradient></defs>
+<rect width="800" height="1000" fill="url(#g)"/>
+<circle cx="400" cy="430" r="150" fill="#fff" opacity=".55"/>
+<text x="400" y="460" font-family="Georgia,serif" font-size="90" text-anchor="middle" fill="#fff">♥</text>
+<text x="400" y="700" font-family="Georgia,serif" font-size="44" text-anchor="middle" fill="#fff" opacity=".95">Foto 2 da Betina</text>
+<text x="400" y="760" font-family="Arial,sans-serif" font-size="26" text-anchor="middle" fill="#fff" opacity=".8">substitua em public/photos</text>
+</svg>

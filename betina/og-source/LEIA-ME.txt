@@ -1,0 +1,1 @@
+Coloque aqui o convite (convite.jpg ou convite.png) e rode: npm run og

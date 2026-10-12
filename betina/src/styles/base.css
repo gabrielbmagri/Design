@@ -1,0 +1,78 @@
+/* Paleta do convite — troque aqui para casar com as cores do convite real */
+:root {
+  --rose: #e8799b;
+  --rose-deep: #c9517a;
+  --rose-soft: #fbe3ea;
+  --blush: #fdf2f5;
+  --cream: #fffaf6;
+  --gold: #d9a94e;
+  --gold-soft: #f6e6c2;
+  --lilac: #b9a4ec;
+  --ink: #4a2a37;
+  --ink-soft: #7b5a67;
+  --ok: #2f9e6a;
+  --ok-soft: #dcf3e7;
+  --no: #c2484f;
+  --no-soft: #fbe1e2;
+  --maybe: #b9822b;
+  --maybe-soft: #fbefd6;
+  --line: #f0d6de;
+  --shadow: 0 10px 30px rgba(201, 81, 122, 0.14);
+  --radius: 22px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+:focus-visible {
+  outline: 3px solid var(--rose-deep);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
