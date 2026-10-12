@@ -181,9 +181,11 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
       }
     if (outcome === 'no') return { eyebrow: 'Resposta recebida', title: 'Obrigado por avisar', msg: g(settings.welcomeNo) }
     if (outcome === 'maybe') return { eyebrow: 'Sem pressa', title: 'Tudo bem, combinado', msg: settings.welcomeMaybe }
+    const rest = settings.title.replace(settings.childName, '').trim()
     return {
       eyebrow: me ? `Oi, ${firstName(me.name)}` : 'Você está convidado',
       title: settings.title,
+      big: settings.title.includes(settings.childName) && rest ? rest : '',
       msg: settings.subtitle,
     }
   })()
@@ -238,14 +240,40 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
         <motion.p className="g-eyebrow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
           {hero.eyebrow}
         </motion.p>
-        <motion.h1
-          className="g-title"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.65, duration: 0.6, ease }}
-        >
-          {hero.title}
-        </motion.h1>
+        {hero.big ? (
+          <h1 className="im-hero-title" aria-label={settings.title}>
+            <span className="line1 im-shine" aria-hidden="true">
+              {[...settings.childName].map((ch, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 40, rotate: -8 }}
+                  animate={{ opacity: 1, y: 0, rotate: 0 }}
+                  transition={{ type: 'spring', stiffness: 220, damping: 16, delay: 0.55 + i * 0.07 }}
+                >
+                  {ch}
+                </motion.span>
+              ))}
+            </span>
+            <motion.span
+              className="line2"
+              aria-hidden="true"
+              initial={{ opacity: 0, letterSpacing: '0.8em' }}
+              animate={{ opacity: 1, letterSpacing: '0.32em' }}
+              transition={{ delay: 0.6 + settings.childName.length * 0.07, duration: 0.9, ease }}
+            >
+              {hero.big}
+            </motion.span>
+          </h1>
+        ) : (
+          <motion.h1
+            className="g-title"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65, duration: 0.6, ease }}
+          >
+            {hero.title}
+          </motion.h1>
+        )}
         <motion.p className="im-msg" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85, duration: 0.6, ease }}>
           {hero.msg}
         </motion.p>
