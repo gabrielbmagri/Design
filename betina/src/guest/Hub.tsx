@@ -4,7 +4,7 @@ import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { STATUS_LABEL } from '../lib/types'
 import { firstName, longDate, waLink } from '../lib/text'
-import { Countdown, downloadIcs, googleCalendarUrl, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
+import { Countdown, MapEmbed, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
 
 interface Props {
   settings: EventSettings
@@ -72,11 +72,11 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
               <button onClick={() => { setOpen(false); onReplay() }}>
                 <span>✨</span>Ver a história de novo
               </button>
-              {settings.hostsPhone && (
-                <button onClick={() => window.open(waLink(settings.hostsPhone, 'Oi! Tenho uma dúvida sobre o aniversário da Betina.'), '_blank')}>
-                  <span>💬</span>Falar com a família
+              {hostContacts(settings, me?.host).map((c) => (
+                <button key={c.host} onClick={() => window.open(waLink(c.phone, `Oi, ${c.host === 'gabriel' ? 'Gabriel' : 'Luiza'}! Tenho uma dúvida sobre o aniversário da ${settings.childName}.`), '_blank')}>
+                  <span>💬</span>{c.label}
                 </button>
-              )}
+              ))}
               <div style={{ flex: 1 }} />
               {me && (
                 <button onClick={() => { setOpen(false); onExit() }} style={{ background: 'transparent', boxShadow: 'none', fontSize: 17 }}>
@@ -129,7 +129,8 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
             <div className="icon">📍</div>
             <div className="big">{settings.venueName}</div>
             <div className="muted">{settings.address}</div>
-            <a className="g-btn" href={mapsUrl(settings)} target="_blank" rel="noreferrer">Abrir no mapa</a>
+            <MapEmbed settings={settings} />
+            <a className="g-btn" href={mapsUrl(settings)} target="_blank" rel="noreferrer">Abrir no Google Maps</a>
             <a className="g-btn secondary" href={wazeUrl(settings)} target="_blank" rel="noreferrer">Ir com Waze</a>
           </div>
         )}

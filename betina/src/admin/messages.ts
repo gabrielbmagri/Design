@@ -1,5 +1,6 @@
 import { SITE_URL } from '../lib/firebase'
 import type { EventSettings, Guest, Invite } from '../lib/types'
+import { HOST_LABEL } from '../lib/types'
 import { fillTemplate, firstName, fmtTime, joinNames, longDate, waLink } from '../lib/text'
 
 export function inviteLink(inviteId: string) {
@@ -19,6 +20,7 @@ function vars(s: EventSettings, invite: Invite, members: Guest[]) {
     endereco: s.address,
     prazo: longDate(s.rsvpDeadlineISO),
     link: inviteLink(invite.id),
+    anfitriao: HOST_LABEL[invite.host],
   }
 }
 

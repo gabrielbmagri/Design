@@ -4,7 +4,8 @@ import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { firstName, joinNames, longDate } from '../lib/text'
 import type { Outcome } from './GuestApp'
-import { Countdown, Sparkles, downloadIcs, googleCalendarUrl, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
+import { Countdown, MapEmbed, Sparkles, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
+import { waLink } from '../lib/text'
 
 interface Props {
   settings: EventSettings
@@ -116,8 +117,9 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
           <p className="g-eyebrow">Onde</p>
           <div className="big">{settings.venueName}</div>
           <div className="muted">{settings.address}</div>
+          <MapEmbed settings={settings} />
           <a className="g-btn" href={mapsUrl(settings)} target="_blank" rel="noreferrer">
-            Abrir no mapa
+            Abrir no Google Maps
           </a>
           <a className="g-btn secondary" href={wazeUrl(settings)} target="_blank" rel="noreferrer">
             Ir com Waze
@@ -250,9 +252,16 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
           </h2>
         </Reveal>
         <Reveal delay={0.2}>
-          <button className="g-btn gold" onClick={onFinish}>
-            Ver o convite completo
-          </button>
+          <div style={{ display: 'grid', gap: 12 }}>
+            <button className="g-btn gold" onClick={onFinish}>
+              Ver o convite completo
+            </button>
+            {hostContacts(settings, me?.host).map((c) => (
+              <a key={c.host} className="g-btn wa" href={waLink(c.phone, `Oi, ${c.host === 'gabriel' ? 'Gabriel' : 'Luiza'}! Tenho uma dúvida sobre o aniversário da ${settings.childName}.`)} target="_blank" rel="noreferrer">
+                💬 {c.label}
+              </a>
+            ))}
+          </div>
         </Reveal>
       </section>
     </main>

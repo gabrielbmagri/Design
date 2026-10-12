@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { deleteDoc, doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import type { AdminCtx } from './AdminApp'
-import type { EventSettings } from '../lib/types'
+import type { EventSettings, Host } from '../lib/types'
 import { HOST_LABEL, STATUS_LABEL } from '../lib/types'
 import { download, exportBackup, saveSettings } from './ops'
 import { isFreeChild } from './stats'
@@ -21,6 +21,7 @@ export default function SettingsView({ settings, admins, user, invites, guests }
   const [dirty, setDirty] = useState(false)
   const [msg, setMsg] = useState('')
   const [newAdmin, setNewAdmin] = useState('')
+  const [newHost, setNewHost] = useState<Host>('luiza')
 
   useEffect(() => {
     if (!dirty) setS(settings)
@@ -68,7 +69,7 @@ export default function SettingsView({ settings, admins, user, invites, guests }
   const addAdmin = async () => {
     const email = newAdmin.trim().toLowerCase()
     if (!email.includes('@')) return
-    await setDoc(doc(db, 'admins', email), { addedBy: user.email, at: serverTimestamp() })
+    await setDoc(doc(db, 'admins', email), { host: newHost, addedBy: user.email, at: serverTimestamp() })
     setNewAdmin('')
   }
 
@@ -100,7 +101,11 @@ export default function SettingsView({ settings, admins, user, invites, guests }
             <Field label="Link do Waze (opcional)">{text('wazeUrl')}</Field>
           </div>
           <Field label="Traje (opcional)">{text('dressCode')}</Field>
-          <Field label="WhatsApp da família (botão 'Falar com a família')">{text('hostsPhone')}</Field>
+          <div className="ad-grid">
+            <Field label="WhatsApp do Gabriel">{text('gabrielPhone')}</Field>
+            <Field label="WhatsApp da Luiza">{text('luizaPhone')}</Field>
+          </div>
+          <Field label="Busca do mapa embutido (nome do lugar + endereço)">{text('mapsQuery')}</Field>
           <label className="ad-row" style={{ fontWeight: 700 }}>
             <input type="checkbox" checked={s.rsvpOpen} onChange={(e) => set('rsvpOpen', e.target.checked)} /> Confirmações abertas no site
           </label>
@@ -121,7 +126,7 @@ export default function SettingsView({ settings, admins, user, invites, guests }
           <Field label="Depois de recusar">{area('welcomeNo', 2)}</Field>
           <Field label="Depois de 'ainda não sei'">{area('welcomeMaybe', 2)}</Field>
           <div className="ad-note">
-            Variáveis do WhatsApp: <code>{'{nome} {crianca} {data} {hora} {local} {endereco} {prazo} {link}'}</code>
+            Variáveis do WhatsApp: <code>{'{nome} {crianca} {data} {hora} {local} {endereco} {prazo} {link} {anfitriao}'}</code>
           </div>
           <Field label="Mensagem do convite (WhatsApp)">{area('inviteMessage', 8)}</Field>
           <Field label="Mensagem de lembrete (WhatsApp)">{area('reminderMessage', 7)}</Field>
@@ -160,13 +165,22 @@ export default function SettingsView({ settings, admins, user, invites, guests }
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
           <h3>Administradores</h3>
           {admins.map((a) => (
-            <div key={a} className="ad-row">
-              <span style={{ flex: 1 }}>{a}</span>
-              {a !== user.email && <button className="ad-btn sm danger" onClick={() => confirm(`Remover ${a}?`) && deleteDoc(doc(db, 'admins', a))}>Remover</button>}
+            <div key={a.email} className="ad-row">
+              <span style={{ flex: 1 }}>{a.email}</span>
+              <select className="ad-select" style={{ width: 140 }} value={a.host ?? ''} onChange={(e) => setDoc(doc(db, 'admins', a.email), { host: e.target.value || null }, { merge: true })}>
+                <option value="">—</option>
+                <option value="gabriel">Gabriel</option>
+                <option value="luiza">Luiza</option>
+              </select>
+              {a.email !== user.email && <button className="ad-btn sm danger" onClick={() => confirm(`Remover ${a.email}?`) && deleteDoc(doc(db, 'admins', a.email))}>Remover</button>}
             </div>
           ))}
           <div className="ad-row">
-            <input className="ad-input" style={{ flex: 1 }} placeholder="email@gmail.com da Luiza" value={newAdmin} onChange={(e) => setNewAdmin(e.target.value)} />
+            <input className="ad-input" style={{ flex: 1 }} placeholder="email@gmail.com" value={newAdmin} onChange={(e) => setNewAdmin(e.target.value)} />
+            <select className="ad-select" style={{ width: 140 }} value={newHost} onChange={(e) => setNewHost(e.target.value as Host)}>
+              <option value="gabriel">Gabriel</option>
+              <option value="luiza">Luiza</option>
+            </select>
             <button className="ad-btn" onClick={addAdmin}>Adicionar</button>
           </div>
         </div>

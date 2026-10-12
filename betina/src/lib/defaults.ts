@@ -10,8 +10,8 @@ export const DEFAULT_SETTINGS: EventSettings = {
   dateISO: '2026-11-02',
   timeStart: '13:00',
   timeEnd: '',
-  venueName: 'Adventure Kids',
-  address: 'Casa 01',
+  venueName: 'Adventure Kids — Casa 01',
+  address: 'Av. Dr. Luiz Guimarães, 669 – Centro, Nova Iguaçu – RJ',
   mapsUrl: 'https://share.google/ic7mYwxZPlUNpQ9vC',
   wazeUrl: '',
   dressCode: 'Seu chapéu de cowboy é bem-vindo! 🤠',
@@ -36,12 +36,15 @@ export const DEFAULT_SETTINGS: EventSettings = {
   giftNote: 'Sua presença é o nosso maior presente. Se quiser presentear, aqui vão algumas ideias:',
   pix: '',
   hostsPhone: '',
+  gabrielPhone: '',
+  luizaPhone: '',
+  mapsQuery: "Adventure Kid's Casa de Festas, Av. Dr. Luiz Guimarães, 669, Nova Iguaçu - RJ",
   capPerHost: 50,
   childFreeMaxAge: 5,
   reminderDays: 7,
   inviteMessage:
-    'Oi, {nome}! 🐮\n\nAs porteiras estão abertas! A {crianca} vai fazer 1 aninho e queremos muito você com a gente na fazendinha.\n\n📅 {data}\n⏰ {hora}\n📍 {local}\n🤠 Seu chapéu de cowboy é bem-vindo!\n\nConfirme sua presença aqui, é bem fácil:\n{link}',
+    'Oi, {nome}! 🐮\n\nAs porteiras estão abertas! A {crianca} vai fazer 1 aninho e queremos muito você com a gente na fazendinha.\n\n📅 {data}\n⏰ {hora}\n📍 {local}\n🤠 Seu chapéu de cowboy é bem-vindo!\n\nConfirme sua presença aqui, é bem fácil:\n{link}\n\nCom carinho, {anfitriao} 💗',
   reminderMessage:
-    'Oi, {nome}! Tudo bem? 🐷\n\nPassando pra lembrar do aniversário de 1 ano da {crianca}, {data}, às {hora}.\n\nVocê consegue confirmar se vai? É só tocar no link:\n{link}\n\nObrigado! 💗',
+    'Oi, {nome}! Tudo bem? 🐷\n\nPassando pra lembrar do aniversário de 1 ano da {crianca}, {data}, às {hora}.\n\nVocê consegue confirmar se vai? É só tocar no link:\n{link}\n\nObrigado! {anfitriao} 💗',
   inviteImage: '/photos/convite.jpg',
 }

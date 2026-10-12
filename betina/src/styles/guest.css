@@ -975,3 +975,25 @@
 .g-screen.soft::after {
   bottom: 0;
 }
+
+.im-map {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 4px solid #fff;
+  box-shadow: var(--shadow);
+  background: var(--blush);
+}
+
+.im-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.g-btn.wa {
+  background: linear-gradient(135deg, #2bd66b, #1fae55);
+  box-shadow: 0 10px 24px rgba(31, 174, 85, 0.3);
+}

@@ -150,7 +150,7 @@ export default function Invites(ctx: AdminCtx) {
               <div className="ad-row">
                 {!i.reserve && !i.archived && (
                   <a className="ad-btn sm wa" href={inviteWa(settings, i, mem)} target="_blank" rel="noreferrer" onClick={() => !i.sentAt && markSent(i)}>
-                    {i.sentAt ? 'Reenviar no WhatsApp' : 'Enviar no WhatsApp'}
+                    {i.sentAt ? 'Reenviar' : 'Enviar'} no WhatsApp ({HOST_LABEL[i.host]})
                   </a>
                 )}
                 {!i.sentAt && !i.reserve && !i.archived && <button className="ad-btn sm" onClick={() => markSent(i)}>Marcar como enviado</button>}

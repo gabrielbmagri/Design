@@ -84,6 +84,11 @@ export interface EventSettings {
   giftNote: string
   pix: string
   hostsPhone: string
+  /** WhatsApp de cada anfitrião (botão "Falar com…" e assinatura das mensagens) */
+  gabrielPhone: string
+  luizaPhone: string
+  /** o que procurar no mapa embutido (nome do lugar + endereço) */
+  mapsQuery: string
   capPerHost: number
   childFreeMaxAge: number
   reminderDays: number

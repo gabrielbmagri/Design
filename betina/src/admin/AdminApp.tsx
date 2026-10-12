@@ -4,7 +4,7 @@ import { collection, doc, getDoc, limit, onSnapshot, orderBy, query } from 'fire
 import { auth, db, firebaseConfigured } from '../lib/firebase'
 import { guestsCol, invitesCol, logCol, watchSettings } from '../lib/data'
 import { DEFAULT_SETTINGS } from '../lib/defaults'
-import type { EventSettings, Guest, Invite, RsvpLog } from '../lib/types'
+import type { EventSettings, Guest, Host, Invite, RsvpLog } from '../lib/types'
 import { computeStats } from './stats'
 import Dashboard from './Dashboard'
 import Invites from './Invites'
@@ -21,7 +21,8 @@ export interface AdminCtx {
   logs: RsvpLog[]
   settings: EventSettings
   stats: ReturnType<typeof computeStats>
-  admins: string[]
+  admins: { email: string; host?: Host }[]
+  myHost?: Host
   go: (tab: Tab, filter?: string) => void
   filter: string
 }
@@ -79,7 +80,7 @@ export default function AdminApp() {
   const [invites, setInvites] = useState<Invite[]>([])
   const [guests, setGuests] = useState<Guest[]>([])
   const [logs, setLogs] = useState<RsvpLog[]>([])
-  const [admins, setAdmins] = useState<string[]>([])
+  const [admins, setAdmins] = useState<{ email: string; host?: Host }[]>([])
   const [settings, setSettings] = useState<EventSettings>(DEFAULT_SETTINGS)
   const [tab, setTab] = useState<Tab>('painel')
   const [filter, setFilter] = useState('')
@@ -102,7 +103,7 @@ export default function AdminApp() {
       onSnapshot(query(logCol, orderBy('at', 'desc'), limit(400)), (s) =>
         setLogs(s.docs.map((d) => ({ id: d.id, ...d.data() }) as RsvpLog)),
       ),
-      onSnapshot(collection(db, 'admins'), (s) => setAdmins(s.docs.map((d) => d.id))),
+      onSnapshot(collection(db, 'admins'), (s) => setAdmins(s.docs.map((d) => ({ email: d.id, host: d.get('host') as Host | undefined })))),
       watchSettings(setSettings),
     ]
     return () => offs.forEach((f) => f())
@@ -138,7 +139,8 @@ export default function AdminApp() {
     setFilter(f)
     window.scrollTo({ top: 0 })
   }
-  const ctx: AdminCtx = { user, invites, guests, logs, settings, stats, admins, go, filter }
+  const myHost = admins.find((a) => a.email === user.email)?.host
+  const ctx: AdminCtx = { user, invites, guests, logs, settings, stats, admins, myHost, go, filter }
   const badge: Partial<Record<Tab, number>> = {
     lembretes: stats.reminders.length + stats.notSent.length,
     criancas: stats.kidsNoAge.length,

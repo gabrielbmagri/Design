@@ -179,3 +179,32 @@ export function timeLabel(s: EventSettings) {
 export function placeLabel(s: EventSettings) {
   return [s.venueName, s.address].filter(Boolean).join(', ')
 }
+
+export function mapEmbedUrl(s: EventSettings) {
+  const q = s.mapsQuery || placeLabel(s)
+  return `https://www.google.com/maps?q=${encodeURIComponent(q)}&hl=pt-BR&z=16&output=embed`
+}
+
+export function MapEmbed({ settings }: { settings: EventSettings }) {
+  return (
+    <div className="im-map">
+      <iframe
+        title={`Mapa: ${settings.venueName}`}
+        src={mapEmbedUrl(settings)}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        allowFullScreen
+      />
+    </div>
+  )
+}
+
+/** Contatos para "Falar com…": o anfitrião do convite, ou os dois para visitantes. */
+export function hostContacts(s: EventSettings, host?: 'gabriel' | 'luiza') {
+  const all = [
+    { host: 'gabriel' as const, label: 'Falar com o Gabriel', phone: s.gabrielPhone || s.hostsPhone },
+    { host: 'luiza' as const, label: 'Falar com a Luiza', phone: s.luizaPhone || s.hostsPhone },
+  ].filter((c) => c.phone)
+  const mine = host ? all.filter((c) => c.host === host) : []
+  return mine.length ? mine : all
+}
