@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { STATUS_LABEL } from '../lib/types'
-import { eventDate, firstName, forGroup, guestName, waLink } from '../lib/text'
+import { eventDate, firstName, forGroup, guestName, parseISODate, shortDate, waLink } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
 import { Countdown, FloatingAnimals, GiftList, MapEmbed, Sparkles, hostContacts, timeLabel } from './bits'
 import { CalendarButton, ContactButtons, PlaceActions } from './Immersion'
@@ -83,6 +83,9 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
     if (bar && on) bar.scrollTo({ left: on.offsetLeft - bar.clientWidth / 2 + on.clientWidth / 2, behavior: 'smooth' })
   }, [section])
   const contacts = hostContacts(settings, me?.host)
+  const [wd] = eventDate(settings.dateISO).split(', ')
+  const drawerDate = `${wd.replace('-feira', '')}, ${shortDate(settings.dateISO)}`
+  const daysLeft = Math.ceil((parseISODate(settings.dateISO).getTime() - Date.now()) / 864e5)
 
   return (
     <div className="im">
@@ -119,9 +122,19 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
               transition={{ type: 'spring', stiffness: 320, damping: 34 }}
               aria-label="Menu"
             >
-              <div className="head">
-                <b>{settings.title}</b>
-                <small>{eventDate(settings.dateISO, settings.dateNote)}</small>
+              <div className="hub-drawer-card">
+                <div className="row">
+                  <span className="badge">1</span>
+                  <div className="name">
+                    <span className="im-shine">{settings.childName}</span>
+                    <small>faz 1 ano</small>
+                  </div>
+                </div>
+                <div className="meta">
+                  <span><Icon name="calendar" size={15} /> {drawerDate}</span>
+                  <span><Icon name="clock" size={15} /> {timeLabel(settings).replace(/^às /, '')}{settings.dateNote ? ` · ${settings.dateNote}` : ''}</span>
+                  {daysLeft > 0 && <span className="count"><Icon name="sparkle" size={15} /> Faltam {daysLeft} {daysLeft === 1 ? 'dia' : 'dias'}</span>}
+                </div>
               </div>
               {MENU.map((m) => (
                 <button key={m.id} className={section === m.id ? 'on' : ''} onClick={() => go(m.id)}>
