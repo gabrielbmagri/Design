@@ -22,11 +22,18 @@ export const DEFAULT_SETTINGS: EventSettings = {
   welcomeNo: 'Que pena! Vamos sentir sua falta — obrigado por avisar com tanto carinho.',
   welcomeMaybe: 'Tudo bem! Volte aqui e responda quando souber — as porteiras continuam abertas.',
   story: [
-    { photo: ph(1), text: 'No dia 31 de outubro de 2025, às 15h, no Instituto Fernandes Figueira, nasceu a Betina — e a nossa vida ganhou uma cor nova.' },
-    { photo: ph(2), text: 'Vieram os primeiros sorrisos, os primeiros balbucios, as primeiras gargalhadas… cada dia uma descoberta, cada descoberta uma festa.' },
-    { photo: ph(3), text: 'Gabriel e Luíza viram essa pequena crescer cheia de curiosidade — e de amor por todo mundo que está por perto.' },
-    { photo: ph(4), text: 'Agora as porteiras estão abertas: chegou a hora de celebrar o primeiro aninho da Betina na fazendinha. E a festa só fica completa com você!' },
+    { label: '31 de outubro de 2025 · 15h', photo: ph(1), text: 'No Instituto Fernandes Figueira, nasceu a Betina. Naquele instante, a nossa vida ganhou uma cor nova.' },
+    { label: 'Os primeiros dias', photo: ph(2), text: 'Noites em claro, colo sem fim e um amor que a gente nem sabia que cabia no peito.' },
+    { label: 'Os primeiros sorrisos', photo: ph(3), text: 'Veio o primeiro sorriso e, com ele, a certeza de que cada dia ia ser uma festa.' },
+    { label: 'Descobertas', photo: ph(4), text: 'Mãozinhas curiosas, gargalhadas, as primeiras palavrinhas. Cada descoberta virou um motivo para celebrar.' },
+    { label: 'Gabriel e Luíza', photo: ph(5), text: 'Ver a Betina crescer cheia de curiosidade e carinho por todo mundo é o maior presente que a vida nos deu.' },
+    { label: '1 aninho', photo: ph(1), text: 'Agora as porteiras estão abertas: chegou a hora de celebrar o primeiro ano da Betina na fazendinha. E a festa só fica completa com você.' },
   ],
+  birthISO: '2025-10-31T15:00',
+  introText: 'Essa é a história de um ano que mudou as nossas vidas.',
+  letter:
+    'Obrigado por fazer parte da vida da Betina. Cada pessoa convidada para esta festa tem um pedacinho dessa história: num colo, numa visita, numa mensagem, numa oração. Queremos muito celebrar esse primeiro ano ao seu lado.',
+  letterSign: 'Com amor, Gabriel e Luíza',
   carousel: [ph(1), ph(2), ph(3), ph(4), ph(5)],
   gifts: [
     { group: 'Betina adora', title: 'Livros' },

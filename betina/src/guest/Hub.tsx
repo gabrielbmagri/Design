@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { STATUS_LABEL } from '../lib/types'
 import { firstName, longDate, waLink } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
-import { Countdown, GiftList, MapEmbed, hostContacts, timeLabel } from './bits'
+import { Countdown, FloatingAnimals, GiftList, MapEmbed, Sparkles, hostContacts, timeLabel } from './bits'
 import { CalendarButton, ContactButtons, PlaceActions } from './Immersion'
 
 interface Props {
@@ -24,32 +24,71 @@ const MENU: { id: string; icon: IconName; label: string }[] = [
   { id: 'quando', icon: 'calendar', label: 'Data e hora' },
   { id: 'onde', icon: 'pin', label: 'Local' },
   { id: 'presentes', icon: 'gift', label: 'Presentes' },
+  { id: 'historia', icon: 'heart', label: 'Nossa história' },
   { id: 'confirmacao', icon: 'check', label: 'Minha confirmação' },
 ]
 
-function Card({ icon, title, children }: { icon: IconName; title: string; children: React.ReactNode }) {
+function Card({ icon, title, children }: { icon: IconName; title: string; children: ReactNode }) {
   return (
-    <div className="im-card">
+    <motion.div
+      className="im-card"
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="im-card-head">
         <span className="im-icon"><Icon name={icon} size={22} /></span>
         <h3>{title}</h3>
       </div>
       {children}
-    </div>
+    </motion.div>
   )
 }
 
 export default function Hub({ settings, invite, me, section, onSection, onManage, onReplay, onExit }: Props) {
   const [open, setOpen] = useState(false)
+  const tabsRef = useRef<HTMLElement>(null)
   const go = (id: string) => {
     onSection(id)
     setOpen(false)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    document.getElementById(`hub-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
+
+  // ao abrir, vai direto para a seção pedida (ex.: "Minha confirmação")
+  useEffect(() => {
+    if (section !== 'convite') setTimeout(() => document.getElementById(`hub-${section}`)?.scrollIntoView({ block: 'start' }), 50)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // destaca a aba da seção que está na tela
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
+        if (vis) onSection(vis.target.id.replace('hub-', ''))
+      },
+      { rootMargin: '-130px 0px -55% 0px' },
+    )
+    MENU.forEach((m) => {
+      const el = document.getElementById(`hub-${m.id}`)
+      if (el) obs.observe(el)
+    })
+    return () => obs.disconnect()
+  }, [onSection])
+
+  useEffect(() => {
+    const bar = tabsRef.current
+    const on = bar?.querySelector<HTMLElement>('.on')
+    if (bar && on) bar.scrollTo({ left: on.offsetLeft - bar.clientWidth / 2 + on.clientWidth / 2, behavior: 'smooth' })
+  }, [section])
   const contacts = hostContacts(settings, me?.host)
 
   return (
     <div className="im">
+      <div className="im-glow" />
+      <Sparkles count={10} />
+      <FloatingAnimals count={8} />
       <header className="hub-top">
         <button className="hub-menu-btn" onClick={() => setOpen(true)} aria-label="Abrir menu" aria-expanded={open}>
           <Icon name="menu" size={22} />
@@ -60,7 +99,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
         <span style={{ width: 44 }} />
       </header>
 
-      <nav className="hub-tabs" aria-label="Seções">
+      <nav className="hub-tabs" aria-label="Seções" ref={tabsRef} style={{ position: 'sticky', top: 'calc(64px + env(safe-area-inset-top))', zIndex: 15, background: 'rgba(255,252,248,.97)', backdropFilter: 'blur(10px)', maxWidth: 'none', paddingBottom: 10 }}>
         {MENU.map((m) => (
           <button key={m.id} className={section === m.id ? 'on' : ''} onClick={() => go(m.id)}>
             {m.label}
@@ -111,27 +150,25 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
       </AnimatePresence>
 
       <main className="hub-main">
-        {section === 'convite' && (
+        <section id="hub-convite" className="hub-section" style={{ display: 'grid', gap: 14 }}>
           <>
             {settings.inviteImage && (
               <div className="im-invite" style={{ maxWidth: '100%', margin: '0 auto' }}>
                 <img src={settings.inviteImage} alt={`Convite: ${settings.title}`} />
               </div>
             )}
-            <Card icon="calendar" title={longDate(settings.dateISO)}>
-              <p>
-                {timeLabel(settings)} · {settings.venueName}
-              </p>
-              <Countdown settings={settings} />
-            </Card>
+            <p className="g-lead" style={{ textAlign: 'center' }}>
+              {me ? `${firstName(me.name)}, ` : ''}
+              {longDate(settings.dateISO)}, {timeLabel(settings)}, {settings.venueName}
+            </p>
             <button className="g-btn" onClick={() => (me ? go('confirmacao') : onManage())}>
               {me ? 'Ver minha confirmação' : 'Confirmar presença'}
             </button>
             {settings.dressCode && <p className="g-small" style={{ textAlign: 'center' }}>{settings.dressCode}</p>}
           </>
-        )}
+        </section>
 
-        {section === 'quando' && (
+        <section id="hub-quando" className="hub-section" style={{ display: 'grid', gap: 14 }}>
           <Card icon="calendar" title="Data e hora">
             <p>
               <b style={{ color: 'var(--ink)' }}>{longDate(settings.dateISO)}</b>, {timeLabel(settings)}
@@ -139,9 +176,9 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
             <Countdown settings={settings} />
             <CalendarButton settings={settings} />
           </Card>
-        )}
+        </section>
 
-        {section === 'onde' && (
+        <section id="hub-onde" className="hub-section" style={{ display: 'grid', gap: 14 }}>
           <Card icon="pin" title="Local">
             <p>
               <b style={{ color: 'var(--ink)' }}>{settings.venueName}</b>
@@ -151,17 +188,34 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
             <MapEmbed settings={settings} />
             <PlaceActions settings={settings} />
           </Card>
-        )}
+        </section>
 
-        {section === 'presentes' && (
+        <section id="hub-presentes" className="hub-section" style={{ display: 'grid', gap: 14 }}>
           <Card icon="gift" title="Sugestões de presente">
             <p>{settings.giftNote}</p>
             <GiftList settings={settings} />
             {settings.pix && <p>Pix: <b>{settings.pix}</b></p>}
           </Card>
-        )}
+        </section>
 
-        {section === 'confirmacao' && (
+        <section id="hub-historia" className="hub-section" style={{ display: 'grid', gap: 14 }}>
+          <Card icon="heart" title="Nossa história">
+            <p>Um ano em alguns momentos.</p>
+            <div className="im-strip">
+              {settings.story.map((c, i) => (
+                <figure key={i}>
+                  <img src={c.photo} alt={c.label || `Momento ${i + 1}`} loading="lazy" />
+                  {c.label && <figcaption>{c.label}</figcaption>}
+                </figure>
+              ))}
+            </div>
+            <button className="g-btn ghost" onClick={onReplay}>
+              <Icon name="sparkle" size={18} /> Ver a história completa
+            </button>
+          </Card>
+        </section>
+
+        <section id="hub-confirmacao" className="hub-section" style={{ display: 'grid', gap: 14 }}>
           <Card icon="check" title={invite ? 'Respostas do seu convite' : 'Confirme sua presença'}>
             {invite ? (
               <>
@@ -183,7 +237,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
             )}
             <ContactButtons settings={settings} me={me} />
           </Card>
-        )}
+        </section>
       </main>
     </div>
   )

@@ -6,8 +6,8 @@ import { firstName, joinNames, longDate, waLink } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
 import type { Outcome } from './GuestApp'
 import {
-  Countdown, GiftList, MapEmbed, Sparkles, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl,
-  placeLabel, timeLabel, wazeUrl,
+  Countdown, FloatingAnimals, GiftList, LifeCounter, MapEmbed, Sparkles, WordReveal, downloadIcs, googleCalendarUrl,
+  hostContacts, isIOS, mapsUrl, placeLabel, timeLabel, wazeUrl,
 } from './bits'
 
 interface Props {
@@ -34,20 +34,47 @@ function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }
   )
 }
 
-function Chapter({ photo, text, index }: { photo: string; text: string; index: number }) {
-  const ref = useRef<HTMLElement>(null)
+function Moment({ photo, text, label, index }: { photo: string; text: string; label?: string; index: number }) {
+  const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40])
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1, 0.98])
+  const y = useTransform(scrollYProgress, [0, 1], [30, -30])
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1.12, 1])
   return (
-    <section className="im-section" ref={ref}>
-      <motion.div className="im-photo" style={{ y, scale }}>
-        <img src={photo} alt={`Foto da Betina ${index + 1}`} loading="lazy" />
+    <div className="im-moment" ref={ref}>
+      {label && (
+        <motion.p className="g-eyebrow" initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          {label}
+        </motion.p>
+      )}
+      <motion.div
+        className="im-photo"
+        style={{ y }}
+        initial={{ opacity: 0, scale: 0.94 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.25 }}
+        transition={{ duration: 0.8, ease }}
+      >
+        <motion.img src={photo} alt={`Foto da Betina ${index + 1}`} loading="lazy" style={{ scale: imgScale }} />
       </motion.div>
-      <Reveal delay={0.1}>
-        <p className="im-story">{text}</p>
-      </Reveal>
-    </section>
+      <WordReveal text={text} className="im-story" />
+    </div>
+  )
+}
+
+function Timeline({ items, offset }: { items: EventSettings['story']; offset: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 70%', 'end 60%'] })
+  const fill = useSpring(scrollYProgress, { stiffness: 90, damping: 25 })
+  if (!items.length) return null
+  return (
+    <div className="im-timeline" ref={ref}>
+      <div className="im-timeline-rail">
+        <motion.span style={{ scaleY: fill }} />
+      </div>
+      {items.map((c, i) => (
+        <Moment key={i} index={offset + i} photo={c.photo} text={c.text} label={c.label} />
+      ))}
+    </div>
   )
 }
 
@@ -114,6 +141,8 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 })
   const going = invite?.guests.filter((g) => g.status === 'yes').map((g) => firstName(g.name)) ?? []
+  const names = invite ? joinNames(invite.guests.map((g) => firstName(g.name))) : me ? firstName(me.name) : ''
+  const many = (invite?.guests.length ?? 1) > 1
 
   const hero = (() => {
     if (outcome === 'yes')
@@ -161,19 +190,13 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
       </InfoCard>,
     )
 
-  const sequence: ReactNode[] = []
-  const max = Math.max(settings.story.length, cards.length)
-  for (let i = 0; i < max; i++) {
-    const c = settings.story[i]
-    if (c) sequence.push(<Chapter key={`s${i}`} index={i} photo={c.photo} text={c.text} />)
-    if (cards[i]) sequence.push(cards[i])
-  }
-
+  const half = Math.ceil(settings.story.length / 2)
   return (
     <main className="im">
       <motion.div className="im-progress" style={{ scaleX: progress }} />
       <div className="im-glow" />
       <Sparkles />
+      <FloatingAnimals />
 
       <section className="im-section im-hero">
         <motion.div
@@ -204,14 +227,36 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
         </motion.div>
       </section>
 
+      <section className="im-section">
+        <WordReveal text={settings.introText} className="im-intro" />
+        <Reveal delay={0.2}>
+          <p className="g-small">
+            {names ? `${names}, ${many ? 'vocês fazem' : 'você faz'} parte dela.` : 'E você faz parte dela.'}
+          </p>
+        </Reveal>
+      </section>
+
+      <section className="im-section" style={{ paddingTop: 24 }}>
+        <Reveal>
+          <LifeCounter birthISO={settings.birthISO} name={settings.childName} />
+        </Reveal>
+      </section>
+
+      <Timeline items={settings.story.slice(0, half)} offset={0} />
+
+      {cards.slice(0, 2)}
+
       {settings.inviteImage && (
         <section className="im-section">
+          <Reveal>
+            <p className="g-eyebrow">O convite</p>
+          </Reveal>
           <motion.div
             className="im-invite"
-            initial={{ opacity: 0, y: 40, rotate: -3 }}
-            whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+            initial={{ opacity: 0, y: 40, rotate: -4, scale: 0.92 }}
+            whileInView={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.9, ease }}
+            transition={{ type: 'spring', stiffness: 70, damping: 15 }}
           >
             <img src={settings.inviteImage} alt={`Convite: ${settings.title}`} />
           </motion.div>
@@ -221,11 +266,27 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
         </section>
       )}
 
-      {sequence}
+      <Timeline items={settings.story.slice(half)} offset={half} />
+
+      {cards.slice(2)}
+
+      {settings.letter && (
+        <section className="im-section">
+          <Reveal>
+            <div className="im-letter">
+              <span className="to">{names ? `Para ${names},` : 'Para você,'}</span>
+              <p>{settings.letter}</p>
+              <span className="sign">{settings.letterSign}</span>
+            </div>
+          </Reveal>
+        </section>
+      )}
 
       <section className="im-section" style={{ paddingBottom: 96 }}>
         <Reveal>
-          <h2 className="g-h2">Esperamos você!</h2>
+          <h2 className="g-title">
+            {names ? <>{names}, <span className="im-shine">{many ? 'esperamos vocês!' : 'esperamos você!'}</span></> : <span className="im-shine">Esperamos você!</span>}
+          </h2>
         </Reveal>
         <Reveal delay={0.1}>
           <div style={{ display: 'grid', gap: 10, width: '100%' }}>

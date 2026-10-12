@@ -80,7 +80,12 @@ export interface EventSettings {
   welcomeYes: string
   welcomeNo: string
   welcomeMaybe: string
-  story: { photo: string; text: string }[]
+  story: { photo: string; text: string; label?: string }[]
+  /** nascimento (para o contador "já viveu X dias") */
+  birthISO: string
+  introText: string
+  letter: string
+  letterSign: string
   carousel: string[]
   gifts: GiftItem[]
   giftNote: string

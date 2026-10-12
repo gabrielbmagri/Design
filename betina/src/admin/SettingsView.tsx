@@ -77,7 +77,7 @@ export default function SettingsView({ settings }: AdminCtx) {
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
           <h3>Informações</h3>
           <Field label="Título">{text('title')}</Field>
-          <Field label="Frase de abertura">{text('subtitle')}</Field>
+          <Field label="Frase do convite">{text('subtitle')}</Field>
           <div className="ad-grid">
             <Field label="Data">{text('dateISO', 'date')}</Field>
             <Field label="Começa">{text('timeStart', 'time')}</Field>
@@ -132,15 +132,21 @@ export default function SettingsView({ settings }: AdminCtx) {
           <Field label="Imagem do convite">{text('inviteImage')}</Field>
           <h3>Fotos do carrossel (uma por linha)</h3>
           <textarea className="ad-textarea" rows={5} value={s.carousel.join('\n')} onChange={(e) => set('carousel', e.target.value.split('\n').map((x) => x.trim()).filter(Boolean))} />
-          <h3>História (uma foto + texto por capítulo)</h3>
+          <h3>Linha do tempo (título, foto e texto de cada momento)</h3>
+          <Field label="Frase de abertura da história">{text('introText')}</Field>
+          <Field label="Nascimento (para o contador de dias vividos)">{text('birthISO', 'datetime-local')}</Field>
           {s.story.map((c, i) => (
             <div key={i} className="ad-member">
+              <input className="ad-input" placeholder="Título do momento (ex.: Os primeiros sorrisos)" value={c.label ?? ''} onChange={(e) => set('story', s.story.map((x, k) => (k === i ? { ...x, label: e.target.value } : x)))} style={{ gridColumn: '1 / -1' }} />
               <input className="ad-input" placeholder="/photos/foto.jpg" value={c.photo} onChange={(e) => set('story', s.story.map((x, k) => (k === i ? { ...x, photo: e.target.value } : x)))} />
               <button className="ad-btn sm danger" onClick={() => set('story', s.story.filter((_, k) => k !== i))}>✕</button>
               <textarea className="ad-textarea" style={{ gridColumn: '1 / -1', minHeight: 60 }} value={c.text} onChange={(e) => set('story', s.story.map((x, k) => (k === i ? { ...x, text: e.target.value } : x)))} />
             </div>
           ))}
-          <button className="ad-btn" onClick={() => set('story', [...s.story, { photo: '', text: '' }])}>+ Capítulo</button>
+          <button className="ad-btn" onClick={() => set('story', [...s.story, { label: '', photo: '', text: '' }])}>+ Momento</button>
+          <h3 style={{ marginTop: 10 }}>Carta para os convidados</h3>
+          <Field label="Texto (aparece com 'Para {nome do convidado},')">{area('letter', 5)}</Field>
+          <Field label="Assinatura">{text('letterSign')}</Field>
         </div>
         )}
 

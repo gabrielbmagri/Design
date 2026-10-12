@@ -243,3 +243,92 @@ export function GiftList({ settings, animate = false }: { settings: EventSetting
     </div>
   )
 }
+
+const ANIMALS = ['🐷', '🐮', '🐴', '🐔', '🐰', '🐑', '🐥', '🌼']
+
+/** Bichinhos da fazenda subindo devagar, com balanço, ao fundo. */
+export function FloatingAnimals({ count = 12 }: { count?: number }) {
+  const items = useMemo(
+    () =>
+      Array.from({ length: count }, (_, k) => ({
+        k,
+        a: ANIMALS[k % ANIMALS.length],
+        left: (k * 97) % 100,
+        delay: -(Math.random() * 24),
+        dur: 18 + Math.random() * 14,
+        size: 18 + Math.round(Math.random() * 14),
+        sway: 12 + Math.random() * 24,
+      })),
+    [count],
+  )
+  return (
+    <div className="im-animals" aria-hidden="true">
+      {items.map((s) => (
+        <span
+          key={s.k}
+          style={{
+            left: `${s.left}%`,
+            fontSize: s.size,
+            animationDelay: `${s.delay}s`,
+            animationDuration: `${s.dur}s`,
+            ['--sway' as string]: `${s.sway}px`,
+          }}
+        >
+          {s.a}
+        </span>
+      ))}
+    </div>
+  )
+}
+
+/** "A Betina já viveu X dias, Y horas…" — conta ao vivo desde o nascimento. */
+export function LifeCounter({ birthISO, name }: { birthISO: string; name: string }) {
+  const birth = new Date(birthISO).getTime()
+  const [now, setNow] = useState(Date.now())
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(t)
+  }, [])
+  if (!birth || Number.isNaN(birth)) return null
+  const diff = Math.max(0, now - birth)
+  const days = Math.floor(diff / 864e5)
+  const hours = Math.floor(diff / 36e5)
+  const minutes = Math.floor(diff / 6e4)
+  const fmt = (n: number) => n.toLocaleString('pt-BR')
+  return (
+    <div className="im-life">
+      <p className="g-eyebrow">A {name} já viveu</p>
+      <div className="im-life-grid">
+        <div><b>{fmt(days)}</b><small>dias</small></div>
+        <div><b>{fmt(hours)}</b><small>horas</small></div>
+        <div><b>{fmt(minutes)}</b><small>minutos</small></div>
+      </div>
+      <p className="g-small">e cada um deles foi cheio de amor.</p>
+    </div>
+  )
+}
+
+/** Frase que aparece palavra por palavra quando entra na tela. */
+export function WordReveal({ text, className }: { text: string; className?: string }) {
+  const words = text.split(' ')
+  return (
+    <motion.p
+      className={className}
+      initial="hide"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.5 }}
+      variants={{ show: { transition: { staggerChildren: 0.06 } } }}
+    >
+      {words.map((w, i) => (
+        <motion.span
+          key={i}
+          style={{ display: 'inline-block', whiteSpace: 'pre' }}
+          variants={{ hide: { opacity: 0, y: 14, filter: 'blur(6px)' }, show: { opacity: 1, y: 0, filter: 'blur(0px)' } }}
+          transition={{ duration: 0.5 }}
+        >
+          {w + (i < words.length - 1 ? ' ' : '')}
+        </motion.span>
+      ))}
+    </motion.p>
+  )
+}
