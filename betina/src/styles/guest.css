@@ -1268,3 +1268,34 @@
 .hub-section {
   scroll-margin-top: 120px;
 }
+
+/* ---------- primeira foto da linha do tempo ---------- */
+.im-first-stage {
+  position: relative;
+  width: 100%;
+}
+
+.im-first-glow {
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(248, 201, 220, 0.95), rgba(232, 169, 74, 0.35) 60%, transparent 75%);
+  filter: blur(18px);
+  animation: first-pulse 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes first-pulse {
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+.im-first-photo {
+  position: relative;
+  box-shadow: 0 30px 70px rgba(201, 58, 118, 0.25);
+}
+
+.im-first-photo img {
+  will-change: transform;
+}

@@ -34,11 +34,38 @@ function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }
   )
 }
 
+/** Primeira foto da linha do tempo: abre como um círculo de luz que cresce com a rolagem. */
+function FirstMoment({ photo, text, label }: { photo: string; text: string; label?: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 95%', 'center 45%'] })
+  const p = useSpring(scrollYProgress, { stiffness: 80, damping: 22 })
+  const clip = useTransform(p, [0, 1], ['circle(12% at 50% 50%)', 'circle(75% at 50% 50%)'])
+  const imgScale = useTransform(p, [0, 1], [1.35, 1])
+  const glow = useTransform(p, [0, 0.6, 1], [0.2, 1, 0.65])
+  return (
+    <div className="im-moment im-first" ref={ref}>
+      {label && (
+        <motion.p className="g-eyebrow" initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          {label}
+        </motion.p>
+      )}
+      <div className="im-first-stage">
+        <motion.div className="im-first-glow" style={{ opacity: glow }} />
+        <motion.div className="im-photo im-first-photo" style={{ clipPath: clip }}>
+          <motion.img src={photo} alt="Foto do nascimento da Betina" style={{ scale: imgScale }} />
+        </motion.div>
+      </div>
+      <WordReveal text={text} className="im-story" />
+    </div>
+  )
+}
+
 function Moment({ photo, text, label, index }: { photo: string; text: string; label?: string; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], [30, -30])
   const imgScale = useTransform(scrollYProgress, [0, 1], [1.12, 1])
+  if (index === 0) return <FirstMoment photo={photo} text={text} label={label} />
   return (
     <div className="im-moment" ref={ref}>
       {label && (
