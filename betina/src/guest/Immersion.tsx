@@ -230,14 +230,6 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
       <FloatingAnimals />
 
       <section className="im-section im-hero">
-        <motion.div
-          className="im-badge"
-          initial={{ scale: 0.4, opacity: 0, rotate: -12 }}
-          animate={{ scale: 1, opacity: 1, rotate: 0 }}
-          transition={{ type: 'spring', stiffness: 140, damping: 14, delay: 0.15 }}
-        >
-          1
-        </motion.div>
         <motion.p className="g-eyebrow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
           {hero.eyebrow}
         </motion.p>
