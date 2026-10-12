@@ -4,7 +4,7 @@ import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { STATUS_LABEL } from '../lib/types'
 import { firstName, longDate, waLink } from '../lib/text'
-import { Countdown, MapEmbed, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
+import { Countdown, GiftList, MapEmbed, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
 
 interface Props {
   settings: EventSettings
@@ -139,18 +139,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
           <div className="im-info">
             <div className="icon" style={{ textAlign: 'center' }}>🎁</div>
             <p className="muted" style={{ margin: 0, textAlign: 'center' }}>{settings.giftNote}</p>
-            <div className="im-gifts">
-              {settings.gifts.map((g, i) => (
-                <div className="im-gift" key={i}>
-                  <span style={{ fontSize: 28 }}>💝</span>
-                  <div>
-                    <b>{g.title}</b>
-                    {g.detail && <span>{g.detail}</span>}
-                    {g.link && <div><a href={g.link} target="_blank" rel="noreferrer">Ver sugestão →</a></div>}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <GiftList settings={settings} />
             {settings.pix && <p className="muted" style={{ textAlign: 'center' }}>Pix: <b>{settings.pix}</b></p>}
           </div>
         )}

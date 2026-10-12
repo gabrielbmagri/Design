@@ -997,3 +997,12 @@
   background: linear-gradient(135deg, #2bd66b, #1fae55);
   box-shadow: 0 10px 24px rgba(31, 174, 85, 0.3);
 }
+
+.im-gift-group {
+  margin: 8px 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--rose-deep);
+  text-align: left;
+}

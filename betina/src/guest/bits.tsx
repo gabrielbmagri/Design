@@ -214,3 +214,53 @@ export function hostContacts(s: EventSettings, host?: 'gabriel' | 'luiza') {
   const mine = host ? all.filter((c) => c.host === host) : []
   return mine.length ? mine : all
 }
+
+const GIFT_ICONS: [RegExp, string][] = [
+  [/livr/i, '📚'], [/educativ|quebra|bloco/i, '🧩'], [/anima/i, '🐮'], [/bonec/i, '🧸'],
+  [/sapat|cal[cç]ad|t[eê]nis/i, '👟'], [/roup|vestid|body/i, '👗'],
+]
+const giftIcon = (title: string) => GIFT_ICONS.find(([re]) => re.test(title))?.[1] ?? '🎁'
+
+export function GiftList({ settings, animate = false }: { settings: EventSettings; animate?: boolean }) {
+  const groups: { name: string; items: EventSettings['gifts'] }[] = []
+  for (const g of settings.gifts) {
+    const name = g.group || ''
+    let grp = groups.find((x) => x.name === name)
+    if (!grp) groups.push((grp = { name, items: [] }))
+    grp.items.push(g)
+  }
+  let i = 0
+  return (
+    <div className="im-gifts">
+      {groups.map((grp) => (
+        <div key={grp.name} style={{ display: 'grid', gap: 10 }}>
+          {grp.name && <h3 className="im-gift-group">{grp.name}:</h3>}
+          {grp.items.map((g) => {
+            const k = i++
+            return (
+              <motion.div
+                className="im-gift"
+                key={k}
+                initial={animate ? { opacity: 0, x: -30 } : false}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: (k % 6) * 0.08 }}
+              >
+                <span style={{ fontSize: 28 }}>{giftIcon(g.title)}</span>
+                <div>
+                  <b>{g.title}</b>
+                  {g.detail && <span>{g.detail}</span>}
+                  {g.link && (
+                    <div>
+                      <a href={g.link} target="_blank" rel="noreferrer">Ver sugestão →</a>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+      ))}
+    </div>
+  )
+}

@@ -4,7 +4,7 @@ import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { firstName, joinNames, longDate } from '../lib/text'
 import type { Outcome } from './GuestApp'
-import { Countdown, MapEmbed, Sparkles, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
+import { Countdown, GiftList, MapEmbed, Sparkles, downloadIcs, googleCalendarUrl, hostContacts, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
 import { waLink } from '../lib/text'
 
 interface Props {
@@ -135,31 +135,7 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
           <p className="muted" style={{ margin: 0 }}>
             {settings.giftNote}
           </p>
-          <div className="im-gifts">
-            {settings.gifts.map((g, i) => (
-              <motion.div
-                className="im-gift"
-                key={i}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <span style={{ fontSize: 28 }}>💝</span>
-                <div>
-                  <b>{g.title}</b>
-                  {g.detail && <span>{g.detail}</span>}
-                  {g.link && (
-                    <div>
-                      <a href={g.link} target="_blank" rel="noreferrer">
-                        Ver sugestão →
-                      </a>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <GiftList settings={settings} animate />
           {settings.pix && <p className="muted">Pix: <b>{settings.pix}</b></p>}
         </div>
       </Reveal>

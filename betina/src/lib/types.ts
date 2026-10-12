@@ -56,6 +56,8 @@ export interface Invite {
 }
 
 export interface GiftItem {
+  /** grupo na tela, ex.: "Betina adora" */
+  group?: string
   title: string
   detail?: string
   link?: string

@@ -151,14 +151,15 @@ export default function SettingsView({ settings, admins, user, invites, guests }
           <h3>Sugestões de presente</h3>
           <Field label="Texto">{area('giftNote', 2)}</Field>
           {s.gifts.map((g, i) => (
-            <div key={i} className="ad-member" style={{ gridTemplateColumns: '1fr 1fr 1fr auto' }}>
+            <div key={i} className="ad-member" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr auto' }}>
+              <input className="ad-input" placeholder="Grupo (ex.: Betina adora)" value={g.group ?? ''} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, group: e.target.value } : x)))} />
               <input className="ad-input" placeholder="Presente" value={g.title} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, title: e.target.value } : x)))} />
               <input className="ad-input" placeholder="Detalhe (tamanho…)" value={g.detail ?? ''} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, detail: e.target.value } : x)))} />
               <input className="ad-input" placeholder="Link (opcional)" value={g.link ?? ''} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, link: e.target.value } : x)))} />
               <button className="ad-btn sm danger" onClick={() => set('gifts', s.gifts.filter((_, k) => k !== i))}>✕</button>
             </div>
           ))}
-          <button className="ad-btn" onClick={() => set('gifts', [...s.gifts, { title: '' }])}>+ Presente</button>
+          <button className="ad-btn" onClick={() => set('gifts', [...s.gifts, { group: s.gifts[s.gifts.length - 1]?.group ?? '', title: '' }])}>+ Presente</button>
           <Field label="Chave Pix (opcional)">{text('pix')}</Field>
         </div>
 
