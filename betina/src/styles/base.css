@@ -1,25 +1,33 @@
 /* Paleta do convite — troque aqui para casar com as cores do convite real */
 :root {
-  --rose: #e8799b;
-  --rose-deep: #c9517a;
-  --rose-soft: #fbe3ea;
-  --blush: #fdf2f5;
-  --cream: #fffaf6;
-  --gold: #d9a94e;
-  --gold-soft: #f6e6c2;
-  --lilac: #b9a4ec;
-  --ink: #4a2a37;
-  --ink-soft: #7b5a67;
-  --ok: #2f9e6a;
-  --ok-soft: #dcf3e7;
+  /* Paleta tirada do convite (Fazendinha) */
+  --rose: #e8609a;
+  --rose-deep: #d92f74;
+  --rose-soft: #fddae8;
+  --blush: #fff0f6;
+  --cream: #fefcf4;
+  --gold: #f1b24a;
+  --gold-soft: #fde7c3;
+  --lilac: #f49ac0;
+  --brown: #a3564c;
+  --grass: #7fb85a;
+  --ink: #4b2b2a;
+  --ink-soft: #7d5b56;
+  --ok: #3f9a4f;
+  --ok-soft: #e1f3dc;
   --no: #c2484f;
   --no-soft: #fbe1e2;
   --maybe: #b9822b;
   --maybe-soft: #fbefd6;
-  --line: #f0d6de;
-  --shadow: 0 10px 30px rgba(201, 81, 122, 0.14);
+  --line: #f6d3e1;
+  --shadow: 0 10px 30px rgba(217, 47, 116, 0.14);
   --radius: 22px;
-  --font-display: 'Fraunces', Georgia, serif;
+  --gingham:
+    repeating-linear-gradient(0deg, rgba(247, 168, 200, 0.45) 0 28px, transparent 28px 56px),
+    repeating-linear-gradient(90deg, rgba(247, 168, 200, 0.45) 0 28px, transparent 28px 56px),
+    #fff;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-script: 'Dancing Script', 'Brush Script MT', cursive;
   --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 

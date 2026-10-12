@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dff3ec"/><stop offset="1" stop-color="#9fd8c2"/></linearGradient></defs>
+<defs><pattern id="g" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="#fff"/><rect width="40" height="80" fill="#f7a8c8" opacity=".35"/><rect width="80" height="40" fill="#f7a8c8" opacity=".35"/></pattern></defs>
 <rect width="800" height="1000" fill="url(#g)"/>
-<circle cx="400" cy="430" r="150" fill="#fff" opacity=".55"/>
-<text x="400" y="460" font-family="Georgia,serif" font-size="90" text-anchor="middle" fill="#fff">♥</text>
-<text x="400" y="700" font-family="Georgia,serif" font-size="44" text-anchor="middle" fill="#fff" opacity=".95">Foto 4 da Betina</text>
-<text x="400" y="760" font-family="Arial,sans-serif" font-size="26" text-anchor="middle" fill="#fff" opacity=".8">substitua em public/photos</text>
+<rect x="70" y="90" width="660" height="820" rx="70" fill="#e9f4df"/>
+<text x="400" y="520" font-size="260" text-anchor="middle">🐔</text>
+<text x="400" y="690" font-family="Georgia,serif" font-weight="700" font-size="48" text-anchor="middle" fill="#d92f74">Foto 4 da Betina</text>
+<text x="400" y="750" font-family="Arial,sans-serif" font-size="26" text-anchor="middle" fill="#a3564c">em breve</text>
 </svg>

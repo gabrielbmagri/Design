@@ -18,7 +18,7 @@ export default function Pick({ matches, onChoose, onBack }: Props) {
   const single = options.length === 1
 
   return (
-    <main className="g-screen">
+    <main className="g-screen soft">
       <button className="g-back" onClick={onBack}>
         ← Voltar
       </button>

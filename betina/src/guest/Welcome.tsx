@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { EventSettings } from '../lib/types'
-import { firstName, shortDate } from '../lib/text'
+import { firstName, fmtTime, parseISODate } from '../lib/text'
 import { Carousel } from './bits'
 
 interface Props {
@@ -16,25 +16,32 @@ interface Props {
 
 export default function Welcome({ settings, busy, error, saved, onSearch, onContinue, onForget, onVisitor }: Props) {
   const [name, setName] = useState('')
-  const titleParts = settings.title.split(settings.childName)
+  const rest = settings.title.replace(settings.childName, '').trim()
+  const d = parseISODate(settings.dateISO)
+  const month = d.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')
 
   return (
     <main className="g-screen">
+      <div className="g-paper">
       <Carousel photos={settings.carousel} />
-      <div className="g-center" style={{ paddingTop: 18 }}>
-        <div>
-          <p className="g-eyebrow">Você está convidado · {shortDate(settings.dateISO)}</p>
-          <h1 className="g-title" style={{ marginTop: 8 }}>
-            {titleParts.length === 2 ? (
-              <>
-                {titleParts[0]}
-                <em>{settings.childName}</em>
-                {titleParts[1]}
-              </>
-            ) : (
-              settings.title
-            )}
+      <div className="g-center" style={{ paddingTop: 12, paddingBottom: 0, gap: 14 }}>
+        <div style={{ display: 'grid', gap: 6 }}>
+          <h1 className="g-title">
+            <span className="g-title-main">{settings.childName}</span>
+            {rest && <span className="g-title-sub">{rest.charAt(0).toUpperCase() + rest.slice(1)}</span>}
           </h1>
+          {settings.subtitle && <p className="g-script">{settings.subtitle}</p>}
+          <div className="g-datebar" aria-label={`Dia ${d.getDate()} de ${month}, ${fmtTime(settings.timeStart)}`}>
+            <div style={{ textAlign: 'center' }}>
+              <b>{String(d.getDate()).padStart(2, '0')}</b>
+              <div style={{ fontSize: 15 }}>{month}</div>
+            </div>
+            <span />
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 15 }}>às</div>
+              <b>{fmtTime(settings.timeStart).toUpperCase()}</b>
+            </div>
+          </div>
         </div>
 
         {saved ? (
@@ -84,9 +91,10 @@ export default function Welcome({ settings, busy, error, saved, onSearch, onCont
           </div>
         )}
       </div>
+      </div>
 
       <div className="g-subtle">
-        <button className="g-link" onClick={onVisitor}>
+        <button className="g-link" style={{ background: 'rgba(255,255,255,.85)', borderRadius: 99, padding: '10px 18px' }} onClick={onVisitor}>
           Só quero ver as informações da festa
         </button>
       </div>

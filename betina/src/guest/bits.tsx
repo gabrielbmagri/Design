@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { EventSettings } from '../lib/types'
-import { parseISODate } from '../lib/text'
+import { fmtTime, parseISODate } from '../lib/text'
 
 export function Carousel({ photos, interval = 3800 }: { photos: string[]; interval?: number }) {
   const [i, setI] = useState(0)
@@ -38,12 +38,14 @@ export function Carousel({ photos, interval = 3800 }: { photos: string[]; interv
   )
 }
 
+const FARM = ['🐷', '🐮', '🐴', '🐔', '🐰', '🌼', '🐑', '🤠', '💗']
+
 export function Sparkles({ count = 26 }: { count?: number }) {
   const items = useMemo(
     () =>
       Array.from({ length: count }, (_, k) => ({
         k,
-        heart: k % 4 === 0,
+        emoji: k % 3 === 0 ? FARM[k % FARM.length] : '',
         left: Math.random() * 100,
         top: Math.random() * 100,
         delay: Math.random() * 4,
@@ -57,16 +59,16 @@ export function Sparkles({ count = 26 }: { count?: number }) {
       {items.map((s) => (
         <i
           key={s.k}
-          className={s.heart ? 'heart' : ''}
+          className={s.emoji ? 'emoji' : ''}
           style={{
             left: `${s.left}%`,
             top: `${s.top}%`,
             animationDelay: `${s.delay}s`,
-            animationDuration: `${s.heart ? s.dur * 2 : s.dur}s`,
+            animationDuration: `${s.emoji ? s.dur * 2.2 : s.dur}s`,
             transform: `scale(${s.size})`,
           }}
         >
-          {s.heart ? '♥' : null}
+          {s.emoji || null}
         </i>
       ))}
     </div>
@@ -155,7 +157,7 @@ export function mapsUrl(s: EventSettings) {
 }
 
 export function wazeUrl(s: EventSettings) {
-  return s.wazeUrl || `https://waze.com/ul?q=${encodeURIComponent(s.address)}&navigate=yes`
+  return s.wazeUrl || `https://waze.com/ul?q=${encodeURIComponent(placeLabel(s))}&navigate=yes`
 }
 
 export function Toast({ text, onDone }: { text: string; onDone: () => void }) {
@@ -168,4 +170,12 @@ export function Toast({ text, onDone }: { text: string; onDone: () => void }) {
       {text}
     </motion.div>
   )
+}
+
+export function timeLabel(s: EventSettings) {
+  return s.timeEnd ? `das ${fmtTime(s.timeStart)} às ${fmtTime(s.timeEnd)}` : `às ${fmtTime(s.timeStart)}`
+}
+
+export function placeLabel(s: EventSettings) {
+  return [s.venueName, s.address].filter(Boolean).join(', ')
 }

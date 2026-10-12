@@ -98,3 +98,10 @@ export function shortDate(iso: string) {
   const dt = parseISODate(iso)
   return `${dt.getDate()} de ${MONTHS[dt.getMonth()]}`
 }
+
+/** "13:00" -> "13h", "13:30" -> "13h30" */
+export function fmtTime(t: string) {
+  if (!t) return ''
+  const [h, m] = t.split(':')
+  return `${Number(h)}h${m && m !== '00' ? m : ''}`
+}

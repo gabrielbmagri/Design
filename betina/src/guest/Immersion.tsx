@@ -4,7 +4,7 @@ import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { firstName, joinNames, longDate } from '../lib/text'
 import type { Outcome } from './GuestApp'
-import { Countdown, Sparkles, downloadIcs, googleCalendarUrl, isIOS, mapsUrl, wazeUrl } from './bits'
+import { Countdown, Sparkles, downloadIcs, googleCalendarUrl, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
 
 interface Props {
   settings: EventSettings
@@ -68,6 +68,26 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
     }
   })()
 
+  const inviteSection = settings.inviteImage ? (
+    <section className="im-section" key="invite">
+      <Reveal>
+        <p className="g-eyebrow">O seu convite</p>
+      </Reveal>
+      <motion.div
+        className="im-invite"
+        initial={{ opacity: 0, rotate: -8, scale: 0.85, y: 60 }}
+        whileInView={{ opacity: 1, rotate: -2, scale: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ type: 'spring', stiffness: 70, damping: 14 }}
+      >
+        <img src={settings.inviteImage} alt={`Convite: ${settings.title}`} />
+      </motion.div>
+      <Reveal delay={0.2}>
+        <p className="im-script">{settings.subtitle}</p>
+      </Reveal>
+    </section>
+  ) : null
+
   const blocks: ReactNode[] = [
     <section className="im-section" key="date">
       <Reveal>
@@ -75,10 +95,7 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
           <div className="icon">📅</div>
           <p className="g-eyebrow">Quando</p>
           <div className="big">{longDate(settings.dateISO)}</div>
-          <div className="muted">
-            das {settings.timeStart}
-            {settings.timeEnd && ` às ${settings.timeEnd}`}
-          </div>
+          <div className="muted">{timeLabel(settings)}</div>
           <Countdown settings={settings} />
           {isIOS() ? (
             <button className="g-btn secondary" onClick={() => downloadIcs(settings)}>
@@ -152,8 +169,8 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
       <section className="im-section" key="dress">
         <Reveal>
           <div className="im-info">
-            <div className="icon">👗</div>
-            <p className="g-eyebrow">Traje</p>
+            <div className="icon">🤠</div>
+            <p className="g-eyebrow">Dica de traje</p>
             <div className="big" style={{ fontSize: 28 }}>
               {settings.dressCode}
             </div>
@@ -186,6 +203,8 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
         }}
       />
       <Sparkles />
+      <div className="im-gingham-edge" style={{ top: 5 }} />
+      <div className="im-gingham-edge" style={{ bottom: 0 }} />
 
       <section className="im-section" style={{ minHeight: '100dvh' }}>
         <motion.div
@@ -221,6 +240,7 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
         </motion.div>
       </section>
 
+      {inviteSection}
       {sequence}
 
       <section className="im-section">

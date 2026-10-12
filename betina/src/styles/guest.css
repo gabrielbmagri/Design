@@ -5,12 +5,19 @@
   flex-direction: column;
   align-items: center;
   padding: 0 20px calc(28px + env(safe-area-inset-bottom));
-  background:
-    radial-gradient(1200px 600px at 50% -10%, var(--rose-soft), transparent 60%),
-    radial-gradient(700px 500px at 110% 110%, #efe7fd, transparent 60%),
-    var(--cream);
+  background: var(--gingham);
   position: relative;
   overflow-x: hidden;
+}
+
+.g-paper {
+  width: 100%;
+  max-width: 520px;
+  background: var(--cream);
+  border-radius: 40px;
+  box-shadow: 0 16px 40px rgba(217, 47, 116, 0.16);
+  padding: 14px 14px 20px;
+  margin-top: 12px;
 }
 
 .g-wrap {
@@ -56,6 +63,53 @@
   color: var(--rose-deep);
 }
 
+.g-title-main {
+  display: block;
+  font-size: clamp(50px, 14vw, 80px);
+  font-weight: 900;
+  color: var(--rose-deep);
+  line-height: 0.95;
+}
+
+.g-title-sub {
+  display: block;
+  font-size: clamp(26px, 7vw, 38px);
+  font-weight: 800;
+  color: #dc4f74;
+  margin-top: 2px;
+}
+
+.g-script {
+  font-family: var(--font-script);
+  font-weight: 700;
+  color: var(--brown);
+  font-size: clamp(26px, 7vw, 38px);
+  line-height: 1.1;
+  text-align: center;
+  margin: 0;
+}
+
+.g-datebar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  font-weight: 900;
+  color: var(--rose-deep);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.g-datebar b {
+  font-size: 32px;
+}
+
+.g-datebar span {
+  width: 2px;
+  align-self: stretch;
+  background: var(--line);
+}
+
 .g-h2 {
   font-family: var(--font-display);
   font-size: clamp(28px, 7.5vw, 38px);
@@ -74,11 +128,11 @@
 /* ---------- Carrossel ---------- */
 .g-carousel {
   position: relative;
-  width: calc(100% + 40px);
-  margin: 0 -20px;
-  height: min(36dvh, 340px);
+  width: 100%;
+  height: min(24dvh, 230px);
   overflow: hidden;
-  border-radius: 0 0 44px 44px;
+  border-radius: 30px;
+  border: 6px solid #fff;
   box-shadow: var(--shadow);
   background: var(--rose-soft);
 }
@@ -96,7 +150,7 @@
   position: absolute;
   inset: auto 0 0 0;
   height: 40%;
-  background: linear-gradient(transparent, rgba(255, 250, 246, 0.85));
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.18));
   pointer-events: none;
 }
 
@@ -115,13 +169,13 @@
   width: 8px;
   height: 8px;
   border-radius: 99px;
-  background: rgba(201, 81, 122, 0.3);
+  background: rgba(255, 255, 255, 0.7);
   transition: width 0.3s, background 0.3s;
 }
 
 .g-dots span.on {
   width: 26px;
-  background: var(--rose-deep);
+  background: #fff;
 }
 
 /* ---------- Cartão de identificação ---------- */
@@ -459,8 +513,8 @@
 
 /* ---------- Imersão ---------- */
 .im {
-  background: radial-gradient(1000px 700px at 50% 0%, #fde6ee, transparent 70%),
-    linear-gradient(180deg, var(--cream), #fff5f8 40%, #f6effd 80%, var(--cream));
+  background: radial-gradient(900px 700px at 50% 0%, rgba(255, 255, 255, 0.9), transparent 70%),
+    linear-gradient(180deg, var(--cream), #fff3f8 35%, #fff8ec 70%, var(--cream));
   min-height: 100dvh;
   position: relative;
   overflow-x: hidden;
@@ -483,14 +537,56 @@
   opacity: 0;
 }
 
-.im-sparkles i.heart {
+.im-sparkles i.emoji {
   background: none;
   clip-path: none;
   width: auto;
   height: auto;
-  color: var(--rose);
-  font-size: 16px;
+  font-style: normal;
+  font-size: 26px;
   animation-name: floatUp;
+}
+
+.im-gingham-edge {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: var(--gingham);
+  z-index: 25;
+  pointer-events: none;
+}
+
+.im-invite {
+  width: min(78vw, 360px);
+  border-radius: 26px;
+  border: 8px solid #fff;
+  box-shadow: 0 30px 60px rgba(75, 43, 42, 0.25);
+  overflow: hidden;
+  position: relative;
+}
+
+.im-invite img {
+  width: 100%;
+  display: block;
+}
+
+.im-invite::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 45%, transparent 60%);
+  transform: translateX(-120%);
+  animation: shine 3.5s ease-in-out infinite;
+}
+
+.im-script {
+  font-family: var(--font-script);
+  color: var(--brown);
+  font-weight: 700;
+  font-size: clamp(34px, 9vw, 46px);
+  line-height: 1.1;
+  margin: 0;
 }
 
 @keyframes twinkle {
@@ -855,4 +951,27 @@
   z-index: 100;
   max-width: calc(100vw - 32px);
   text-align: center;
+}
+
+/* Telas de formulário: fundo creme com faixa xadrez em cima e embaixo */
+.g-screen.soft {
+  background: var(--cream);
+}
+
+.g-screen.soft::before,
+.g-screen.soft::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: var(--gingham);
+}
+
+.g-screen.soft::before {
+  top: 0;
+}
+
+.g-screen.soft::after {
+  bottom: 0;
 }

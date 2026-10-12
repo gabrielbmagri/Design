@@ -1,6 +1,6 @@
 import { SITE_URL } from '../lib/firebase'
 import type { EventSettings, Guest, Invite } from '../lib/types'
-import { fillTemplate, firstName, joinNames, longDate, waLink } from '../lib/text'
+import { fillTemplate, firstName, fmtTime, joinNames, longDate, waLink } from '../lib/text'
 
 export function inviteLink(inviteId: string) {
   return `${SITE_URL}/c/${inviteId}`
@@ -14,8 +14,8 @@ function vars(s: EventSettings, invite: Invite, members: Guest[]) {
     convite: invite.label,
     crianca: s.childName,
     data: longDate(s.dateISO),
-    hora: s.timeStart,
-    local: s.venueName,
+    hora: fmtTime(s.timeStart),
+    local: [s.venueName, s.address].filter(Boolean).join(', '),
     endereco: s.address,
     prazo: longDate(s.rsvpDeadlineISO),
     link: inviteLink(invite.id),

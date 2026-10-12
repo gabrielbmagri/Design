@@ -4,7 +4,7 @@ import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { STATUS_LABEL } from '../lib/types'
 import { firstName, longDate, waLink } from '../lib/text'
-import { Countdown, downloadIcs, googleCalendarUrl, isIOS, mapsUrl, wazeUrl } from './bits'
+import { Countdown, downloadIcs, googleCalendarUrl, isIOS, mapsUrl, timeLabel, wazeUrl } from './bits'
 
 interface Props {
   settings: EventSettings
@@ -47,7 +47,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
         <button className="hub-menu-btn" onClick={() => setOpen(true)} aria-expanded={open}>
           ☰ Menu
         </button>
-        <b>{settings.childName} · 1 ano</b>
+        <b style={{ color: 'var(--rose-deep)' }}>{settings.childName} · 1 ano</b>
       </header>
 
       <AnimatePresence>
@@ -91,14 +91,17 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
       <main className="hub-main">
         {section === 'convite' && (
           <>
-            <div className="im-photo" style={{ margin: '0 auto', width: 'min(70vw, 320px)' }}>
-              <img src={settings.carousel[0]} alt="Betina" />
-            </div>
-            <h1 className="g-title" style={{ fontSize: 'clamp(34px, 9vw, 46px)' }}>{settings.title}</h1>
-            <p className="g-lead">{settings.subtitle}</p>
+            {settings.inviteImage ? (
+              <div className="im-invite" style={{ margin: '0 auto', width: 'min(84vw, 380px)' }}>
+                <img src={settings.inviteImage} alt={`Convite: ${settings.title}`} />
+              </div>
+            ) : (
+              <h1 className="g-title" style={{ fontSize: 'clamp(34px, 9vw, 46px)' }}>{settings.title}</h1>
+            )}
+            {settings.dressCode && <p className="g-lead">{settings.dressCode}</p>}
             <div className="im-info" style={{ textAlign: 'center' }}>
               <div className="big" style={{ fontSize: 28 }}>{longDate(settings.dateISO)}</div>
-              <div className="muted">às {settings.timeStart} · {settings.venueName}</div>
+              <div className="muted">{timeLabel(settings)} · {settings.venueName}</div>
               <Countdown settings={settings} />
             </div>
             <div className="hub-actions">
@@ -115,7 +118,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
           <div className="im-info" style={{ textAlign: 'center' }}>
             <div className="icon">📅</div>
             <div className="big">{longDate(settings.dateISO)}</div>
-            <div className="muted">das {settings.timeStart}{settings.timeEnd && ` às ${settings.timeEnd}`}</div>
+            <div className="muted">{timeLabel(settings)}</div>
             <Countdown settings={settings} />
             {calendarBtn}
           </div>

@@ -128,6 +128,7 @@ export default function SettingsView({ settings, admins, user, invites, guests }
         </div>
 
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
+          <Field label="Imagem do convite">{text('inviteImage')}</Field>
           <h3>Fotos do carrossel (endereços)</h3>
           <textarea className="ad-textarea" rows={5} value={s.carousel.join('\n')} onChange={(e) => set('carousel', e.target.value.split('\n').map((x) => x.trim()).filter(Boolean))} />
           <h3>História (uma foto + texto por capítulo)</h3>

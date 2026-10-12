@@ -3,6 +3,7 @@ import { saveAnswers, type InviteMatch } from '../lib/data'
 import type { EventSettings, Guest, Status } from '../lib/types'
 import { firstName, longDate } from '../lib/text'
 import { outcomeOf, type Outcome } from './GuestApp'
+import { timeLabel } from './bits'
 
 interface Props {
   settings: EventSettings
@@ -62,13 +63,13 @@ export default function Rsvp({ settings, invite, me, onDone, onLater, onNotMe }:
   }
 
   return (
-    <main className="g-screen">
+    <main className="g-screen soft">
       <div className="g-wrap" style={{ display: 'grid', gap: 18, paddingTop: 28 }}>
         <div style={{ display: 'grid', gap: 8 }}>
           <p className="g-eyebrow">Olá, {firstName(me.name)}! 💗</p>
           <h1 className="g-h2">{people.length > 1 ? 'Quem vai à festa?' : 'Você vai à festa?'}</h1>
           <p className="g-lead">
-            {longDate(settings.dateISO)}, às {settings.timeStart}
+            {longDate(settings.dateISO)}, {timeLabel(settings)}
           </p>
           {people.length > 1 && (
             <p className="g-help" style={{ marginTop: 0 }}>

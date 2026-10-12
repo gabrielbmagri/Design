@@ -89,6 +89,8 @@ export interface EventSettings {
   reminderDays: number
   inviteMessage: string
   reminderMessage: string
+  /** imagem do convite (aparece na imersão e no convite completo) */
+  inviteImage: string
 }
 
 export interface RsvpLog {

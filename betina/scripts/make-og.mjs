@@ -11,24 +11,34 @@ const out = resolve('public/og/convite.jpg')
 const img = src ? `data:image/${src.split('.').pop().replace('jpg', 'jpeg')};base64,${readFileSync(src).toString('base64')}` : ''
 
 const html = `<!doctype html><html><head>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Nunito:wght@800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Dancing+Script:wght@700&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
 <style>
   html,body{margin:0;width:1200px;height:630px;overflow:hidden}
-  .bg{position:absolute;inset:-40px;background:${img ? `url(${img}) center/cover` : 'linear-gradient(135deg,#fde3ea,#f6effd)'};filter:${img ? 'blur(28px) saturate(1.2) brightness(1.05)' : 'none'}}
-  .wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:56px}
-  .card{height:560px;border-radius:28px;box-shadow:0 30px 60px rgba(74,42,55,.35);border:8px solid #fff}
-  .txt{font-family:Fraunces,Georgia,serif;color:#4a2a37;text-align:center}
-  .txt small{display:block;font:800 26px Nunito,sans-serif;letter-spacing:.14em;color:#c9517a;text-transform:uppercase;margin-bottom:16px}
-  .txt b{font-size:120px;line-height:.95;display:block}
-  .txt em{font-style:normal;color:#c9517a}
-  .badge{width:150px;height:150px;border-radius:50%;margin:0 auto 26px;display:grid;place-items:center;color:#fff;font:700 100px Fraunces,serif;
-    background:conic-gradient(#e8799b,#d9a94e,#b9a4ec,#e8799b);box-shadow:0 0 0 12px rgba(255,255,255,.75)}
-  .cta{margin-top:28px;font:800 30px Nunito,sans-serif;color:#fff;background:#c9517a;border-radius:99px;padding:14px 34px;display:inline-block}
+  body{background:
+    repeating-linear-gradient(0deg, rgba(247,168,200,.5) 0 36px, transparent 36px 72px),
+    repeating-linear-gradient(90deg, rgba(247,168,200,.5) 0 36px, transparent 36px 72px), #fff}
+  .paper{position:absolute;inset:26px;border-radius:44px;background:#fefcf4;box-shadow:0 20px 50px rgba(217,47,116,.18)}
+  .wrap{position:absolute;inset:26px;display:flex;align-items:center;gap:44px;padding:0 56px 0 40px}
+  .card{height:510px;border-radius:24px;border:7px solid #fff;box-shadow:0 24px 50px rgba(75,43,42,.3);transform:rotate(-2.5deg)}
+  .txt{flex:1;text-align:center;color:#4b2b2a}
+  .eye{font:900 24px Nunito,sans-serif;letter-spacing:.16em;color:#d92f74;text-transform:uppercase}
+  .name{font:900 150px/0.95 'Playfair Display',serif;color:#d92f74;margin-top:8px}
+  .sub{font:900 56px 'Playfair Display',serif;color:#dc4f74}
+  .script{font:700 52px 'Dancing Script',cursive;color:#a3564c;margin-top:10px}
+  .date{font:900 40px Nunito,sans-serif;color:#d92f74;margin-top:14px}
+  .cta{margin-top:20px;font:900 28px Nunito,sans-serif;color:#fff;background:#d92f74;border-radius:99px;padding:14px 32px;display:inline-block;box-shadow:0 10px 24px rgba(217,47,116,.35)}
 </style></head><body>
-<div class="bg"></div>
+<div class="paper"></div>
 <div class="wrap">
  ${img ? `<img class="card" src="${img}">` : ''}
- ${img ? '' : `<div class="txt"><div class="badge">1</div><small>Você está convidado</small><b><em>Betina</em><br>faz 1 aninho</b><div class="cta">Toque para confirmar presença</div></div>`}
+ <div class="txt">
+   <div class="eye">Você está convidado</div>
+   <div class="name">Betina</div>
+   <div class="sub">faz 1 ano</div>
+   <div class="script">As porteiras estão abertas!</div>
+   <div class="date">02 NOV · 13H</div>
+   <div class="cta">Toque para confirmar presença</div>
+ </div>
 </div></body></html>`
 
 const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {})
