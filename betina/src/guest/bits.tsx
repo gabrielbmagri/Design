@@ -12,7 +12,7 @@ export function Marquee({ photos }: { photos: string[] }) {
   const loop = [...base, ...base]
   return (
     <div className="g-marquee" aria-hidden="true">
-      <div className="g-marquee-track" style={{ ['--marquee-dur' as string]: `${base.length * 6}s` }}>
+      <div className="g-marquee-track" style={{ ['--marquee-dur' as string]: `${base.length * 4.8}s` }}>
         {loop.map((src, i) => (
           <img key={i} src={src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
         ))}

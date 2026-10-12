@@ -35,7 +35,11 @@ export const DEFAULT_SETTINGS: EventSettings = {
   letter:
     'Obrigado por fazer parte da vida da Betina. Cada pessoa convidada para esta festa tem um pedacinho dessa história: num colo, numa visita, numa mensagem, numa oração. Queremos muito viver esse dia ao seu lado.',
   letterSign: 'Com amor, Gabriel e Luíza',
-  carousel: [photo('um-aninho'), photo('primeiros-sorrisos'), photo('nascimento'), photo('descobertas'), photo('primeiros-dias'), photo('gabriel-e-luiza')],
+  carousel: [
+    photo('um-aninho'), photo('c-sorriso-rosa'), photo('primeiros-sorrisos'), photo('c-familia'), photo('nascimento'),
+    photo('c-cavalinho'), photo('descobertas'), photo('c-cabecinha'), photo('primeiros-dias'), photo('c-colo'),
+    photo('gabriel-e-luiza'),
+  ],
   gifts: [
     { group: 'Betina adora', title: 'Livros' },
     { group: 'Betina adora', title: 'Brinquedos educativos' },
