@@ -12,8 +12,8 @@ interface Props {
 export default function Pick({ matches, onChoose, onBack }: Props) {
   const options = matches.flatMap((inv) =>
     inv.guests
-      .filter((g) => !inv.matchedIds || inv.matchedIds.includes(g.id))
-      .map((g) => ({ inv, g, others: inv.guests.filter((o) => o.id !== g.id).map((o) => firstName(o.name)) })),
+      .filter((g) => !g.isPlusOne && (!inv.matchedIds || inv.matchedIds.includes(g.id)))
+      .map((g) => ({ inv, g, others: inv.guests.filter((o) => o.id !== g.id && !o.isPlusOne).map((o) => firstName(o.name)) })),
   )
   const fromLink = matches.length === 1 && matches[0].matchedIds?.length === matches[0].guests.length
   const single = options.length === 1

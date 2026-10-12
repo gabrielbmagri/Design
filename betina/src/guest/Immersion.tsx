@@ -167,16 +167,17 @@ export function ContactButtons({ settings, me }: { settings: EventSettings; me: 
 export default function Immersion({ settings, outcome, me, invite, onFinish }: Props) {
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 })
-  const going = invite?.guests.filter((g) => g.status === 'yes').map((g) => firstName(g.name)) ?? []
-  const names = invite ? joinNames(invite.guests.map((g) => firstName(g.name))) : me ? firstName(me.name) : ''
-  const many = (invite?.guests.length ?? 1) > 1
+  const going = invite?.guests.filter((g) => g.status === 'yes').map((g) => (g.isPlusOne ? g.plusOneName?.trim() ? firstName(g.plusOneName) : 'acompanhante' : firstName(g.name))) ?? []
+  const real = invite?.guests.filter((g) => !g.isPlusOne) ?? []
+  const names = invite ? joinNames(real.map((g) => firstName(g.name))) : me ? firstName(me.name) : ''
+  const many = real.length > 1
   const g = (t: string) => forGroup(t, many)
 
   const hero = (() => {
     if (outcome === 'yes')
       return {
         eyebrow: going.length > 1 ? `${joinNames(going)} confirmados` : 'Presença confirmada',
-        title: (invite?.guests.length ?? 1) > 1 && going.length > 1 ? 'Que alegria ter vocês com a gente!' : 'Que alegria ter você com a gente!',
+        title: going.length > 1 ? 'Que alegria ter vocês com a gente!' : 'Que alegria ter você com a gente!',
         msg: g(settings.welcomeYes),
       }
     if (outcome === 'no') return { eyebrow: 'Resposta recebida', title: 'Obrigado por avisar', msg: g(settings.welcomeNo) }

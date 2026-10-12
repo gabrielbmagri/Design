@@ -1377,3 +1377,10 @@
   border-color: var(--rose);
   box-shadow: 0 0 0 4px var(--rose-100);
 }
+
+/* vaga de acompanhante */
+.g-plus {
+  border-style: dashed;
+  border-color: var(--rose-200);
+  background: var(--rose-50);
+}

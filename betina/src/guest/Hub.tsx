@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { STATUS_LABEL } from '../lib/types'
-import { eventDate, firstName, forGroup, waLink } from '../lib/text'
+import { eventDate, firstName, forGroup, guestName, waLink } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
 import { Countdown, FloatingAnimals, GiftList, MapEmbed, Sparkles, hostContacts, timeLabel } from './bits'
 import { CalendarButton, ContactButtons, PlaceActions } from './Immersion'
@@ -188,7 +188,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
 
         <section id="hub-presentes" className="hub-section" style={{ display: 'grid', gap: 14 }}>
           <Card icon="gift" title="Sugestões de presente">
-            <p>{forGroup(settings.giftNote, (invite?.guests.length ?? 1) > 1)}</p>
+            <p>{forGroup(settings.giftNote, (invite?.guests.filter((g) => !g.isPlusOne).length ?? 1) > 1)}</p>
             <GiftList settings={settings} />
             {settings.pix && <p>Pix: <b>{settings.pix}</b></p>}
           </Card>
@@ -218,7 +218,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
                 <div>
                   {invite.guests.map((g) => (
                     <div key={g.id} className="hub-status">
-                      <b style={{ fontWeight: 600 }}>{g.name}</b>
+                      <b style={{ fontWeight: 600 }}>{guestName(g)}</b>
                       <span className={`pill ${g.status}`}>{STATUS_LABEL[g.status]}</span>
                     </div>
                   ))}

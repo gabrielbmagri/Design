@@ -4,7 +4,7 @@ import {
 } from 'firebase/firestore'
 import { db, ensureGuestSession } from './firebase'
 import { DEFAULT_SETTINGS } from './defaults'
-import { queryKey } from './text'
+import { guestName, queryKey } from './text'
 import type { EventSettings, Guest, Status } from './types'
 
 export const guestsCol = collection(db, 'guests')
@@ -72,6 +72,8 @@ export interface Answer {
   guestId: string
   status: Status
   age?: number | null
+  /** só para a vaga de acompanhante */
+  plusOneName?: string | null
 }
 
 /**
@@ -95,6 +97,7 @@ export async function saveAnswers(
       respondedBy: a.status === 'pending' ? null : by,
       updatedAt: serverTimestamp(),
     }
+    if (g.isPlusOne && a.plusOneName !== undefined) patch.plusOneName = a.plusOneName ? a.plusOneName.trim().slice(0, 60) : null
     if (a.age !== undefined && a.age !== g.age) {
       patch.age = a.age
       if (source === 'guest') patch.ageFromGuest = true
@@ -102,7 +105,7 @@ export async function saveAnswers(
     batch.update(doc(db, 'guests', g.id), patch)
     batch.set(doc(logCol), {
       guestId: g.id,
-      guestName: g.name,
+      guestName: g.isPlusOne ? guestName({ ...g, plusOneName: a.plusOneName ?? g.plusOneName }) : g.name,
       inviteId: invite.inviteId,
       status: a.status,
       age: a.age ?? g.age ?? null,

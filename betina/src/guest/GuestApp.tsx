@@ -40,8 +40,8 @@ function writeSaved(s: Saved | null) {
   }
 }
 
-export function outcomeOf(guests: { status: Status }[]): Outcome {
-  const st = guests.map((g) => g.status)
+export function outcomeOf(guests: { status: Status; isPlusOne?: boolean }[]): Outcome {
+  const st = guests.filter((g) => !g.isPlusOne).map((g) => g.status)
   if (st.includes('yes')) return 'yes'
   if (st.length && st.every((s) => s === 'no')) return 'no'
   if (st.includes('maybe')) return 'maybe'

@@ -35,6 +35,9 @@ export interface Guest {
   order: number
   /** tirado do convite pelo admin (fica guardado) */
   removed?: boolean
+  /** vaga de acompanhante liberada pelo admin; o convidado escreve o nome */
+  isPlusOne?: boolean
+  plusOneName?: string | null
   createdAt?: Timestamp
 }
 

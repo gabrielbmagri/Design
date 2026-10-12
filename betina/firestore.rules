@@ -58,7 +58,11 @@ service cloud.firestore {
         && resource.data.active == true
         && rsvpOpen()
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(['status', 'age', 'respondedAt', 'respondedBy', 'updatedAt', 'ageFromGuest'])
+             .hasOnly(['status', 'age', 'respondedAt', 'respondedBy', 'updatedAt', 'ageFromGuest', 'plusOneName'])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['plusOneName'])
+            || (resource.data.get('isPlusOne', false) == true
+                && (request.resource.data.plusOneName == null
+                    || (request.resource.data.plusOneName is string && request.resource.data.plusOneName.size() <= 60))))
         && validStatus(request.resource.data.status)
         && validAge(request.resource.data.get('age', null))
         && request.resource.data.updatedAt == request.time

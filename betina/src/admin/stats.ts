@@ -26,6 +26,8 @@ export interface HostStats {
 export function computeStats(invites: Invite[], guests: Guest[], s: EventSettings, now = Date.now()) {
   const invById = new Map(invites.map((i) => [i.id, i]))
   const live = guests.filter((g) => !g.removed && invById.get(g.inviteId) && !invById.get(g.inviteId)!.archived)
+    // vaga de acompanhante só conta quando a pessoa diz que vai levar alguém
+    .filter((g) => !g.isPlusOne || g.status === 'yes')
   const invited = live.filter((g) => !invById.get(g.inviteId)!.reserve)
   const reserves = live.filter((g) => invById.get(g.inviteId)!.reserve)
 

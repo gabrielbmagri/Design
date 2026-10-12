@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { AdminCtx } from './AdminApp'
 import type { Guest, Host, Invite, Status } from '../lib/types'
 import { HOST_LABEL, STATUS_LABEL } from '../lib/types'
-import { normalize, plural } from '../lib/text'
+import { guestName, normalize, plural } from '../lib/text'
 import { clearSent, markSent, parseBulk, saveInvite, setArchived, setGuestStatus, setReserve, type InviteDraft } from './ops'
 import { inviteLink, inviteWa } from './messages'
 import { isFreeChild } from './stats'
@@ -80,7 +80,8 @@ export default function Invites(ctx: AdminCtx) {
   const openEdit = (i: Invite) =>
     setEditing({
       id: i.id, label: i.label, host: i.host, phone: i.phone ?? '', notes: i.notes ?? '', tags: i.tags ?? [], reserve: i.reserve,
-      members: (membersOf.get(i.id) ?? []).map((g) => ({ id: g.id, name: g.name, isChild: g.isChild, age: g.age, phone: i.memberPhones?.[g.id] ?? '', status: g.status })),
+      members: (membersOf.get(i.id) ?? []).filter((g) => !g.isPlusOne).map((g) => ({ id: g.id, name: g.name, isChild: g.isChild, age: g.age, phone: i.memberPhones?.[g.id] ?? '', status: g.status })),
+      plusOne: (membersOf.get(i.id) ?? []).some((g) => g.isPlusOne),
     })
 
   const copy = async (i: Invite) => {
@@ -140,8 +141,8 @@ export default function Invites(ctx: AdminCtx) {
               </div>
               <div className="ad-people">
                 {mem.map((g) => (
-                  <span key={g.id} className={`ad-person st-${g.status}`}>
-                    {g.name}
+                  <span key={g.id} className={`ad-person st-${g.status}`} style={g.isPlusOne ? { borderStyle: 'dashed', border: '1px dashed currentColor' } : undefined}>
+                    {guestName(g)}
                     {g.isChild && (
                       <small title={isFreeChild(g, settings) ? 'não paga' : ''}>
                         · criança {g.age != null ? `${g.age}a` : '?'}{isFreeChild(g, settings) ? ', não paga' : ''}
@@ -257,6 +258,16 @@ export function InviteEditor({ draft, existing, by, onClose }: { draft: InviteDr
           <button className="ad-btn" onClick={() => setD((x) => ({ ...x, members: [...x.members, { name: '', isChild: false, age: null, phone: '' }] }))}>
             + Adicionar pessoa
           </button>
+          <label className="ad-member" style={{ gridTemplateColumns: 'auto 1fr', alignItems: 'start', cursor: 'pointer' }}>
+            <input type="checkbox" checked={!!d.plusOne} onChange={(e) => set('plusOne', e.target.checked)} style={{ marginTop: 3 }} />
+            <span>
+              <b>Pode levar acompanhante</b>
+              <br />
+              <small style={{ color: 'var(--muted)' }}>
+                O convite mostra "Este convite inclui um acompanhante" e a pessoa escreve o nome, se for levar alguém.
+              </small>
+            </span>
+          </label>
         </div>
 
         <label className="ad-field">
@@ -309,7 +320,7 @@ function BulkImport({ by, onClose }: { by: string; onClose: () => void }) {
         <h2>Importar lista</h2>
         <p style={{ margin: 0, color: 'var(--muted)' }}>
           Uma linha por convite. Separe as pessoas com vírgula ou "e", e o telefone com ponto e vírgula. Marque crianças com
-          <code> (criança)</code> ou <code>(criança 3)</code>.
+          <code> (criança)</code> ou <code>(criança 3)</code>, e escreva <code>+1</code> para liberar acompanhante.
         </p>
         <textarea
           className="ad-textarea"

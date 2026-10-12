@@ -54,6 +54,12 @@ export async function queryKey(input: string) {
   return words[0] + ' ' + words[words.length - 1]
 }
 
+/** Nome para exibir (acompanhante sem nome vira "Acompanhante"). */
+export function guestName(g: { name: string; isPlusOne?: boolean; plusOneName?: string | null }) {
+  if (!g.isPlusOne) return g.name
+  return g.plusOneName?.trim() ? `${g.plusOneName.trim()} (acompanhante)` : 'Acompanhante'
+}
+
 export function firstName(name: string) {
   return name.trim().split(/\s+/)[0] ?? name
 }

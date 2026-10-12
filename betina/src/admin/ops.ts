@@ -22,6 +22,8 @@ export interface InviteDraft {
   tags: string[]
   reserve: boolean
   members: MemberDraft[]
+  /** libera uma vaga de acompanhante para o convidado preencher */
+  plusOne?: boolean
 }
 
 export function autoLabel(names: string[]) {
@@ -78,7 +80,39 @@ export async function saveInvite(draft: InviteDraft, existing: Guest[], by: stri
   }
 
   for (const g of existing) {
+    if (g.isPlusOne) continue
     if (!keptIds.has(g.id)) batch.update(doc(guestsCol, g.id), { active: false, removed: true, updatedAt: serverTimestamp() })
+  }
+
+  // vaga de acompanhante: não aparece na busca por nome, só dentro do convite
+  const plus = existing.find((g) => g.isPlusOne)
+  if (draft.plusOne) {
+    const ref = plus ? doc(guestsCol, plus.id) : doc(guestsCol)
+    const data: Record<string, unknown> = {
+      name: 'Acompanhante',
+      isPlusOne: true,
+      inviteId: inviteRef.id,
+      inviteLabel: label,
+      host: draft.host,
+      active: !draft.reserve,
+      reserve: draft.reserve,
+      removed: false,
+      isChild: false,
+      age: null,
+      searchKeys: [],
+      order: 99,
+      updatedAt: serverTimestamp(),
+    }
+    if (!plus) {
+      data.status = 'pending'
+      data.plusOneName = null
+      data.respondedAt = null
+      data.respondedBy = null
+      data.createdAt = serverTimestamp()
+    }
+    batch.set(ref, data, { merge: true })
+  } else if (plus && !plus.removed) {
+    batch.update(doc(guestsCol, plus.id), { active: false, removed: true, updatedAt: serverTimestamp() })
   }
 
   const inv: Record<string, unknown> = {
@@ -198,7 +232,9 @@ export function parseBulk(text: string): Omit<InviteDraft, 'host' | 'reserve'>[]
     .map((l) => l.trim())
     .filter(Boolean)
     .map((line) => {
-      const [namesPart, phonePart = ''] = line.split(/[;|]/)
+      const [rawNames, phonePart = ''] = line.split(/[;|]/)
+      const plusOne = /\(?\+\s*1\)?/.test(rawNames)
+      const namesPart = rawNames.replace(/\(?\+\s*1\)?/g, ' ')
       const names = namesPart
         .split(/,|\s+e\s+|\s*&\s*|\s*\+\s*/i)
         .map((n) => n.trim())
@@ -208,7 +244,7 @@ export function parseBulk(text: string): Omit<InviteDraft, 'host' | 'reserve'>[]
         const name = raw.replace(/\(.*?\)/g, '').trim()
         return { name, isChild: !!m, age: m?.[1] ? Number(m[1]) : null, phone: '' }
       })
-      return { label: '', phone: phonePart.trim(), notes: '', tags: [], members }
+      return { label: '', phone: phonePart.trim(), notes: '', tags: [], members, plusOne }
     })
     .filter((d) => d.members.length)
 }

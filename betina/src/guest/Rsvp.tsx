@@ -23,7 +23,9 @@ const CHOICES: { s: Status; label: string; icon: IconName }[] = [
 
 export default function Rsvp({ settings, invite, me, onDone, onLater, onNotMe }: Props) {
   // quem está respondendo aparece primeiro
-  const people = [...invite.guests].sort((a, b) => (a.id === me.id ? -1 : b.id === me.id ? 1 : a.order - b.order))
+  const people = invite.guests.filter((g) => !g.isPlusOne).sort((a, b) => (a.id === me.id ? -1 : b.id === me.id ? 1 : a.order - b.order))
+  const plus = invite.guests.find((g) => g.isPlusOne)
+  const [plusName, setPlusName] = useState(plus?.plusOneName ?? '')
   const [status, setStatus] = useState<Record<string, Status>>(() =>
     Object.fromEntries(invite.guests.map((g) => [g.id, g.status])),
   )
@@ -34,7 +36,10 @@ export default function Rsvp({ settings, invite, me, onDone, onLater, onNotMe }:
   const [error, setError] = useState('')
   const closed = settings.rsvpOpen === false
 
-  const changed = invite.guests.filter((g) => status[g.id] !== g.status || ages[g.id] !== g.age)
+  const plusNameNow = plus && status[plus.id] === 'yes' ? plusName.trim() || null : null
+  const changed = invite.guests.filter(
+    (g) => status[g.id] !== g.status || ages[g.id] !== g.age || (g.isPlusOne && plusNameNow !== (g.plusOneName ?? null)),
+  )
   const answered = invite.guests.filter((g) => status[g.id] !== 'pending').length
 
   const submit = async () => {
@@ -47,12 +52,17 @@ export default function Rsvp({ settings, invite, me, onDone, onLater, onNotMe }:
     try {
       await saveAnswers(
         invite,
-        changed.map((g) => ({ guestId: g.id, status: status[g.id], age: ages[g.id] })),
+        changed.map((g) => ({
+          guestId: g.id,
+          status: status[g.id],
+          age: g.isPlusOne ? undefined : ages[g.id],
+          plusOneName: g.isPlusOne ? plusNameNow : undefined,
+        })),
         me.name,
       )
       const updated: InviteMatch = {
         ...invite,
-        guests: invite.guests.map((g) => ({ ...g, status: status[g.id], age: ages[g.id] })),
+        guests: invite.guests.map((g) => ({ ...g, status: status[g.id], age: ages[g.id], plusOneName: g.isPlusOne ? plusNameNow : g.plusOneName })),
       }
       onDone(updated, outcomeOf(updated.guests))
     } catch (e) {
@@ -89,7 +99,7 @@ export default function Rsvp({ settings, invite, me, onDone, onLater, onNotMe }:
         )}
 
         {people.length > 1 && !closed && (
-          <button className="g-allyes" onClick={() => setStatus(Object.fromEntries(people.map((g) => [g.id, 'yes'])))}>
+          <button className="g-allyes" onClick={() => setStatus((x) => ({ ...x, ...Object.fromEntries(people.map((g) => [g.id, 'yes'])) }))}>
             <Icon name="check" size={16} /> Todos vão
           </button>
         )}
@@ -148,6 +158,52 @@ export default function Rsvp({ settings, invite, me, onDone, onLater, onNotMe }:
             </section>
           )
         })}
+
+        {plus && (
+          <section className="g-person g-plus" aria-label="Acompanhante">
+            <div className="g-person-head">
+              <span className="g-avatar" style={{ width: 38, height: 38, fontSize: 18 }}>+</span>
+              <b>Acompanhante</b>
+              <span className="g-chip">opcional</span>
+            </div>
+            <p className="g-small" style={{ margin: 0 }}>
+              Este convite inclui um acompanhante. Se for levar alguém, conte pra gente quem é.
+            </p>
+            <div className="g-seg" style={{ gridTemplateColumns: '1fr 1fr' }} role="radiogroup" aria-label="Acompanhante">
+              {([
+                { s: 'yes' as Status, label: 'Vou levar', icon: 'check' as IconName },
+                { s: 'no' as Status, label: 'Não vou levar', icon: 'x' as IconName },
+              ]).map((c) => (
+                <button
+                  key={c.s}
+                  role="radio"
+                  aria-checked={status[plus.id] === c.s}
+                  disabled={closed}
+                  className={`${c.s} ${status[plus.id] === c.s ? 'on' : ''}`}
+                  onClick={() => setStatus((x) => ({ ...x, [plus.id]: x[plus.id] === c.s ? 'pending' : c.s }))}
+                >
+                  <Icon name={c.icon} size={16} stroke={2.2} />
+                  {c.label}
+                </button>
+              ))}
+            </div>
+            {status[plus.id] === 'yes' && (
+              <label className="g-field" htmlFor="acompanhante">
+                <span className="g-label" style={{ fontSize: 14 }}>Nome do acompanhante</span>
+                <input
+                  id="acompanhante"
+                  className="g-input"
+                  style={{ height: 50, fontSize: 17 }}
+                  placeholder="Nome e sobrenome"
+                  autoCapitalize="words"
+                  maxLength={60}
+                  value={plusName}
+                  onChange={(e) => setPlusName(e.target.value)}
+                />
+              </label>
+            )}
+          </section>
+        )}
 
         {error && (
           <div className="g-error" role="alert">

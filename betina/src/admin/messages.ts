@@ -8,8 +8,8 @@ export function inviteLink(inviteId: string) {
 }
 
 function vars(s: EventSettings, invite: Invite, members: Guest[]) {
-  const adults = members.filter((g) => !g.isChild)
-  const names = (adults.length ? adults : members).map((g) => firstName(g.name))
+  const adults = members.filter((g) => !g.isChild && !g.isPlusOne)
+  const names = (adults.length ? adults : members.filter((g) => !g.isPlusOne)).map((g) => firstName(g.name))
   return {
     nome: joinNames(names) || invite.label,
     convite: invite.label,
@@ -24,7 +24,7 @@ function vars(s: EventSettings, invite: Invite, members: Guest[]) {
   }
 }
 
-const many = (members: Guest[]) => members.filter((g) => !g.isChild).length > 1
+const many = (members: Guest[]) => members.filter((g) => !g.isChild && !g.isPlusOne).length > 1
 
 export function inviteText(s: EventSettings, invite: Invite, members: Guest[]) {
   return forGroup(fillTemplate(s.inviteMessage, vars(s, invite, members)), many(members))

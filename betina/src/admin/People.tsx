@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { AdminCtx } from './AdminApp'
 import type { Host, Status } from '../lib/types'
 import { HOST_LABEL, STATUS_LABEL } from '../lib/types'
-import { normalize } from '../lib/text'
+import { guestName, normalize } from '../lib/text'
 import Icon from '../lib/Icon'
 import { setGuestStatus } from './ops'
 import { isFreeChild } from './stats'
@@ -29,10 +29,10 @@ export default function People({ stats, settings, user, filter }: AdminCtx) {
         if (host && g.host !== host) return false
         if (kind === 'adult' && g.isChild) return false
         if (kind === 'kid' && !g.isChild) return false
-        if (nq && !normalize(`${g.name} ${g.inviteLabel}`).includes(nq)) return false
+        if (nq && !normalize(`${guestName(g)} ${g.inviteLabel}`).includes(nq)) return false
         return true
       })
-      .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+      .sort((a, b) => guestName(a).localeCompare(guestName(b), 'pt-BR'))
   }, [stats.invited, st, host, kind, q])
 
   const chip = <T extends string>(cur: T, set: (v: T) => void, v: T, label: string) => (
@@ -74,10 +74,10 @@ export default function People({ stats, settings, user, filter }: AdminCtx) {
           <tbody>
             {list.map((g) => (
               <tr key={g.id}>
-                <td><b style={{ fontWeight: 600 }}>{g.name}</b></td>
+                <td><b style={{ fontWeight: 600 }}>{guestName(g)}</b></td>
                 <td style={{ color: 'var(--muted)' }}>{g.inviteLabel}</td>
                 <td><span className={`ad-tag ${g.host}`}>{HOST_LABEL[g.host]}</span></td>
-                <td>{g.isChild ? `Criança${g.age != null ? `, ${g.age}a` : ''}${isFreeChild(g, settings) ? ' · não paga' : ''}` : 'Adulto'}</td>
+                <td>{g.isPlusOne ? 'Acompanhante' : g.isChild ? `Criança${g.age != null ? `, ${g.age}a` : ''}${isFreeChild(g, settings) ? ' · não paga' : ''}` : 'Adulto'}</td>
                 <td>
                   <select className={`ad-select st-${g.status}`} style={{ height: 30, width: 150, fontWeight: 700, fontSize: 12, border: 0 }} value={g.status} onChange={(e) => setGuestStatus(g, e.target.value as Status, by)}>
                     {(Object.keys(STATUS_LABEL) as Status[]).map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}

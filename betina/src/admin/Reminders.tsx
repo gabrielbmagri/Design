@@ -6,7 +6,7 @@ import { markReminded, markSent } from './ops'
 import { inviteWa, reminderWa } from './messages'
 import { DAY, ms } from './stats'
 import Icon from '../lib/Icon'
-import { plural } from '../lib/text'
+import { guestName, plural } from '../lib/text'
 
 function Row({ invite, open, extra, children }: { invite: Invite; open: Guest[]; extra?: string; children: React.ReactNode }) {
   return (
@@ -19,7 +19,7 @@ function Row({ invite, open, extra, children }: { invite: Invite; open: Guest[];
       </div>
       {open.length > 0 && (
         <div style={{ fontSize: 14, color: 'var(--muted)' }}>
-          Falta responder: <b style={{ color: 'var(--text)' }}>{open.map((g) => g.name + (g.status === 'maybe' ? ' (talvez)' : '')).join(', ')}</b>
+          Falta responder: <b style={{ color: 'var(--text)' }}>{open.map((g) => guestName(g) + (g.status === 'maybe' ? ' (talvez)' : '')).join(', ')}</b>
         </div>
       )}
       <div className="ad-row">{children}</div>

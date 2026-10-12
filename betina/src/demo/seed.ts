@@ -8,10 +8,10 @@ import { Timestamp, __isEmpty } from './firestore'
 const DAY = 864e5
 const m = (name: string, isChild = false, age: number | null = null): MemberDraft => ({ name, isChild, age, phone: '' })
 
-const SAMPLE: { host: Host; phone: string; members: MemberDraft[]; status?: Status[]; sentDaysAgo?: number; reserve?: boolean; tags?: string[] }[] = [
+const SAMPLE: { host: Host; phone: string; members: MemberDraft[]; status?: Status[]; sentDaysAgo?: number; reserve?: boolean; tags?: string[]; plusOne?: boolean }[] = [
   { host: 'gabriel', phone: '21 99999-0001', members: [m('Maria Silva'), m('João Silva')], status: ['yes', 'yes'], sentDaysAgo: 10, tags: ['família'] },
   { host: 'gabriel', phone: '21 99999-0002', members: [m('Ana Souza'), m('Pedro Souza', true, 3), m('Lia Souza', true)], sentDaysAgo: 9, tags: ['família'] },
-  { host: 'gabriel', phone: '21 99999-0003', members: [m('Carlos Mendes')], status: ['maybe'], sentDaysAgo: 8, tags: ['trabalho'] },
+  { host: 'gabriel', phone: '21 99999-0003', members: [m('Carlos Mendes')], status: ['maybe'], sentDaysAgo: 8, tags: ['trabalho'], plusOne: true },
   { host: 'gabriel', phone: '21 99999-0004', members: [m('Rosa Oliveira'), m('Antônio Oliveira')], status: ['no', 'no'], sentDaysAgo: 6 },
   { host: 'gabriel', phone: '21 99999-0005', members: [m('Fernanda Lima'), m('Bruno Lima'), m('Theo Lima', true, 7)], sentDaysAgo: 2, tags: ['amigos'] },
   { host: 'gabriel', phone: '21 99999-0006', members: [m('Tia Célia')], reserve: true },
@@ -27,14 +27,14 @@ export async function seedDemo() {
   await setDoc(doc(db, 'admins', 'demo@betina'), { host: 'gabriel' })
   for (const s of SAMPLE) {
     const id = await saveInvite(
-      { label: '', host: s.host, phone: s.phone, notes: '', tags: s.tags ?? [], reserve: !!s.reserve, members: s.members },
+      { label: '', host: s.host, phone: s.phone, notes: '', tags: s.tags ?? [], reserve: !!s.reserve, members: s.members, plusOne: s.plusOne },
       [],
       'demo',
     )
     if (s.sentDaysAgo != null) await updateDoc(doc(invitesCol, id), { sentAt: Timestamp.fromMillis(Date.now() - s.sentDaysAgo * DAY) })
     if (s.status) {
       const { getDocs, query, where } = await import('firebase/firestore')
-      const gs = (await getDocs(query(guestsCol, where('inviteId', '==', id)))).docs.sort((a, b) => (a.get('order') as number) - (b.get('order') as number))
+      const gs = (await getDocs(query(guestsCol, where('inviteId', '==', id)))).docs.filter((d) => !d.get('isPlusOne')).sort((a, b) => (a.get('order') as number) - (b.get('order') as number))
       const b = writeBatch(db)
       gs.forEach((g, k) => {
         const st = s.status![k] ?? 'pending'
