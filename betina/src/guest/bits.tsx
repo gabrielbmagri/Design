@@ -186,6 +186,12 @@ export function mapEmbedUrl(s: EventSettings) {
 }
 
 export function MapEmbed({ settings }: { settings: EventSettings }) {
+  if (import.meta.env.MODE === 'demo')
+    return (
+      <div className="im-map" style={{ display: 'grid', placeItems: 'center', padding: 16, textAlign: 'center', color: 'var(--ink-soft)', fontWeight: 700 }}>
+        🗺️ Aqui aparece o mapa do Google com o salão marcado (só no site publicado).
+      </div>
+    )
   return (
     <div className="im-map">
       <iframe

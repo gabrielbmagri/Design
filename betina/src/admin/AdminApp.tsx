@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, signInWithPopup, signInWithRedirect, signOut, type User } from 'firebase/auth'
 import { collection, doc, getDoc, limit, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { auth, db, firebaseConfigured } from '../lib/firebase'
@@ -75,6 +76,7 @@ function Login({ error }: { error?: string }) {
 }
 
 export default function AdminApp() {
+  const navigate = useNavigate()
   const [user, setUser] = useState<User | null | undefined>(undefined)
   const [allowed, setAllowed] = useState<boolean | undefined>(undefined)
   const [invites, setInvites] = useState<Invite[]>([])
@@ -160,9 +162,11 @@ export default function AdminApp() {
           </button>
         ))}
         <div style={{ flex: 1 }} />
-        <a className="ad-nav" href="/" target="_blank" rel="noreferrer">
-          🌐 Ver site
-        </a>
+        {import.meta.env.MODE === 'demo' ? (
+          <button className="ad-nav" onClick={() => navigate('/')}>🌐 Ver site</button>
+        ) : (
+          <a className="ad-nav" href="/" target="_blank" rel="noreferrer">🌐 Ver site</a>
+        )}
         <button className="ad-nav" onClick={() => signOut(auth)}>
           ↩ Sair <small style={{ marginLeft: 'auto', fontSize: 11 }}>{user.email?.split('@')[0]}</small>
         </button>

@@ -1,6 +1,7 @@
 import type { EventSettings } from './types'
 
-const ph = (n: number) => `/photos/betina-${String(n).padStart(2, '0')}.svg`
+const BASE = import.meta.env.BASE_URL
+const ph = (n: number) => `${BASE}photos/betina-${String(n).padStart(2, '0')}.svg`
 
 // Valores iniciais — tudo editável no painel em "Festa".
 export const DEFAULT_SETTINGS: EventSettings = {
@@ -46,5 +47,5 @@ export const DEFAULT_SETTINGS: EventSettings = {
     'Oi, {nome}! 🐮\n\nAs porteiras estão abertas! A {crianca} vai fazer 1 aninho e queremos muito você com a gente na fazendinha.\n\n📅 {data}\n⏰ {hora}\n📍 {local}\n🤠 Seu chapéu de cowboy é bem-vindo!\n\nConfirme sua presença aqui, é bem fácil:\n{link}\n\nCom carinho, {anfitriao} 💗',
   reminderMessage:
     'Oi, {nome}! Tudo bem? 🐷\n\nPassando pra lembrar do aniversário de 1 ano da {crianca}, {data}, às {hora}.\n\nVocê consegue confirmar se vai? É só tocar no link:\n{link}\n\nObrigado! {anfitriao} 💗',
-  inviteImage: '/photos/convite.jpg',
+  inviteImage: `${BASE}photos/convite.jpg`,
 }

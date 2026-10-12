@@ -5,3 +5,4 @@ dist
 *.log
 service-account*.json
 vite.config.ts.timestamp-*
+dist-demo

@@ -4,7 +4,7 @@ import { connectFirestoreEmulator, initializeFirestore, persistentLocalCache, pe
 
 const env = import.meta.env
 
-export const firebaseConfigured = Boolean((env.VITE_FB_API_KEY && env.VITE_FB_PROJECT_ID) || env.VITE_USE_EMULATOR === '1')
+export const firebaseConfigured = Boolean((env.VITE_FB_API_KEY && env.VITE_FB_PROJECT_ID) || env.VITE_USE_EMULATOR === '1' || env.MODE === 'demo')
 
 export const app = initializeApp({
   apiKey: env.VITE_FB_API_KEY || 'missing',
@@ -28,7 +28,10 @@ if (env.VITE_USE_EMULATOR === '1') {
   connectFirestoreEmulator(db, '127.0.0.1', 8080)
 }
 
-export const SITE_URL = (env.VITE_SITE_URL || window.location.origin).replace(/\/$/, '')
+export const SITE_URL =
+  env.MODE === 'demo'
+    ? window.location.href.split('#')[0] + '#'
+    : (env.VITE_SITE_URL || window.location.origin).replace(/\/$/, '')
 
 let anonPromise: Promise<unknown> | null = null
 export function ensureGuestSession() {

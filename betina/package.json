@@ -6,7 +6,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "og": "node scripts/make-og.mjs",
-    "deploy": "npm run build && firebase deploy"
+    "deploy": "npm run build && firebase deploy",
+    "build:demo": "vite build --mode demo"
   },
   "dependencies": {
     "firebase": "^11.10.0",
