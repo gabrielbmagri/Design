@@ -2,7 +2,7 @@ import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { useRef, type ReactNode } from 'react'
 import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
-import { firstName, forGroup, joinNames, longDate, waLink } from '../lib/text'
+import { eventDate, firstName, forGroup, joinNames, waLink } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
 import type { Outcome } from './GuestApp'
 import {
@@ -193,7 +193,7 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
   const cards: ReactNode[] = [
     <InfoCard key="when" icon="calendar" title="Quando">
       <p>
-        <b style={{ color: 'var(--ink)' }}>{longDate(settings.dateISO)}</b>, {timeLabel(settings)}
+        <b style={{ color: 'var(--ink)' }}>{eventDate(settings.dateISO, settings.dateNote)}</b>, {timeLabel(settings)}
       </p>
       <Countdown settings={settings} />
       <CalendarButton settings={settings} />

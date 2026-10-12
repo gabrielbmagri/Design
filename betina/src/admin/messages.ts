@@ -1,7 +1,7 @@
 import { SITE_URL } from '../lib/firebase'
 import type { EventSettings, Guest, Invite } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
-import { fillTemplate, firstName, fmtTime, joinNames, longDate, waLink } from '../lib/text'
+import { eventDate, fillTemplate, forGroup, firstName, fmtTime, joinNames, longDate, waLink } from '../lib/text'
 
 export function inviteLink(inviteId: string) {
   return `${SITE_URL}/c/${inviteId}`
@@ -14,7 +14,7 @@ function vars(s: EventSettings, invite: Invite, members: Guest[]) {
     nome: joinNames(names) || invite.label,
     convite: invite.label,
     crianca: s.childName,
-    data: longDate(s.dateISO),
+    data: eventDate(s.dateISO, s.dateNote),
     hora: fmtTime(s.timeStart),
     local: [s.venueName, s.address].filter(Boolean).join(', '),
     endereco: s.address,
@@ -24,12 +24,14 @@ function vars(s: EventSettings, invite: Invite, members: Guest[]) {
   }
 }
 
+const many = (members: Guest[]) => members.filter((g) => !g.isChild).length > 1
+
 export function inviteText(s: EventSettings, invite: Invite, members: Guest[]) {
-  return fillTemplate(s.inviteMessage, vars(s, invite, members))
+  return forGroup(fillTemplate(s.inviteMessage, vars(s, invite, members)), many(members))
 }
 
 export function reminderText(s: EventSettings, invite: Invite, members: Guest[]) {
-  return fillTemplate(s.reminderMessage, vars(s, invite, members))
+  return forGroup(fillTemplate(s.reminderMessage, vars(s, invite, members)), many(members))
 }
 
 export function inviteWa(s: EventSettings, invite: Invite, members: Guest[]) {

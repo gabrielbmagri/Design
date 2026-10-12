@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { STATUS_LABEL } from '../lib/types'
-import { firstName, forGroup, longDate, waLink } from '../lib/text'
+import { eventDate, firstName, forGroup, waLink } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
 import { Countdown, FloatingAnimals, GiftList, MapEmbed, Sparkles, hostContacts, timeLabel } from './bits'
 import { CalendarButton, ContactButtons, PlaceActions } from './Immersion'
@@ -121,7 +121,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
             >
               <div className="head">
                 <b>{settings.title}</b>
-                <small>{longDate(settings.dateISO)}</small>
+                <small>{eventDate(settings.dateISO, settings.dateNote)}</small>
               </div>
               {MENU.map((m) => (
                 <button key={m.id} className={section === m.id ? 'on' : ''} onClick={() => go(m.id)}>
@@ -167,7 +167,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
         <section id="hub-quando" className="hub-section" style={{ display: 'grid', gap: 14 }}>
           <Card icon="calendar" title="Data e hora">
             <p>
-              <b style={{ color: 'var(--ink)' }}>{longDate(settings.dateISO)}</b>, {timeLabel(settings)}
+              <b style={{ color: 'var(--ink)' }}>{eventDate(settings.dateISO, settings.dateNote)}</b>, {timeLabel(settings)}
             </p>
             <Countdown settings={settings} />
             <CalendarButton settings={settings} />

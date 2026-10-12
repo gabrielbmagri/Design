@@ -9,6 +9,7 @@ export const DEFAULT_SETTINGS: EventSettings = {
   title: 'Betina faz 1 ano',
   subtitle: 'As porteiras estão abertas!',
   dateISO: '2026-11-02',
+  dateNote: 'feriado',
   timeStart: '13:00',
   timeEnd: '',
   venueName: 'Adventure Kids — Casa 01',
@@ -53,8 +54,8 @@ export const DEFAULT_SETTINGS: EventSettings = {
   childFreeMaxAge: 5,
   reminderDays: 7,
   inviteMessage:
-    'Oi, {nome}! 🐮\n\nAs porteiras estão abertas! A {crianca} vai fazer 1 aninho e queremos muito você com a gente na fazendinha.\n\n📅 {data}\n⏰ {hora}\n📍 {local}\n🤠 Seu chapéu de cowboy é bem-vindo!\n\nResponda por aqui, leva menos de um minuto:\n{link}\n\nCom carinho, {anfitriao} 💗',
+    'Oi, {nome}! 🐮\n\nAs porteiras estão abertas! A {crianca} vai fazer 1 aninho e queremos muito você com a gente na fazendinha.\n\n📅 {data}\n⏰ {hora}\n📍 {local}\n🤠 Seu chapéu de cowboy é bem-vindo!\n\nConfirme a presença por aqui, leva menos de um minuto:\n{link}\n\nCom carinho, {anfitriao} 💗',
   reminderMessage:
-    'Oi, {nome}! Tudo bem? 🐷\n\nPassando pra lembrar do aniversário de 1 ano da {crianca}, {data}, às {hora}.\n\nConsegue nos dizer se vai? A resposta leva menos de um minuto:\n{link}\n\nObrigado! {anfitriao} 💗',
+    'Oi, {nome}! Tudo bem? 🐷\n\nPassando pra lembrar do aniversário de 1 ano da {crianca}, {data}, às {hora}.\n\nConsegue confirmar a presença? Leva menos de um minuto:\n{link}\n\nObrigado! {anfitriao} 💗',
   inviteImage: `${BASE}photos/convite.jpg`,
 }

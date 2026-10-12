@@ -80,6 +80,7 @@ export default function SettingsView({ settings }: AdminCtx) {
           <Field label="Frase do convite">{text('subtitle')}</Field>
           <div className="ad-grid">
             <Field label="Data">{text('dateISO', 'date')}</Field>
+            <Field label="Observação do dia (ex.: feriado)">{text('dateNote')}</Field>
             <Field label="Começa">{text('timeStart', 'time')}</Field>
             <Field label="Termina">{text('timeEnd', 'time')}</Field>
             <Field label="Prazo de confirmação">{text('rsvpDeadlineISO', 'date')}</Field>

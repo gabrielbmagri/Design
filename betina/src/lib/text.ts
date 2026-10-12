@@ -93,6 +93,15 @@ export function longDate(iso: string) {
   return `${WEEKDAYS[dt.getDay()]}, ${dt.getDate()} de ${MONTHS[dt.getMonth()]}`
 }
 
+/** "Segunda-feira (feriado), 2 de novembro" */
+export function eventDate(iso: string, note?: string) {
+  const d = longDate(iso)
+  if (!d) return ''
+  const [weekday, rest] = d.split(', ')
+  const cap = weekday.charAt(0).toUpperCase() + weekday.slice(1)
+  return `${cap}${note ? ` (${note})` : ''}, ${rest}`
+}
+
 export function shortDate(iso: string) {
   if (!iso) return ''
   const dt = parseISODate(iso)
@@ -120,6 +129,6 @@ export function forGroup(text: string, many: boolean) {
     .replace(/\bsua falta\b/gi, 'a falta de vocês')
     .replace(/\bSe quiser\b/g, 'Se quiserem')
     .replace(/\bse quiser\b/g, 'se quiserem')
-    .replace(/\b(com|ter|para|por|sem) você(?![a-zà-ú])/gi, '$1 vocês')
+    .replace(/\b(com|ter|para|por|sem|muito) você(?![a-zà-ú])/gi, '$1 vocês')
     .replace(/\bVocê(?![a-zà-ú])/g, 'Vocês')
 }

@@ -68,6 +68,8 @@ export interface EventSettings {
   title: string
   subtitle: string
   dateISO: string // 2026-12-05
+  /** observação ao lado do dia da semana, ex.: "feriado" */
+  dateNote: string
   timeStart: string // 15:00
   timeEnd: string
   venueName: string
