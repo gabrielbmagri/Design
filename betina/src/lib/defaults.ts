@@ -2,6 +2,7 @@ import type { EventSettings } from './types'
 
 const BASE = import.meta.env.BASE_URL
 const ph = (n: number) => `${BASE}photos/betina-${String(n).padStart(2, '0')}.svg`
+const photo = (name: string) => `${BASE}photos/${name}.jpg`
 
 // Valores iniciais — tudo editável no painel em "Festa".
 export const DEFAULT_SETTINGS: EventSettings = {
@@ -23,9 +24,9 @@ export const DEFAULT_SETTINGS: EventSettings = {
   welcomeNo: 'Que pena! Vamos sentir sua falta, mas a gente entende.',
   welcomeMaybe: 'Volte aqui e responda quando souber. As porteiras continuam abertas.',
   story: [
-    { label: '31 de outubro de 2025 · 15h', photo: ph(1), text: 'No Instituto Fernandes Figueira, nasceu a Betina. Naquele instante, tudo ganhou uma cor nova.' },
-    { label: 'Os primeiros dias', photo: ph(2), text: 'Noites em claro, colo sem fim e um amor que a gente nem sabia que cabia no peito.' },
-    { label: 'Os primeiros sorrisos', photo: ph(3), text: 'Veio o primeiro sorriso e, com ele, a certeza de que os dias iam ficar mais leves.' },
+    { label: '31 de outubro de 2025 · 15h', photo: photo('nascimento'), text: 'No Instituto Fernandes Figueira, nasceu a Betina. Naquele instante, tudo ganhou uma cor nova.' },
+    { label: 'Os primeiros dias', photo: photo('primeiros-dias'), text: 'Noites em claro, colo sem fim e um amor que a gente nem sabia que cabia no peito.' },
+    { label: 'Os primeiros sorrisos', photo: photo('primeiros-sorrisos'), text: 'Veio o primeiro sorriso e, com ele, a certeza de que os dias iam ficar mais leves.' },
     { label: 'Descobertas', photo: ph(4), text: 'Mãozinhas curiosas, gargalhadas, as primeiras palavrinhas. Cada descoberta virou uma pequena conquista.' },
     { label: 'Gabriel e Luíza', photo: ph(5), text: 'Ver a Betina crescer cheia de curiosidade e carinho por todo mundo é o maior presente que a vida nos deu.' },
     { label: '1 aninho', photo: ph(1), text: 'Chegou a hora de celebrar o primeiro ano da Betina na fazendinha. E a festa só fica completa com você.' },
@@ -35,7 +36,7 @@ export const DEFAULT_SETTINGS: EventSettings = {
   letter:
     'Obrigado por fazer parte da vida da Betina. Cada pessoa convidada para esta festa tem um pedacinho dessa história: num colo, numa visita, numa mensagem, numa oração. Queremos muito viver esse dia ao seu lado.',
   letterSign: 'Com amor, Gabriel e Luíza',
-  carousel: [ph(1), ph(2), ph(3), ph(4), ph(5)],
+  carousel: [photo('primeiros-sorrisos'), photo('nascimento'), photo('primeiros-dias')],
   gifts: [
     { group: 'Betina adora', title: 'Livros' },
     { group: 'Betina adora', title: 'Brinquedos educativos' },
