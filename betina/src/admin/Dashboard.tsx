@@ -1,6 +1,6 @@
 import type { AdminCtx } from './AdminApp'
 import { HOST_LABEL, STATUS_LABEL } from '../lib/types'
-import { firstName, parseISODate, shortDate } from '../lib/text'
+import { firstName, parseISODate, plural, shortDate } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
 import type { HostStats } from './stats'
 
@@ -56,14 +56,14 @@ export default function Dashboard({ stats, settings, go, logs, user }: AdminCtx)
 
   const actions: { icon: IconName; title: string; sub: string; onClick: () => void }[] = []
   if (stats.reminders.length)
-    actions.push({ icon: 'bell', title: `Lembrar ${stats.reminders.length} convite(s)`, sub: `Sem resposta há mais de ${settings.reminderDays} dias`, onClick: () => go('lembretes') })
+    actions.push({ icon: 'bell', title: `Lembrar ${plural(stats.reminders.length, 'convite')}`, sub: `Sem resposta há mais de ${settings.reminderDays} dias`, onClick: () => go('lembretes') })
   if (stats.notSent.length)
-    actions.push({ icon: 'mail', title: `Enviar ${stats.notSent.length} convite(s)`, sub: 'Ainda não foram mandados pelo WhatsApp', onClick: () => go('lembretes') })
+    actions.push({ icon: 'mail', title: `Enviar ${plural(stats.notSent.length, 'convite')}`, sub: 'Ainda não mandados pelo WhatsApp', onClick: () => go('lembretes') })
   for (const h of stats.hosts)
     if (h.free > 0 && h.reserves > 0)
-      actions.push({ icon: 'inbox', title: `${HOST_LABEL[h.host]} tem ${h.free} vaga(s) livre(s)`, sub: `${h.reserves} pessoa(s) na reserva para chamar`, onClick: () => go('reservas') })
+      actions.push({ icon: 'inbox', title: `${HOST_LABEL[h.host]} tem ${plural(h.free, 'vaga livre', 'vagas livres')}`, sub: `${plural(h.reserves, 'pessoa', 'pessoas')} na reserva para chamar`, onClick: () => go('reservas') })
   if (stats.kidsNoAge.length)
-    actions.push({ icon: 'baby', title: `${stats.kidsNoAge.length} criança(s) sem idade`, sub: 'Define quem paga e a contagem de lembrancinhas', onClick: () => go('criancas') })
+    actions.push({ icon: 'baby', title: `${plural(stats.kidsNoAge.length, 'criança', 'crianças')} sem idade`, sub: 'Define quem paga e a contagem de lembrancinhas', onClick: () => go('criancas') })
 
   return (
     <>
@@ -71,8 +71,8 @@ export default function Dashboard({ stats, settings, go, logs, user }: AdminCtx)
         <div>
           <h1>{name ? `Oi, ${name}` : 'Olá'}</h1>
           <p>
-            {toParty > 0 ? `Faltam ${toParty} dias para a festa` : toParty === 0 ? 'A festa é hoje!' : 'A festa já passou'}
-            {toDeadline >= 0 && ` · prazo de resposta em ${toDeadline} dias (${shortDate(settings.rsvpDeadlineISO)})`}
+            {toParty > 0 ? `${toParty === 1 ? 'Falta' : 'Faltam'} ${plural(toParty, 'dia')} para a festa` : toParty === 0 ? 'A festa é hoje!' : 'A festa já passou'}
+            {toDeadline >= 0 && ` · prazo de resposta em ${plural(toDeadline, 'dia')} (${shortDate(settings.rsvpDeadlineISO)})`}
           </p>
         </div>
         <button className="ad-btn primary" onClick={() => go('convites', 'new')}>
@@ -82,7 +82,7 @@ export default function Dashboard({ stats, settings, go, logs, user }: AdminCtx)
 
       <div className="ad-grid" style={{ marginBottom: 16 }}>
         <Kpi label="Confirmados" n={t.payingConfirmed} of={`/ ${t.cap}`} sub={`${t.confirmed} pessoas, contando crianças`} onClick={() => go('pessoas', 'yes')} />
-        <Kpi label="Aguardando resposta" n={t.pending + t.maybe} sub={t.maybe ? `${t.maybe} disseram talvez` : undefined} onClick={() => go('pessoas', 'open')} />
+        <Kpi label="Aguardando resposta" n={t.pending + t.maybe} sub={t.maybe ? `${plural(t.maybe, 'disse', 'disseram')} talvez` : undefined} onClick={() => go('pessoas', 'open')} />
         <Kpi label="Não vão" n={t.declined} onClick={() => go('pessoas', 'no')} />
         <Kpi label="Responderam" n={`${answered}%`} sub={`${t.sent} de ${t.invites} convites enviados`} />
       </div>

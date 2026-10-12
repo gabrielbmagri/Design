@@ -3,6 +3,7 @@ import type { AdminCtx } from './AdminApp'
 import type { Host } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
 import Icon from '../lib/Icon'
+import { plural } from '../lib/text'
 import { setReserve, type InviteDraft } from './ops'
 import { InviteEditor } from './Invites'
 
@@ -30,7 +31,7 @@ export default function Reserves({ invites, guests, stats, user }: AdminCtx) {
                 <div>
                   <h3>Reserva {h === 'gabriel' ? 'do' : 'da'} {HOST_LABEL[h]}</h3>
                   <small style={{ color: hs.free > 0 ? 'var(--ok)' : 'var(--muted)', fontWeight: 600 }}>
-                    {hs.free > 0 ? `${hs.free} vaga(s) livre(s) agora` : 'Sem vagas livres'}
+                    {hs.free > 0 ? `${plural(hs.free, 'vaga livre', 'vagas livres')} agora` : 'Sem vagas livres'}
                   </small>
                 </div>
                 <button
@@ -47,7 +48,7 @@ export default function Reserves({ invites, guests, stats, user }: AdminCtx) {
                   <div key={i.id} className="ad-action" style={{ cursor: 'default' }}>
                     <div>
                       <b>{i.label}</b>
-                      <small>{m.length} pessoa(s){i.phone ? ` · ${i.phone}` : ''}</small>
+                      <small>{plural(m.length, 'pessoa')}{i.phone ? ` · ${i.phone}` : ''}</small>
                     </div>
                     <button className="ad-btn sm primary" onClick={() => setReserve(i, m, false)}>Convidar</button>
                   </div>

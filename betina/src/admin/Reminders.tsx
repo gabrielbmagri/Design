@@ -6,6 +6,7 @@ import { markReminded, markSent } from './ops'
 import { inviteWa, reminderWa } from './messages'
 import { DAY, ms } from './stats'
 import Icon from '../lib/Icon'
+import { plural } from '../lib/text'
 
 function Row({ invite, open, extra, children }: { invite: Invite; open: Guest[]; extra?: string; children: React.ReactNode }) {
   return (
@@ -81,7 +82,7 @@ export default function Reminders({ stats, settings, myHost }: AdminCtx) {
           const since = Math.max(ms(r.invite.sentAt), ms(r.invite.lastReminderAt))
           const left = Math.max(0, Math.ceil((since + settings.reminderDays * DAY - now) / DAY))
           return (
-            <Row key={r.invite.id} invite={r.invite} open={r.open} extra={`lembrar em ${left} dia(s)`}>
+            <Row key={r.invite.id} invite={r.invite} open={r.open} extra={`lembrar em ${plural(left, 'dia')}`}>
               <a className="ad-btn sm" href={reminderWa(settings, r.invite, stats.guestsOf(r.invite.id))} target="_blank" rel="noreferrer" onClick={() => markReminded(r.invite)}>
                 Lembrar mesmo assim
               </a>

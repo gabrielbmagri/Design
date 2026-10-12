@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { STATUS_LABEL } from '../lib/types'
-import { firstName, longDate, waLink } from '../lib/text'
+import { firstName, forGroup, longDate, waLink } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
 import { Countdown, FloatingAnimals, GiftList, MapEmbed, Sparkles, hostContacts, timeLabel } from './bits'
 import { CalendarButton, ContactButtons, PlaceActions } from './Immersion'
@@ -25,7 +25,7 @@ const MENU: { id: string; icon: IconName; label: string }[] = [
   { id: 'onde', icon: 'pin', label: 'Local' },
   { id: 'presentes', icon: 'gift', label: 'Presentes' },
   { id: 'historia', icon: 'heart', label: 'Nossa história' },
-  { id: 'confirmacao', icon: 'check', label: 'Minha confirmação' },
+  { id: 'confirmacao', icon: 'check', label: 'Minha resposta' },
 ]
 
 function Card({ icon, title, children }: { icon: IconName; title: string; children: ReactNode }) {
@@ -157,12 +157,8 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
                 <img src={settings.inviteImage} alt={`Convite: ${settings.title}`} />
               </div>
             )}
-            <p className="g-lead" style={{ textAlign: 'center' }}>
-              {me ? `${firstName(me.name)}, ` : ''}
-              {longDate(settings.dateISO)}, {timeLabel(settings)}, {settings.venueName}
-            </p>
             <button className="g-btn" onClick={() => (me ? go('confirmacao') : onManage())}>
-              {me ? 'Ver minha confirmação' : 'Confirmar presença'}
+              {me ? 'Ver minha resposta' : 'Responder ao convite'}
             </button>
             {settings.dressCode && <p className="g-small" style={{ textAlign: 'center' }}>{settings.dressCode}</p>}
           </>
@@ -192,7 +188,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
 
         <section id="hub-presentes" className="hub-section" style={{ display: 'grid', gap: 14 }}>
           <Card icon="gift" title="Sugestões de presente">
-            <p>{settings.giftNote}</p>
+            <p>{forGroup(settings.giftNote, (invite?.guests.length ?? 1) > 1)}</p>
             <GiftList settings={settings} />
             {settings.pix && <p>Pix: <b>{settings.pix}</b></p>}
           </Card>
@@ -200,7 +196,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
 
         <section id="hub-historia" className="hub-section" style={{ display: 'grid', gap: 14 }}>
           <Card icon="heart" title="Nossa história">
-            <p>Um ano em alguns momentos.</p>
+            <p>Os momentos que marcaram esse primeiro ano.</p>
             <div className="im-strip">
               {settings.story.map((c, i) => (
                 <figure key={i}>
@@ -216,7 +212,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
         </section>
 
         <section id="hub-confirmacao" className="hub-section" style={{ display: 'grid', gap: 14 }}>
-          <Card icon="check" title={invite ? 'Respostas do seu convite' : 'Confirme sua presença'}>
+          <Card icon="check" title={invite ? 'Respostas do seu convite' : 'Sua resposta'}>
             {invite ? (
               <>
                 <div>
@@ -231,8 +227,8 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
               </>
             ) : (
               <>
-                <p>Digite seu nome para encontrar seu convite.</p>
-                <button className="g-btn" onClick={onManage}>Confirmar presença</button>
+                <p>Encontre seu convite pelo nome para responder.</p>
+                <button className="g-btn" onClick={onManage}>Responder agora</button>
               </>
             )}
             <ContactButtons settings={settings} me={me} />

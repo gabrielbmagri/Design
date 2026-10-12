@@ -105,3 +105,21 @@ export function fmtTime(t: string) {
   const [h, m] = t.split(':')
   return `${Number(h)}h${m && m !== '00' ? m : ''}`
 }
+
+/** plural(2, 'convite') -> "2 convites"; plural(1, 'vaga livre', 'vagas livres') -> "1 vaga livre" */
+export function plural(n: number, one: string, many = one + 's') {
+  return `${n} ${n === 1 ? one : many}`
+}
+
+/** Ajusta frases escritas para "você" quando o convite tem mais de uma pessoa. */
+export function forGroup(text: string, many: boolean) {
+  if (!many) return text
+  return text
+    .replace(/\bcom a sua companhia\b/gi, 'com a companhia de vocês')
+    .replace(/\bao seu lado\b/gi, 'ao lado de vocês')
+    .replace(/\bsua falta\b/gi, 'a falta de vocês')
+    .replace(/\bSe quiser\b/g, 'Se quiserem')
+    .replace(/\bse quiser\b/g, 'se quiserem')
+    .replace(/\b(com|ter|para|por|sem) você(?![a-zà-ú])/gi, '$1 vocês')
+    .replace(/\bVocê(?![a-zà-ú])/g, 'Vocês')
+}

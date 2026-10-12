@@ -9,7 +9,7 @@ export const STATUS_LABEL: Record<Status, string> = {
   pending: 'Sem resposta',
   yes: 'Confirmado',
   no: 'Não vai',
-  maybe: 'Ainda não sabe',
+  maybe: 'Talvez',
 }
 
 /** Documento público de cada pessoa (sem telefone). */

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { AdminCtx } from './AdminApp'
 import type { Guest, Host, Invite, Status } from '../lib/types'
 import { HOST_LABEL, STATUS_LABEL } from '../lib/types'
-import { normalize } from '../lib/text'
+import { normalize, plural } from '../lib/text'
 import { clearSent, markSent, parseBulk, saveInvite, setArchived, setGuestStatus, setReserve, type InviteDraft } from './ops'
 import { inviteLink, inviteWa } from './messages'
 import { isFreeChild } from './stats'
@@ -135,7 +135,7 @@ export default function Invites(ctx: AdminCtx) {
                 <span className="ad-meta">
                   {i.phone || 'sem telefone'}
                   {i.sentAt ? ` · enviado ${i.sentAt.toDate().toLocaleDateString('pt-BR')}` : !i.reserve ? ' · não enviado' : ''}
-                  {i.reminderCount ? ` · ${i.reminderCount} lembrete(s)` : ''}
+                  {i.reminderCount ? ` · ${plural(i.reminderCount, 'lembrete')}` : ''}
                 </span>
               </div>
               <div className="ad-people">

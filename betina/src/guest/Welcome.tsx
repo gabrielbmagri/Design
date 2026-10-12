@@ -78,7 +78,7 @@ export default function Welcome({ settings, busy, error, saved, onSearch, onCont
 
         <div style={{ marginTop: 'auto', textAlign: 'center' }}>
           <button className="g-link" onClick={onVisitor}>
-            Ver informações da festa
+            Só quero ver os detalhes
           </button>
         </div>
       </div>
