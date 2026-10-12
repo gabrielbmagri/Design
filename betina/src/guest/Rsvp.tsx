@@ -122,18 +122,28 @@ export default function Rsvp({ settings, invite, me, onDone, onLater, onNotMe }:
                 ))}
               </div>
               {askAge && (
-                <div className="g-age">
-                  <span>Idade no dia da festa</span>
-                  <div className="g-stepper">
-                    <button aria-label="Menos" onClick={() => setAges((a) => ({ ...a, [g.id]: Math.max(0, (a[g.id] ?? 1) - 1) }))}>
-                      −
-                    </button>
-                    <output>{ages[g.id] == null ? '—' : ages[g.id] === 0 ? 'bebê' : `${ages[g.id]} ${ages[g.id] === 1 ? 'ano' : 'anos'}`}</output>
-                    <button aria-label="Mais" onClick={() => setAges((a) => ({ ...a, [g.id]: Math.min(17, a[g.id] == null ? 1 : a[g.id]! + 1) }))}>
-                      +
-                    </button>
-                  </div>
-                </div>
+                <label className="g-age" htmlFor={`idade-${g.id}`}>
+                  <span>
+                    <b style={{ color: 'var(--ink)' }}>Idade de {fn}</b>
+                    <small>Pedimos só a idade da criança. Menos de 1 ano, coloque 0.</small>
+                  </span>
+                  <span className="g-age-field">
+                    <input
+                      id={`idade-${g.id}`}
+                      type="number"
+                      inputMode="numeric"
+                      min={0}
+                      max={17}
+                      placeholder="—"
+                      value={ages[g.id] ?? ''}
+                      onChange={(e) => {
+                        const v = e.target.value
+                        setAges((a) => ({ ...a, [g.id]: v === '' ? null : Math.max(0, Math.min(17, Math.floor(Number(v)))) }))
+                      }}
+                    />
+                    anos
+                  </span>
+                </label>
               )}
             </section>
           )

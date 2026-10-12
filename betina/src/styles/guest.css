@@ -1332,3 +1332,48 @@
   margin-right: -0.32em;
   color: var(--ink);
 }
+
+/* idade da criança (só quando não foi cadastrada) */
+.g-age span {
+  display: grid;
+  gap: 2px;
+}
+
+.g-age small {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.g-age .g-age-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--ink-2);
+  flex: none;
+}
+
+.g-age input {
+  width: 64px;
+  height: 46px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  text-align: center;
+  font-size: 20px;
+  font-weight: 800;
+  -moz-appearance: textfield;
+}
+
+.g-age input::-webkit-outer-spin-button,
+.g-age input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.g-age input:focus {
+  outline: none;
+  border-color: var(--rose);
+  box-shadow: 0 0 0 4px var(--rose-100);
+}
