@@ -1,7 +1,6 @@
 import type { EventSettings } from './types'
 
 const BASE = import.meta.env.BASE_URL
-const ph = (n: number) => `${BASE}photos/betina-${String(n).padStart(2, '0')}.svg`
 const photo = (name: string) => `${BASE}photos/${name}.jpg`
 
 // Valores iniciais — tudo editável no painel em "Festa".
@@ -29,14 +28,14 @@ export const DEFAULT_SETTINGS: EventSettings = {
     { label: 'Os primeiros sorrisos', photo: photo('primeiros-sorrisos'), text: 'Veio o primeiro sorriso e, com ele, a certeza de que os dias iam ficar mais leves.' },
     { label: 'Descobertas', photo: photo('descobertas'), text: 'Mãozinhas curiosas, gargalhadas, as primeiras palavrinhas. Cada descoberta virou uma pequena conquista.' },
     { label: 'Gabriel e Luíza', photo: photo('gabriel-e-luiza'), text: 'Ver a Betina crescer cheia de curiosidade e carinho por todo mundo é o maior presente que a vida nos deu.' },
-    { label: '1 aninho', photo: ph(1), text: 'Chegou a hora de celebrar o primeiro ano da Betina na fazendinha. E a festa só fica completa com você.' },
+    { label: '1 aninho', photo: photo('um-aninho'), text: 'Chegou a hora de celebrar o primeiro ano da Betina na fazendinha. E a festa só fica completa com você.' },
   ],
   birthISO: '2025-10-31T15:00',
   introText: 'Essa é a história de um ano que mudou as nossas vidas.',
   letter:
     'Obrigado por fazer parte da vida da Betina. Cada pessoa convidada para esta festa tem um pedacinho dessa história: num colo, numa visita, numa mensagem, numa oração. Queremos muito viver esse dia ao seu lado.',
   letterSign: 'Com amor, Gabriel e Luíza',
-  carousel: [photo('primeiros-sorrisos'), photo('nascimento'), photo('descobertas'), photo('primeiros-dias'), photo('gabriel-e-luiza')],
+  carousel: [photo('um-aninho'), photo('primeiros-sorrisos'), photo('nascimento'), photo('descobertas'), photo('primeiros-dias'), photo('gabriel-e-luiza')],
   gifts: [
     { group: 'Betina adora', title: 'Livros' },
     { group: 'Betina adora', title: 'Brinquedos educativos' },
