@@ -131,6 +131,7 @@ export default function SettingsView({ settings }: AdminCtx) {
         {sub === 'fotos' && (
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
           <Field label="Imagem do convite">{text('inviteImage')}</Field>
+          <Field label="Foto de capa da história (topo da imersão)">{text('heroPhoto')}</Field>
           <h3>Fotos do carrossel (uma por linha)</h3>
           <textarea className="ad-textarea" rows={5} value={s.carousel.join('\n')} onChange={(e) => set('carousel', e.target.value.split('\n').map((x) => x.trim()).filter(Boolean))} />
           <h3>Linha do tempo (título, foto e texto de cada momento)</h3>

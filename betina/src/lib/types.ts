@@ -108,6 +108,8 @@ export interface EventSettings {
   reminderMessage: string
   /** imagem do convite (aparece na imersão e no convite completo) */
   inviteImage: string
+  /** foto de capa no topo da imersão */
+  heroPhoto: string
 }
 
 export interface RsvpLog {

@@ -62,4 +62,5 @@ export const DEFAULT_SETTINGS: EventSettings = {
   reminderMessage:
     'Oi, {nome}! Tudo bem? 🐷\n\nPassando pra lembrar do aniversário de 1 ano da {crianca}, {data}, às {hora}.\n\nConsegue confirmar a presença? Leva menos de um minuto:\n{link}\n\nObrigado! {anfitriao} 💗',
   inviteImage: `${BASE}photos/convite.jpg`,
+  heroPhoto: `${BASE}photos/um-aninho.jpg`,
 }

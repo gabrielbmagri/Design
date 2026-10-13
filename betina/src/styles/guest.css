@@ -1493,3 +1493,42 @@
   color: var(--rose-ink);
   font-weight: 700;
 }
+
+/* ---------- capa da imersão ---------- */
+.im-cover {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  height: min(58dvh, 560px);
+}
+
+.im-cover-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(#000 45%, rgba(0, 0, 0, 0.55) 70%, transparent 100%);
+  mask-image: linear-gradient(#000 45%, rgba(0, 0, 0, 0.55) 70%, transparent 100%);
+}
+
+.im-cover-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+
+
+.im-hero.with-photo {
+  min-height: auto;
+  margin-top: -110px;
+  padding-top: 0;
+  padding-bottom: 64px;
+}
+
+@media (min-width: 600px) {
+  .im-cover-frame {
+    border-radius: 0 0 32px 32px;
+  }
+}

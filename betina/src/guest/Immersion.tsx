@@ -121,6 +121,31 @@ function InfoCard({ icon, title, children }: { icon: IconName; title: string; ch
   )
 }
 
+/** Foto de capa: desce como cortina, com zoom lento e degradê na base; sobe devagar ao rolar. */
+function HeroPhoto({ src, alt }: { src: string; alt: string }) {
+  const { scrollY } = useScroll()
+  const y = useTransform(scrollY, [0, 600], [0, 140])
+  const opacity = useTransform(scrollY, [0, 500], [1, 0.25])
+  return (
+    <motion.div className="im-cover" style={{ y, opacity }}>
+      <motion.div
+        className="im-cover-frame"
+        initial={{ clipPath: 'inset(0% 0% 100% 0%)' }}
+        animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+        transition={{ duration: 1.5, ease: [0.65, 0, 0.35, 1] }}
+      >
+        <motion.img
+          src={src}
+          alt={alt}
+          initial={{ scale: 1.18 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 3.2, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </motion.div>
+    </motion.div>
+  )
+}
+
 export function CalendarButton({ settings }: { settings: EventSettings }) {
   return isIOS() ? (
     <button className="g-btn ghost" onClick={() => downloadIcs(settings)}>
@@ -229,7 +254,9 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
       <Sparkles />
       <FloatingAnimals />
 
-      <section className="im-section im-hero">
+      {settings.heroPhoto && <HeroPhoto src={settings.heroPhoto} alt={`${settings.childName} no cavalinho`} />}
+
+      <section className={`im-section im-hero ${settings.heroPhoto ? 'with-photo' : ''}`}>
         <motion.p className="g-eyebrow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
           {hero.eyebrow}
         </motion.p>
