@@ -198,6 +198,7 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
   const many = real.length > 1
   const g = (t: string) => forGroup(t, many)
 
+  const titleRest = settings.title.includes(settings.childName) ? settings.title.replace(settings.childName, '').trim() : ''
   const hero = (() => {
     if (outcome === 'yes')
       return {
@@ -207,11 +208,10 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
       }
     if (outcome === 'no') return { eyebrow: 'Resposta recebida', title: 'Obrigado por avisar', msg: g(settings.welcomeNo) }
     if (outcome === 'maybe') return { eyebrow: 'Sem pressa', title: 'Tudo bem, combinado', msg: settings.welcomeMaybe }
-    const rest = settings.title.replace(settings.childName, '').trim()
     return {
       eyebrow: me ? `Oi, ${firstName(me.name)}` : 'Você está convidado',
       title: settings.title,
-      big: settings.title.includes(settings.childName) && rest ? rest : '',
+      big: titleRest,
       msg: settings.subtitle,
     }
   })()
@@ -291,7 +291,7 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.65, duration: 0.6, ease }}
           >
-            {hero.title}
+            <span className="im-shine">{hero.title}</span>
           </motion.h1>
         )}
         <motion.p className="im-msg" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85, duration: 0.6, ease }}>
@@ -304,7 +304,34 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
       </section>
 
       <section className="im-section">
-        <WordReveal text={settings.introText} className="im-intro" />
+        {!hero.big && titleRest && (
+          <h2 className="im-hero-title im-chapter" aria-label={settings.title}>
+            <span className="line1 im-shine" aria-hidden="true">
+              {[...settings.childName].map((ch, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 40, rotate: -8 }}
+                  whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ type: 'spring', stiffness: 220, damping: 16, delay: i * 0.07 }}
+                >
+                  {ch}
+                </motion.span>
+              ))}
+            </span>
+            <motion.span
+              className="line2"
+              aria-hidden="true"
+              initial={{ opacity: 0, letterSpacing: '0.8em' }}
+              whileInView={{ opacity: 1, letterSpacing: '0.32em' }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ delay: 0.1 + settings.childName.length * 0.07, duration: 0.9, ease }}
+            >
+              {titleRest}
+            </motion.span>
+          </h2>
+        )}
+        <WordReveal text={settings.introText} className={!hero.big && titleRest ? 'im-intro im-intro-sub' : 'im-intro'} />
         <Reveal delay={0.2}>
           <p className="g-small">
             {names ? `${names}, ${many ? 'venham' : 'venha'} com a gente.` : 'Venha com a gente.'}

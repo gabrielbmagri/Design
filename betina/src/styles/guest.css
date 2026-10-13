@@ -1333,6 +1333,19 @@
   color: var(--ink);
 }
 
+/* abertura da história (quando o topo mostra a mensagem da resposta) */
+.im-chapter {
+  margin-bottom: 18px;
+}
+
+.im-intro.im-intro-sub {
+  font-size: clamp(20px, 5.4vw, 24px);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink-2);
+  max-width: 22ch;
+}
+
 /* idade da criança (só quando não foi cadastrada) */
 .g-age span {
   display: grid;
