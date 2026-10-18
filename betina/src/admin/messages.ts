@@ -1,7 +1,14 @@
 import { SITE_URL } from '../lib/firebase'
 import type { EventSettings, Guest, Invite } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
-import { eventDate, fillTemplate, forGroup, firstName, fmtTime, joinNames, longDate, waLink } from '../lib/text'
+import { eventDate, fillTemplate, forGroup, firstName, fmtTime, guestName, joinNames, longDate, waLink } from '../lib/text'
+
+const MEMBER_STATUS: Record<Guest['status'], string> = {
+  pending: '⏳ aguardando resposta',
+  maybe: '🤔 talvez',
+  yes: '✅ presença confirmada',
+  no: '❌ não poderá ir',
+}
 
 export function inviteLink(inviteId: string) {
   return `${SITE_URL}/c/${inviteId}`
@@ -21,6 +28,10 @@ function vars(s: EventSettings, invite: Invite, members: Guest[]) {
     prazo: longDate(s.rsvpDeadlineISO),
     link: inviteLink(invite.id),
     anfitriao: HOST_LABEL[invite.host],
+    convidados: members
+      .filter((g) => !g.isPlusOne)
+      .map((g) => `• ${guestName(g)} — ${MEMBER_STATUS[g.status]}`)
+      .join('\n'),
   }
 }
 

@@ -17,7 +17,7 @@ export const DEFAULT_SETTINGS: EventSettings = {
   mapsUrl: 'https://share.google/ic7mYwxZPlUNpQ9vC',
   wazeUrl: '',
   dressCode: 'Seu chapéu de cowboy é bem-vindo!',
-  rsvpDeadlineISO: '2026-10-26',
+  rsvpDeadlineISO: '2026-10-19',
   rsvpOpen: true,
   welcomeYes: 'A Betina vai ficar muito feliz com a sua companhia na fazendinha.',
   welcomeNo: 'Que pena! Vamos sentir sua falta, mas a gente entende.',
@@ -60,7 +60,7 @@ export const DEFAULT_SETTINGS: EventSettings = {
   inviteMessage:
     'Oi, {nome}! 🐮\n\nAs porteiras estão abertas! A {crianca} vai fazer 1 aninho e queremos muito você com a gente na fazendinha.\n\n📅 {data}\n⏰ {hora}\n📍 {local}\n🤠 Seu chapéu de cowboy é bem-vindo!\n\nConfirme a presença por aqui, leva menos de um minuto:\n{link}\n\nCom carinho, {anfitriao} 💗',
   reminderMessage:
-    'Oi, {nome}! Tudo bem? 🐷\n\nPassando pra lembrar do aniversário de 1 ano da {crianca}, {data}, às {hora}.\n\nConsegue confirmar a presença? Leva menos de um minuto:\n{link}\n\nObrigado! {anfitriao} 💗',
+    '🤖 *Lembrete automático · Aniversário da {crianca}*\n\nOi, {nome}! Tudo bem?\n\nAqui é o assistente da fazendinha 🐮 Consultei o sistema e este é o status do convite:\n\n{convidados}\n\nPara organizarmos tudo com carinho (comidinhas, lembrancinhas e lugares), a confirmação vai até *{prazo}*. Ainda na dúvida? Dá para marcar "Talvez" e mudar depois.\n\nÉ rapidinho, menos de um minuto:\n{link}\n\n📅 {data}, às {hora}\n📍 {local}\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_ 💗',
   inviteImage: `${BASE}photos/convite.jpg`,
   heroPhoto: `${BASE}photos/um-aninho.jpg`,
 }

@@ -121,7 +121,7 @@ export default function SettingsView({ settings }: AdminCtx) {
           <Field label="Depois de recusar">{area('welcomeNo', 2)}</Field>
           <Field label="Depois de 'ainda não sei'">{area('welcomeMaybe', 2)}</Field>
           <div className="ad-note">
-            Variáveis do WhatsApp: <code>{'{nome} {crianca} {data} {hora} {local} {endereco} {prazo} {link} {anfitriao}'}</code>
+            Variáveis do WhatsApp: <code>{'{nome} {crianca} {data} {hora} {local} {endereco} {prazo} {link} {anfitriao} {convidados}'}</code>
           </div>
           <Field label="Mensagem do convite (WhatsApp)">{area('inviteMessage', 8)}</Field>
           <Field label="Mensagem de lembrete (WhatsApp)">{area('reminderMessage', 7)}</Field>
