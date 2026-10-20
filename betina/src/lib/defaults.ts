@@ -62,7 +62,7 @@ export const DEFAULT_SETTINGS: EventSettings = {
   reminderMessage:
     '🤖 *Lembrete automático · Aniversário da {crianca}*\n\nOi, {nome}! Tudo bem?\n\nAqui é o assistente da fazendinha 🐮 Consultei o sistema e este é o status do convite:\n\n{convidados}\n\nPara organizarmos tudo com carinho (comidinhas, lembrancinhas e lugares), a confirmação vai até *{prazo}*. Ainda na dúvida? Dá para marcar "Talvez" e mudar depois.\n\nÉ rapidinho, menos de um minuto:\n{link}\n\n📅 {data}, às {hora}\n📍 {local}\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_ 💗',
   lastCallMessage:
-    '⏰ *Hoje é o último dia para confirmar presença!*\n\n🤖 _Aviso automático · Aniversário da {crianca}_\n\nOi, {nome}! Aqui é o assistente da fazendinha 🐮 Consultei o sistema e ainda não consta a confirmação do convite de:\n\n{pessoas}\n\nLeva menos de um minuto:\n{link}\n\nSe não puderem vir, é só marcar "Não vou" por lá.\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_ 💗',
+    '🤖 *Aviso automático · Aniversário da {crianca}*\n\n⏰ *Hoje é o último dia para confirmar presença!*\n\nOi, {nome}. Consultei o sistema e ainda não consta a confirmação do convite de:\n\n{pessoas}\n\nLeva menos de um minuto:\n{link}\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_',
   inviteImage: `${BASE}photos/convite.jpg`,
   heroPhoto: `${BASE}photos/um-aninho.jpg`,
 }
