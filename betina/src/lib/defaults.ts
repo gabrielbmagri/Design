@@ -61,6 +61,8 @@ export const DEFAULT_SETTINGS: EventSettings = {
     'Oi, {nome}! 🐮\n\nAs porteiras estão abertas! A {crianca} vai fazer 1 aninho e queremos muito você com a gente na fazendinha.\n\n📅 {data}\n⏰ {hora}\n📍 {local}\n🤠 Seu chapéu de cowboy é bem-vindo!\n\nConfirme a presença por aqui, leva menos de um minuto:\n{link}\n\nCom carinho, {anfitriao} 💗',
   reminderMessage:
     '🤖 *Lembrete automático · Aniversário da {crianca}*\n\nOi, {nome}! Tudo bem?\n\nAqui é o assistente da fazendinha 🐮 Consultei o sistema e este é o status do convite:\n\n{convidados}\n\nPara organizarmos tudo com carinho (comidinhas, lembrancinhas e lugares), a confirmação vai até *{prazo}*. Ainda na dúvida? Dá para marcar "Talvez" e mudar depois.\n\nÉ rapidinho, menos de um minuto:\n{link}\n\n📅 {data}, às {hora}\n📍 {local}\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_ 💗',
+  lastCallMessage:
+    '🤖 *Aviso automático · Aniversário da {crianca}*\n\nOi, {nome}! Aqui é o assistente da fazendinha 🐮\n\nConsultei o sistema agora e ainda falta a confirmação deste convite:\n\n{convidados}\n\n⏰ *Hoje é o último dia para confirmar!* Depois disso não conseguimos garantir lugar, comidinha e lembrancinha.\n\nLeva menos de um minuto:\n{link}\n\nSe não puderem vir, também é só avisar por lá. Já ajuda muito a gente a se organizar 💗\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_',
   inviteImage: `${BASE}photos/convite.jpg`,
   heroPhoto: `${BASE}photos/um-aninho.jpg`,
 }

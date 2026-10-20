@@ -3,7 +3,7 @@ import { useState } from 'react'
 import type { Guest, Host, Invite } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
 import { markReminded, markSent } from './ops'
-import { inviteWa, reminderWa } from './messages'
+import { inviteWa, lastCallWa, reminderWa } from './messages'
 import { DAY, ms } from './stats'
 import Icon from '../lib/Icon'
 import { guestName, plural } from '../lib/text'
@@ -55,6 +55,9 @@ export default function Reminders({ stats, settings, myHost }: AdminCtx) {
             <a className="ad-btn wa" href={reminderWa(settings, r.invite, r.members)} target="_blank" rel="noreferrer" onClick={() => markReminded(r.invite)}>
               <Icon name="chat" size={14} /> {HOST_LABEL[r.invite.host]} lembra no WhatsApp
             </a>
+            <a className="ad-btn sm" href={lastCallWa(settings, r.invite, r.members)} target="_blank" rel="noreferrer" onClick={() => markReminded(r.invite)}>
+              Último dia
+            </a>
             <button className="ad-btn sm" onClick={() => markReminded(r.invite)}>Já lembrei por fora</button>
           </Row>
         ))}
@@ -85,6 +88,9 @@ export default function Reminders({ stats, settings, myHost }: AdminCtx) {
             <Row key={r.invite.id} invite={r.invite} open={r.open} extra={`lembrar em ${plural(left, 'dia')}`}>
               <a className="ad-btn sm" href={reminderWa(settings, r.invite, stats.guestsOf(r.invite.id))} target="_blank" rel="noreferrer" onClick={() => markReminded(r.invite)}>
                 Lembrar mesmo assim
+              </a>
+              <a className="ad-btn sm" href={lastCallWa(settings, r.invite, stats.guestsOf(r.invite.id))} target="_blank" rel="noreferrer" onClick={() => markReminded(r.invite)}>
+                Último dia
               </a>
             </Row>
           )

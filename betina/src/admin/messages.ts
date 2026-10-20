@@ -45,6 +45,14 @@ export function reminderText(s: EventSettings, invite: Invite, members: Guest[])
   return forGroup(fillTemplate(s.reminderMessage, vars(s, invite, members)), many(members))
 }
 
+export function lastCallText(s: EventSettings, invite: Invite, members: Guest[]) {
+  return forGroup(fillTemplate(s.lastCallMessage, vars(s, invite, members)), many(members))
+}
+
+export function lastCallWa(s: EventSettings, invite: Invite, members: Guest[]) {
+  return waLink(invite.phone, lastCallText(s, invite, members))
+}
+
 export function inviteWa(s: EventSettings, invite: Invite, members: Guest[]) {
   return waLink(invite.phone, inviteText(s, invite, members))
 }

@@ -106,6 +106,7 @@ export interface EventSettings {
   reminderDays: number
   inviteMessage: string
   reminderMessage: string
+  lastCallMessage: string
   /** imagem do convite (aparece na imersão e no convite completo) */
   inviteImage: string
   /** foto de capa no topo da imersão */
