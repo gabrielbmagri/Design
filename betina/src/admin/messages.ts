@@ -28,6 +28,10 @@ function vars(s: EventSettings, invite: Invite, members: Guest[]) {
     prazo: longDate(s.rsvpDeadlineISO),
     link: inviteLink(invite.id),
     anfitriao: HOST_LABEL[invite.host],
+    pessoas: members
+      .filter((g) => !g.isPlusOne)
+      .map((g) => `• ${guestName(g)}`)
+      .join('\n'),
     convidados: members
       .filter((g) => !g.isPlusOne)
       .map((g) => `• ${guestName(g)} — ${MEMBER_STATUS[g.status]}`)
