@@ -3,7 +3,7 @@ import { useState } from 'react'
 import type { Guest, Host, Invite } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
 import { markReminded, markSent } from './ops'
-import { inviteWa, lastCallWa, reminderWa } from './messages'
+import { inviteWa, lastCallWa, pendingWa, reminderWa } from './messages'
 import { DAY, ms } from './stats'
 import Icon from '../lib/Icon'
 import { guestName, plural } from '../lib/text'
@@ -58,6 +58,9 @@ export default function Reminders({ stats, settings, myHost }: AdminCtx) {
             <a className="ad-btn sm" href={lastCallWa(settings, r.invite, r.members)} target="_blank" rel="noreferrer" onClick={() => markReminded(r.invite)}>
               Último dia
             </a>
+            <a className="ad-btn sm" href={pendingWa(settings, r.invite, r.members)} target="_blank" rel="noreferrer" onClick={() => markReminded(r.invite)}>
+              Confirmação pendente
+            </a>
             <button className="ad-btn sm" onClick={() => markReminded(r.invite)}>Já lembrei por fora</button>
           </Row>
         ))}
@@ -91,6 +94,9 @@ export default function Reminders({ stats, settings, myHost }: AdminCtx) {
               </a>
               <a className="ad-btn sm" href={lastCallWa(settings, r.invite, stats.guestsOf(r.invite.id))} target="_blank" rel="noreferrer" onClick={() => markReminded(r.invite)}>
                 Último dia
+              </a>
+              <a className="ad-btn sm" href={pendingWa(settings, r.invite, stats.guestsOf(r.invite.id))} target="_blank" rel="noreferrer" onClick={() => markReminded(r.invite)}>
+                Confirmação pendente
               </a>
             </Row>
           )

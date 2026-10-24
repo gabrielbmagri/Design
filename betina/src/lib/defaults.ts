@@ -63,6 +63,8 @@ export const DEFAULT_SETTINGS: EventSettings = {
     '🤖 *Lembrete automático · Aniversário da {crianca}*\n\nOi, {nome}! Tudo bem?\n\nAqui é o assistente da fazendinha 🐮 Consultei o sistema e este é o status do convite:\n\n{convidados}\n\nPara organizarmos tudo com carinho (comidinhas, lembrancinhas e lugares), a confirmação vai até *{prazo}*. Ainda na dúvida? Dá para marcar "Talvez" e mudar depois.\n\nÉ rapidinho, menos de um minuto:\n{link}\n\n📅 {data}, às {hora}\n📍 {local}\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_ 💗',
   lastCallMessage:
     '🤖 *Aviso automático · Aniversário da {crianca}*\n\n⏰ *Hoje é o último dia para confirmar presença!*\n\nOi, {nome}. Consultei o sistema e ainda não consta a confirmação do convite de:\n\n{pessoas}\n\nLeva menos de um minuto:\n{link}\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_',
+  pendingMessage:
+    '🤖 *Aviso automático · Aniversário da {crianca}*\n\nOlá, {nome}. Consta em nosso sistema que o convite de:\n\n{pessoas}\n\nainda não tem a presença confirmada.\n\nPedimos que confirmem pelo link abaixo. É rápido, leva menos de um minuto:\n{link}\n\nSe não puderem comparecer, basta marcar "Não vou" no mesmo link.\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_',
   inviteImage: `${BASE}photos/convite.jpg`,
   heroPhoto: `${BASE}photos/um-aninho.jpg`,
 }

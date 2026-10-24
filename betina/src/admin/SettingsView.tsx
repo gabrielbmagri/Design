@@ -126,6 +126,7 @@ export default function SettingsView({ settings }: AdminCtx) {
           <Field label="Mensagem do convite (WhatsApp)">{area('inviteMessage', 8)}</Field>
           <Field label="Mensagem de lembrete (WhatsApp)">{area('reminderMessage', 7)}</Field>
           <Field label="Mensagem de último dia (WhatsApp)">{area('lastCallMessage', 8)}</Field>
+          <Field label="Mensagem de confirmação pendente (WhatsApp)">{area('pendingMessage', 9)}</Field>
         </div>
         )}
 
