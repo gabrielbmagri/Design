@@ -53,6 +53,7 @@ export interface Invite {
   sentAt: Timestamp | null
   lastReminderAt: Timestamp | null
   reminderCount: number
+  countdownCount?: number
   reserve: boolean
   archived: boolean
   createdAt: Timestamp

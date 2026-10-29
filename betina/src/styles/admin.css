@@ -856,3 +856,30 @@ button.ad-kpi:hover {
     overflow-y: auto;
   }
 }
+
+/* lembranças da festa: 3 bolinhas que vão sendo preenchidas */
+.ad-dots {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.ad-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--line, #e6d9de);
+  background: #fff;
+  color: var(--muted, #8d7c82);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+.ad-dot.on {
+  background: var(--rose-deep, #c93a76);
+  border-color: var(--rose-deep, #c93a76);
+  color: #fff;
+}

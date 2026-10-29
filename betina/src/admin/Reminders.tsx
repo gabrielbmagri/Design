@@ -2,7 +2,7 @@ import type { AdminCtx } from './AdminApp'
 import { useState } from 'react'
 import type { Guest, Host, Invite } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
-import { markReminded, markSent } from './ops'
+import { markCountdown, markReminded, markSent } from './ops'
 import { countdownWa, daysToParty, inviteWa, lastCallWa, pendingWa, reminderWa } from './messages'
 import { DAY, ms } from './stats'
 import Icon from '../lib/Icon'
@@ -24,6 +24,19 @@ function Row({ invite, open, extra, children }: { invite: Invite; open: Guest[];
       )}
       <div className="ad-row">{children}</div>
     </div>
+  )
+}
+
+function Dots({ invite }: { invite: Invite }) {
+  const n = invite.countdownCount ?? 0
+  return (
+    <span className="ad-dots" title="Lembranças enviadas (toque para corrigir)">
+      {[1, 2, 3].map((k) => (
+        <button key={k} className={`ad-dot ${k <= n ? 'on' : ''}`} aria-label={`Lembrança ${k}${k <= n ? ' enviada' : ''}`} onClick={() => markCountdown(invite, k === n ? k - 1 : k)}>
+          {k}
+        </button>
+      ))}
+    </span>
   )
 }
 
@@ -65,9 +78,10 @@ export default function Reminders({ stats, settings, invites, myHost }: AdminCtx
           <div className="ad-list" style={{ marginBottom: 24 }}>
             {everyone.map((r) => (
               <Row key={r.invite.id} invite={r.invite} open={[]}>
-                <a className="ad-btn wa" href={countdownWa(settings, r.invite, r.members)} target="_blank" rel="noreferrer">
+                <a className="ad-btn wa" href={countdownWa(settings, r.invite, r.members)} target="_blank" rel="noreferrer" onClick={() => markCountdown(r.invite)}>
                   <Icon name="chat" size={14} /> {HOST_LABEL[r.invite.host]} envia a lembrança
                 </a>
+                <Dots invite={r.invite} />
               </Row>
             ))}
           </div>

@@ -168,6 +168,12 @@ export async function markReminded(invite: Invite) {
   await updateDoc(doc(invitesCol, invite.id), { lastReminderAt: serverTimestamp(), reminderCount: increment(1) })
 }
 
+/** Lembrança da festa: n = quantas já foram enviadas (0 a 3). Sem n, conta mais uma. */
+export async function markCountdown(invite: Invite, n?: number) {
+  const next = Math.max(0, Math.min(3, n ?? (invite.countdownCount ?? 0) + 1))
+  await updateDoc(doc(invitesCol, invite.id), { countdownCount: next, lastCountdownAt: serverTimestamp() })
+}
+
 export async function setGuestStatus(g: Guest, status: Status, by: string) {
   const batch = writeBatch(db)
   batch.update(doc(guestsCol, g.id), {
