@@ -3,7 +3,7 @@ import { useState } from 'react'
 import type { Guest, Host, Invite } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
 import { markReminded, markSent } from './ops'
-import { inviteWa, lastCallWa, pendingWa, reminderWa } from './messages'
+import { countdownWa, daysToParty, inviteWa, lastCallWa, pendingWa, reminderWa } from './messages'
 import { DAY, ms } from './stats'
 import Icon from '../lib/Icon'
 import { guestName, plural } from '../lib/text'
@@ -27,10 +27,16 @@ function Row({ invite, open, extra, children }: { invite: Invite; open: Guest[];
   )
 }
 
-export default function Reminders({ stats, settings, myHost }: AdminCtx) {
+export default function Reminders({ stats, settings, invites, myHost }: AdminCtx) {
   const now = Date.now()
   const [host, setHost] = useState<Host | ''>(myHost ?? '')
   const reminders = stats.reminders.filter((r) => !host || r.invite.host === host)
+  const toParty = daysToParty(settings)
+  // lembrança da festa: todos os convites ativos, menos quem já recusou por completo
+  const everyone = invites
+    .filter((i) => !i.archived && !i.reserve && (!host || i.host === host))
+    .map((i) => ({ invite: i, members: stats.guestsOf(i.id).filter((g) => !g.isPlusOne) }))
+    .filter((r) => r.members.length && r.members.some((g) => g.status !== 'no'))
   const notSent = stats.notSent.filter((i) => !host || i.host === host)
   const upcoming = stats.upcoming.filter((r) => !host || r.invite.host === host)
   return (
@@ -46,6 +52,27 @@ export default function Reminders({ stats, settings, myHost }: AdminCtx) {
           <button key={id} className={`ad-chip ${host === id ? 'on' : ''}`} onClick={() => setHost(id)}>{l}</button>
         ))}
       </div>
+
+
+      {toParty >= 0 && (
+        <>
+          <h3 style={{ fontSize: 13, letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--muted)', margin: '8px 0 4px' }}>
+            Lembrança da festa · {everyone.length}
+          </h3>
+          <p style={{ fontSize: 14, color: 'var(--muted)', margin: '0 0 10px' }}>
+            {toParty === 0 ? 'A festa é hoje.' : toParty === 1 ? 'A festa é amanhã.' : `Faltam ${toParty} dias.`} A prévia do WhatsApp mostra a contagem do dia. Vai para todos, menos quem já recusou o convite inteiro.
+          </p>
+          <div className="ad-list" style={{ marginBottom: 24 }}>
+            {everyone.map((r) => (
+              <Row key={r.invite.id} invite={r.invite} open={[]}>
+                <a className="ad-btn wa" href={countdownWa(settings, r.invite, r.members)} target="_blank" rel="noreferrer">
+                  <Icon name="chat" size={14} /> {HOST_LABEL[r.invite.host]} envia a lembrança
+                </a>
+              </Row>
+            ))}
+          </div>
+        </>
+      )}
 
       <h3 style={{ fontSize: 13, letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--muted)', margin: '8px 0 10px' }}>Lembrar agora · {reminders.length}</h3>
       <div className="ad-list" style={{ marginBottom: 24 }}>

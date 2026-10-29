@@ -108,6 +108,7 @@ export interface EventSettings {
   reminderMessage: string
   lastCallMessage: string
   pendingMessage: string
+  countdownMessage: string
   /** imagem do convite (aparece na imersão e no convite completo) */
   inviteImage: string
   /** foto de capa no topo da imersão */
