@@ -41,7 +41,7 @@ const html = `<!doctype html><html><head>
     <div class="where">Adventure Kids — Casa 01<small>Av. Dr. Luiz Guimarães, 669 – Centro, Nova Iguaçu – RJ</small></div>
     <div class="tips">
       <div class="tip"><i>⏰</i><span>Pontualidade: para aproveitarmos a festa juntos</span></div>
-      <div class="tip"><i>🚗</i><span>Estacionamento na rua, em volta do salão</span></div>
+      <div class="tip"><i>🚗</i><span>Estacionamento próprio, bem na frente do salão</span></div>
       <div class="tip"><i>🤠</i><span>Seu chapéu de cowboy é bem-vindo!</span></div>
     </div>
   </div>
