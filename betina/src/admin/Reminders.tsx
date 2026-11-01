@@ -3,7 +3,7 @@ import { useState } from 'react'
 import type { Guest, Host, Invite } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
 import { markCountdown, markReminded, markSent } from './ops'
-import { countdownWa, daysToParty, inviteWa, lastCallWa, pendingWa, reminderWa } from './messages'
+import { countdownWa, daysToParty, inviteWa, lastCallWa, pendingWa, reminderWa, tomorrowWa } from './messages'
 import { DAY, ms } from './stats'
 import Icon from '../lib/Icon'
 import { guestName, plural } from '../lib/text'
@@ -66,6 +66,29 @@ export default function Reminders({ stats, settings, invites, myHost }: AdminCtx
         ))}
       </div>
 
+
+      {toParty >= 0 && toParty <= 2 && (
+        <>
+          <h3 style={{ fontSize: 13, letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--muted)', margin: '8px 0 4px' }}>
+            "É amanhã" · foto com legenda · {everyone.length}
+          </h3>
+          <p style={{ fontSize: 14, color: 'var(--muted)', margin: '0 0 10px' }}>
+            1) Baixe a imagem. 2) Toque em "envia" para abrir o WhatsApp com a legenda pronta. 3) Anexe a imagem e envie.
+          </p>
+          <a className="ad-btn" href={`${import.meta.env.BASE_URL}og/e-amanha.jpg`} download="e-amanha.jpg" target="_blank" rel="noreferrer" style={{ marginBottom: 12 }}>
+            Baixar a imagem "É amanhã"
+          </a>
+          <div className="ad-list" style={{ marginBottom: 24 }}>
+            {everyone.map((r) => (
+              <Row key={r.invite.id} invite={r.invite} open={[]}>
+                <a className="ad-btn wa" href={tomorrowWa(settings, r.invite, r.members)} target="_blank" rel="noreferrer">
+                  <Icon name="chat" size={14} /> {HOST_LABEL[r.invite.host]} envia o "É amanhã"
+                </a>
+              </Row>
+            ))}
+          </div>
+        </>
+      )}
 
       {toParty >= 0 && (
         <>

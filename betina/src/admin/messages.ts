@@ -44,6 +44,8 @@ function vars(s: EventSettings, invite: Invite, members: Guest[]) {
     hora: fmtTime(s.timeStart),
     local: [s.venueName, s.address].filter(Boolean).join(', '),
     endereco: s.address,
+    salao: s.venueName,
+    mapa: s.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.venueName} ${s.address}`)}`,
     prazo: longDate(s.rsvpDeadlineISO),
     link: inviteLink(invite.id),
     contagem: contagem(daysToParty(s)),
@@ -85,6 +87,10 @@ export function pendingWa(s: EventSettings, invite: Invite, members: Guest[]) {
 
 export function countdownWa(s: EventSettings, invite: Invite, members: Guest[]) {
   return waLink(invite.phone, forGroup(fillTemplate(s.countdownMessage, vars(s, invite, members)), many(members)))
+}
+
+export function tomorrowWa(s: EventSettings, invite: Invite, members: Guest[]) {
+  return waLink(invite.phone, fillTemplate(s.tomorrowMessage, vars(s, invite, members)))
 }
 
 export function inviteWa(s: EventSettings, invite: Invite, members: Guest[]) {

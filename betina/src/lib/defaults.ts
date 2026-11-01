@@ -67,6 +67,8 @@ export const DEFAULT_SETTINGS: EventSettings = {
     '🤖 *Aviso automático · Aniversário da {crianca}*\n\nOlá, {nome}. Consta em nosso sistema que o convite de:\n\n{pessoas}\n\nainda não tem a presença confirmada.\n\nPedimos que confirmem pelo link abaixo. É rápido, leva menos de um minuto:\n{link}\n\nSe não puderem comparecer, basta marcar "Não vou" no mesmo link.\n\n_Mensagem automática enviada em nome de Gabriel e Luíza_',
   countdownMessage:
     '*{contagem}!* 🐮\n\nOi, {nome}! Está chegando o grande dia e a gente mal pode esperar para viver essa festa com vocês. A Betina vai ficar radiante de ter por perto quem ela mais ama.\n\n📅 {data}, às {hora}\n📍 {local}\n🤠 Seu chapéu de cowboy é bem-vindo!\n\nSabemos que imprevistos acontecem. Se algo mudar, é só atualizar a resposta pelo link:\n{linkContagem}\n\nVai ser um dia lindo, e a presença de vocês faz toda a diferença.\n\nCom carinho, Gabriel e Luíza 💗',
+  tomorrowMessage:
+    'Amanhã é o grande dia! 🐮 A Betina e a família esperam vocês com muito carinho.\n\n📍 {salao}\n{endereco}\nComo chegar: {mapa}\n\nChegando no horário, aproveitamos a festa juntos. O salão tem estacionamento próprio, bem na frente. 🚗\n\nAté amanhã! 💗\nGabriel e Luíza',
   inviteImage: `${BASE}photos/convite.jpg`,
   heroPhoto: `${BASE}photos/um-aninho.jpg`,
 }
