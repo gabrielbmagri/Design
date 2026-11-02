@@ -6,6 +6,7 @@ import { guestName, normalize, plural } from '../lib/text'
 import { clearSent, markSent, parseBulk, saveInvite, setArchived, setGuestStatus, setReserve, type InviteDraft } from './ops'
 import { inviteLink, inviteWa } from './messages'
 import { isFreeChild } from './stats'
+import { printGuestList } from './printList'
 import Icon from '../lib/Icon'
 
 type F = 'all' | 'gabriel' | 'luiza' | 'yes' | 'no' | 'open' | 'reserve' | 'notsent' | 'archived'
@@ -23,7 +24,7 @@ const FILTERS: { id: F; label: string }[] = [
 ]
 
 export default function Invites(ctx: AdminCtx) {
-  const { invites, guests, settings, user, filter, myHost } = ctx
+  const { invites, guests, settings, user, filter, myHost, stats } = ctx
   const [f, setF] = useState<F>('all')
   const [host, setHost] = useState<Host | ''>('')
   const [q, setQ] = useState('')
@@ -100,6 +101,7 @@ export default function Invites(ctx: AdminCtx) {
           <p>Cada convite agrupa as pessoas que respondem juntas.</p>
         </div>
         <div className="ad-row">
+          <button className="ad-btn" onClick={() => printGuestList(invites, stats.invited, settings)}><Icon name="download" size={16} /> Lista para imprimir (PDF)</button>
           <button className="ad-btn" onClick={() => setBulk(true)}><Icon name="upload" size={16} /> Importar lista</button>
           <button className="ad-btn primary" onClick={openNew}><Icon name="plus" size={16} /> Novo convite</button>
         </div>

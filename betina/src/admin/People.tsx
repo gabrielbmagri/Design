@@ -6,10 +6,11 @@ import { guestName, normalize } from '../lib/text'
 import Icon from '../lib/Icon'
 import { setGuestStatus } from './ops'
 import { isFreeChild } from './stats'
+import { printGuestList } from './printList'
 
 type SF = 'all' | 'yes' | 'no' | 'open'
 
-export default function People({ stats, settings, user, filter }: AdminCtx) {
+export default function People({ stats, settings, invites, user, filter }: AdminCtx) {
   const [st, setSt] = useState<SF>('all')
   const [host, setHost] = useState<Host | ''>('')
   const [kind, setKind] = useState<'' | 'adult' | 'kid'>('')
@@ -46,6 +47,7 @@ export default function People({ stats, settings, user, filter }: AdminCtx) {
           <h1>Pessoas</h1>
           <p>Todos os convidados, um por linha. Mude a resposta direto na tabela.</p>
         </div>
+        <button className="ad-btn" onClick={() => printGuestList(invites, stats.invited, settings)}><Icon name="download" size={16} /> Lista para imprimir (PDF)</button>
       </div>
       <div className="ad-filters">
         <label className="ad-search">
