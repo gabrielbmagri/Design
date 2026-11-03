@@ -11,6 +11,36 @@ const T = {
   prata: { bg: [['#eef2f8', '#bcc7d8'], ['#f4f6fa', '#a9b6ca'], ['#e8edf5', '#9aa9bf'], ['#f7f8fb', '#c8d1df'], ['#e6ecf4', '#aab7cb'], ['#f1f4f9', '#b3bfd2'], ['#eaeff6', '#a1afc4'], ['#f5f7fb', '#bcc8da']],
     em: ['💍', '🥂', '🕊️', '🤍', '💐', '✨', '🌿', '🩶'], deco: ['✨', '🤍', '🌿', '✨'], title: 'Júlia & André', sub: 'vão se casar', line: 'Nosso começo, juntos para sempre', date: '12 JUN · 16H', place: 'Villa Cristal', c: '#46556b', c2: '#8795ab', paper: '#fbfcfe' },
 }
+const LUX = {
+  ouro: { bg: '#14110b', fg: '#e9d49a', fg2: '#b08a3c', paper: '#0f0d08', mono: 'H&R', names: 'Helena & Rafael', date: '22 · 05 · 2027', place: 'CASA AURORA · CAMPINAS' },
+  prata: { bg: '#10151c', fg: '#dfe5ee', fg2: '#8f9db3', paper: '#0c1015', mono: 'J&A', names: 'Júlia & André', date: '12 · 06 · 2027', place: 'VILLA CRISTAL · PETRÓPOLIS' },
+}
+function luxScene(t, i) {
+  const k = LUX[t]
+  const rings = `<svg viewBox="0 0 400 240" width="760" style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) rotate(${(i - 3) * 2}deg)" fill="none" stroke="${k.fg}" stroke-width="2.4"><circle cx="150" cy="120" r="88"/><circle cx="250" cy="120" r="88"/><path d="M200 38v12M196 44h8" stroke="${k.fg2}"/></svg>`
+  const lines = Array.from({ length: 7 }, (_, n) => `<div style="position:absolute;left:-10%;right:-10%;top:${12 + n * 13 + rnd(i + n) * 4}%;height:1px;background:linear-gradient(90deg,transparent,${k.fg2}55,transparent);transform:rotate(${-8 + i * 2}deg)"></div>`).join('')
+  const orb = `<div style="position:absolute;left:${20 + rnd(i) * 50}%;top:${10 + rnd(i + 3) * 30}%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,${k.fg2}55,transparent 65%);filter:blur(30px)"></div>`
+  const bokeh = Array.from({ length: 16 }, (_, n) => `<i style="position:absolute;left:${rnd(i * 9 + n) * 100}%;top:${rnd(i * 5 + n + 2) * 100}%;width:${14 + rnd(n + i) * 46}px;height:${14 + rnd(n + i) * 46}px;border-radius:50%;background:${k.fg}${['18', '22', '2c'][n % 3]}"></i>`).join('')
+  return `<html><body style="margin:0;width:1200px;height:1600px;overflow:hidden;background:radial-gradient(120% 90% at 30% 10%,${k.bg},#050505);position:relative;font-family:'Cormorant Garamond',Georgia,serif">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
+${orb}${lines}${bokeh}${rings}
+<div style="position:absolute;inset:60px;border:1.5px solid ${k.fg2}88"></div><div style="position:absolute;inset:78px;border:1px solid ${k.fg2}44"></div>
+${i === 5 ? '' : `<div style="position:absolute;left:0;right:0;top:67%;text-align:center;color:${k.fg};font:700 120px/1 'Cormorant Garamond',serif;letter-spacing:.06em">${k.mono}</div>
+<div style="position:absolute;left:0;right:0;top:78%;text-align:center;color:${k.fg2};font:500 34px 'Cormorant Garamond',serif;letter-spacing:.5em">${k.date}</div>`}</body></html>`
+}
+function luxInvite(t) {
+  const k = LUX[t]
+  return `<html><body style="margin:0;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(120% 80% at 30% 0%,${k.bg},#050505);position:relative;text-align:center;color:${k.fg};font-family:'Cormorant Garamond',Georgia,serif">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+<div style="position:absolute;inset:56px;border:1.5px solid ${k.fg2}99"></div><div style="position:absolute;inset:76px;border:1px solid ${k.fg2}55"></div>
+<div style="position:absolute;top:210px;left:0;right:0;font:500 34px 'Cormorant Garamond';letter-spacing:.55em;color:${k.fg2}">CONVITE DE CASAMENTO</div>
+<svg viewBox="0 0 400 240" width="520" style="position:absolute;left:50%;top:330px;transform:translateX(-50%)" fill="none" stroke="${k.fg}" stroke-width="2"><circle cx="150" cy="120" r="88"/><circle cx="250" cy="120" r="88"/></svg>
+<div style="position:absolute;top:760px;left:60px;right:60px;font:400 150px/1.05 'Pinyon Script',cursive;color:${k.fg}">${k.names}</div>
+<div style="position:absolute;top:1130px;left:0;right:0;font:500 40px 'Cormorant Garamond';letter-spacing:.4em;color:${k.fg2}">TÊM A ALEGRIA DE CONVIDAR VOCÊ</div>
+<div style="position:absolute;top:1330px;left:200px;right:200px;height:1px;background:${k.fg2}88"></div>
+<div style="position:absolute;top:1390px;left:0;right:0;font:700 74px 'Cormorant Garamond';letter-spacing:.2em">${k.date}</div>
+<div style="position:absolute;top:1520px;left:0;right:0;font:500 38px 'Cormorant Garamond';letter-spacing:.34em;color:${k.fg2}">${k.place}</div></body></html>`
+}
 const rnd = (s) => { let x = Math.sin(s * 9301 + 49297) * 233280; return x - Math.floor(x) }
 function scene(t, i) {
   const [a, b] = t.bg[i], big = t.em[i % t.em.length], mid = t.em[(i + 3) % t.em.length]
@@ -42,8 +72,8 @@ function invite(t) {
   for (const [id, t] of Object.entries(T)) {
     const dir = path.join('public/demo', id); fs.mkdirSync(dir, { recursive: true })
     const p = await b.newPage({ viewport: { width: 1200, height: 1600 } })
-    for (let i = 0; i < 8; i++) { await p.setContent(scene(t, i)); await p.waitForTimeout(150); await p.screenshot({ path: `${dir}/p${i + 1}.jpg`, type: 'jpeg', quality: 82 }) }
-    await p.setViewportSize({ width: 1080, height: 1920 }); await p.setContent(invite(t)); await p.waitForTimeout(900); await p.screenshot({ path: `${dir}/invite.jpg`, type: 'jpeg', quality: 86 })
+    for (let i = 0; i < 8; i++) { await p.setContent(LUX[id] ? luxScene(id, i) : scene(t, i)); await p.waitForTimeout(400); await p.waitForTimeout(150); await p.screenshot({ path: `${dir}/p${i + 1}.jpg`, type: 'jpeg', quality: 82 }) }
+    await p.setViewportSize({ width: 1080, height: 1920 }); await p.setContent(LUX[id] ? luxInvite(id) : invite(t)); await p.waitForTimeout(1200); await p.screenshot({ path: `${dir}/invite.jpg`, type: 'jpeg', quality: 86 })
     console.log('ok', id)
   }
   await b.close()

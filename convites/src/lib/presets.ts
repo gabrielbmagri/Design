@@ -78,7 +78,7 @@ const SAFARI: EventSettings = {
   giftNote: 'O mais importante é ter você lá. Se quiser levar uma lembrança, aqui vão algumas ideias:',
   capPerHost: 50,
   inviteImage: img('safari', 'invite'),
-  heroPhoto: img('safari', 1),
+  heroPhoto: img('safari', 6),
   ...makeMessages({
     kind: 'kids', subject: 'o Théo', occasion: 'aniversário do Théo', emoji: '🦁', sign: 'Carol e Rafa',
     dress: 'Venha com roupa de explorador!',
@@ -138,7 +138,7 @@ const JARDIM: EventSettings = {
   giftNote: 'O mais importante é ter você lá. Se quiser levar uma lembrança, aqui vão algumas ideias:',
   capPerHost: 50,
   inviteImage: img('jardim', 'invite'),
-  heroPhoto: img('jardim', 1),
+  heroPhoto: img('jardim', 6),
   ...makeMessages({
     kind: 'kids', subject: 'a Lara', occasion: 'aniversário da Lara', emoji: '🦋', sign: 'Marina e Bruno',
     dress: 'Cores leves, flores e muita alegria!',
@@ -198,7 +198,7 @@ const OURO: EventSettings = {
   giftNote: 'A sua presença é o nosso maior presente. Se quiser nos presentear, aqui vão algumas ideias:',
   capPerHost: 80,
   inviteImage: img('ouro', 'invite'),
-  heroPhoto: img('ouro', 1),
+  heroPhoto: img('ouro', 6),
   ...makeMessages({
     kind: 'wedding', subject: 'Helena & Rafael', occasion: 'casamento de Helena & Rafael', emoji: '💍', sign: 'Helena e Rafael',
     dress: 'Traje: passeio completo.',
@@ -236,7 +236,7 @@ const PRATA: EventSettings = {
   letterSign: 'Com amor, Júlia e André',
   carousel: [1, 2, 3, 4, 5, 6, 7, 8].map((n) => img('prata', n)),
   inviteImage: img('prata', 'invite'),
-  heroPhoto: img('prata', 1),
+  heroPhoto: img('prata', 6),
   ...makeMessages({
     kind: 'wedding', subject: 'Júlia & André', occasion: 'casamento de Júlia & André', emoji: '💍', sign: 'Júlia e André',
     dress: 'Traje: social.',

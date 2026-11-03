@@ -1545,3 +1545,70 @@
     border-radius: 0 0 32px 32px;
   }
 }
+
+/* ---------- casamento: pegada de luxo (serifa, linhas finas, cantos discretos) ---------- */
+html[data-kind='wedding'] {
+  --r: 4px;
+  --r-sm: 3px;
+  --r-lg: 6px;
+}
+
+html[data-kind='wedding'] .g-title,
+html[data-kind='wedding'] .g-h2,
+html[data-kind='wedding'] .im-intro,
+html[data-kind='wedding'] .im-card h3 {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+html[data-kind='wedding'] .g-title {
+  font-size: clamp(34px, 9.4vw, 46px);
+  line-height: 1.05;
+}
+
+html[data-kind='wedding'] .g-eyebrow {
+  letter-spacing: 0.32em;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+html[data-kind='wedding'] .g-btn,
+html[data-kind='wedding'] .g-btn.sm {
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+html[data-kind='wedding'] .g-input {
+  border-radius: 2px;
+  background: transparent;
+  border-width: 0 0 1.5px 0;
+  border-color: var(--rose-deep);
+}
+
+html[data-kind='wedding'] .im-card,
+html[data-kind='wedding'] .g-card {
+  border: 1px solid color-mix(in srgb, var(--rose-deep) 35%, transparent);
+  box-shadow: none;
+  border-radius: 2px;
+}
+
+html[data-kind='wedding'] .im-hero-title .line1 {
+  letter-spacing: 0.04em;
+  font-variation-settings: normal;
+  font-size: clamp(48px, 13.5vw, 84px);
+}
+
+html[data-kind='wedding'] .im-hero-title .line2 {
+  letter-spacing: 0.42em;
+  font-size: clamp(14px, 4.4vw, 22px);
+  font-weight: 600;
+}
+
+html[data-kind='wedding'] .im-animals span {
+  opacity: 0.55;
+}

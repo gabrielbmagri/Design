@@ -83,7 +83,7 @@ export const THEMES: Theme[] = [
     name: 'Casamento Ouro',
     kind: 'wedding',
     swatch: ['#8a6a2a', '#d4af5f', '#fffaf0'],
-    emojis: ['✨', '🤍', '🕊️', '💍', '🥂', '✨', '🤍', '🌿'],
+    emojis: ['✨', '🤍', '✨', '🤍'],
     vars: {
       '--rose': '#c9a24d',
       '--rose-deep': '#8a6a2a',
@@ -107,7 +107,7 @@ export const THEMES: Theme[] = [
     name: 'Casamento Prata',
     kind: 'wedding',
     swatch: ['#46556b', '#a9b4c4', '#f7f9fc'],
-    emojis: ['✨', '🤍', '🕊️', '💍', '🥂', '✨', '🤍', '🌿'],
+    emojis: ['✨', '🤍', '✨', '🤍'],
     vars: {
       '--rose': '#8795ab',
       '--rose-deep': '#46556b',
