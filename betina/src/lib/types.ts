@@ -54,6 +54,7 @@ export interface Invite {
   lastReminderAt: Timestamp | null
   reminderCount: number
   countdownCount?: number
+  thanksAt?: Timestamp | null
   reserve: boolean
   archived: boolean
   createdAt: Timestamp
@@ -111,6 +112,7 @@ export interface EventSettings {
   pendingMessage: string
   countdownMessage: string
   tomorrowMessage: string
+  thanksMessage: string
   /** imagem do convite (aparece na imersão e no convite completo) */
   inviteImage: string
   /** foto de capa no topo da imersão */

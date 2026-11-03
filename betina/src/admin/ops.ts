@@ -168,6 +168,11 @@ export async function markReminded(invite: Invite) {
   await updateDoc(doc(invitesCol, invite.id), { lastReminderAt: serverTimestamp(), reminderCount: increment(1) })
 }
 
+/** Agradecimento pós-festa enviado a este convite. */
+export async function markThanked(invite: Invite, sent = true) {
+  await updateDoc(doc(invitesCol, invite.id), { thanksAt: sent ? serverTimestamp() : null })
+}
+
 /** Lembrança da festa: n = quantas já foram enviadas (0 a 3). Sem n, conta mais uma. */
 export async function markCountdown(invite: Invite, n?: number) {
   const next = Math.max(0, Math.min(3, n ?? (invite.countdownCount ?? 0) + 1))

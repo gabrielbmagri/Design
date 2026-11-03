@@ -89,6 +89,10 @@ export function countdownWa(s: EventSettings, invite: Invite, members: Guest[]) 
   return waLink(invite.phone, forGroup(fillTemplate(s.countdownMessage, vars(s, invite, members)), many(members)))
 }
 
+export function thanksWa(s: EventSettings, invite: Invite, members: Guest[]) {
+  return waLink(invite.phone, forGroup(fillTemplate(s.thanksMessage, vars(s, invite, members)), many(members)))
+}
+
 export function tomorrowWa(s: EventSettings, invite: Invite, members: Guest[]) {
   return waLink(invite.phone, fillTemplate(s.tomorrowMessage, vars(s, invite, members)))
 }

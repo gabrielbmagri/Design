@@ -129,6 +129,7 @@ export default function SettingsView({ settings }: AdminCtx) {
           <Field label="Mensagem de confirmação pendente (WhatsApp)">{area('pendingMessage', 9)}</Field>
           <Field label="Mensagem da contagem regressiva (WhatsApp)">{area('countdownMessage', 12)}</Field>
           <Field label={'Legenda do "É amanhã" (WhatsApp, vai junto da imagem)'}>{area('tomorrowMessage', 10)}</Field>
+          <Field label="Agradecimento depois da festa (WhatsApp)">{area('thanksMessage', 8)}</Field>
         </div>
         )}
 

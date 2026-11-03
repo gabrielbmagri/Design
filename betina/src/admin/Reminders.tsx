@@ -2,8 +2,8 @@ import type { AdminCtx } from './AdminApp'
 import { useState } from 'react'
 import type { Guest, Host, Invite } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
-import { markCountdown, markReminded, markSent } from './ops'
-import { countdownWa, daysToParty, inviteWa, lastCallWa, pendingWa, reminderWa, tomorrowWa } from './messages'
+import { markCountdown, markReminded, markSent, markThanked } from './ops'
+import { countdownWa, daysToParty, inviteWa, lastCallWa, pendingWa, reminderWa, thanksWa, tomorrowWa } from './messages'
 import { DAY, ms } from './stats'
 import Icon from '../lib/Icon'
 import { guestName, plural } from '../lib/text'
@@ -50,6 +50,12 @@ export default function Reminders({ stats, settings, invites, myHost }: AdminCtx
     .filter((i) => !i.archived && !i.reserve && (!host || i.host === host))
     .map((i) => ({ invite: i, members: stats.guestsOf(i.id).filter((g) => !g.isPlusOne) }))
     .filter((r) => r.members.length && r.members.some((g) => g.status !== 'no'))
+  // agradecimento: convites com pelo menos uma pessoa confirmada
+  const thanks = invites
+    .filter((i) => !i.archived && !i.reserve && (!host || i.host === host))
+    .map((i) => ({ invite: i, members: stats.guestsOf(i.id).filter((g) => !g.isPlusOne) }))
+    .filter((r) => r.members.some((g) => g.status === 'yes'))
+    .sort((a, b) => Number(!!a.invite.thanksAt) - Number(!!b.invite.thanksAt) || a.invite.label.localeCompare(b.invite.label, 'pt-BR'))
   const notSent = stats.notSent.filter((i) => !host || i.host === host)
   const upcoming = stats.upcoming.filter((r) => !host || r.invite.host === host)
   return (
@@ -66,6 +72,28 @@ export default function Reminders({ stats, settings, invites, myHost }: AdminCtx
         ))}
       </div>
 
+
+      {toParty < 0 && (
+        <>
+          <h3 style={{ fontSize: 13, letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--muted)', margin: '8px 0 4px' }}>
+            Agradecimento · {thanks.length} {thanks.length === 1 ? 'convite' : 'convites'}
+          </h3>
+          <p style={{ fontSize: 14, color: 'var(--muted)', margin: '0 0 10px' }}>
+            Para quem confirmou presença. Toque em "agradece" para abrir o WhatsApp com a mensagem pronta; o convite fica marcado como agradecido.
+          </p>
+          <div className="ad-list" style={{ marginBottom: 24 }}>
+            {thanks.length === 0 && <div className="ad-empty">Ninguém confirmou presença.</div>}
+            {thanks.map((r) => (
+              <Row key={r.invite.id} invite={r.invite} open={[]} extra={r.invite.thanksAt ? 'agradecido ✓' : undefined}>
+                <a className="ad-btn wa" href={thanksWa(settings, r.invite, r.members)} target="_blank" rel="noreferrer" onClick={() => markThanked(r.invite)}>
+                  <Icon name="chat" size={14} /> {HOST_LABEL[r.invite.host]} agradece
+                </a>
+                {r.invite.thanksAt && <button className="ad-btn sm" onClick={() => markThanked(r.invite, false)}>Desmarcar</button>}
+              </Row>
+            ))}
+          </div>
+        </>
+      )}
 
       {toParty >= 0 && toParty <= 2 && (
         <>
