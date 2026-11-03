@@ -191,6 +191,33 @@ export function ContactButtons({ settings, me }: { settings: EventSettings; me: 
   )
 }
 
+/** Nome grande letra por letra. Cada palavra fica inteira (não quebra no meio) e o texto pode ir para a linha de baixo. */
+function NameLetters({ text, delay, inView }: { text: string; delay: number; inView?: boolean }) {
+  let n = 0
+  return (
+    <>
+      {text.split(' ').map((word, w) => (
+        <span className="im-word" key={w}>
+          {[...word].map((ch) => {
+            const i = n++
+            const reveal = { opacity: 1, y: 0, rotate: 0 }
+            return (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 40, rotate: -8 }}
+                {...(inView ? { whileInView: reveal, viewport: { once: true, amount: 0.6 } } : { animate: reveal })}
+                transition={{ type: 'spring', stiffness: 220, damping: 16, delay: delay + i * 0.07 }}
+              >
+                {ch}
+              </motion.span>
+            )
+          })}
+        </span>
+      ))}
+    </>
+  )
+}
+
 export default function Immersion({ settings, outcome, me, invite, onFinish }: Props) {
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 })
@@ -265,16 +292,7 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
         {hero.big ? (
           <h1 className="im-hero-title" aria-label={settings.title}>
             <span className="line1 im-shine" aria-hidden="true">
-              {[...settings.childName].map((ch, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 40, rotate: -8 }}
-                  animate={{ opacity: 1, y: 0, rotate: 0 }}
-                  transition={{ type: 'spring', stiffness: 220, damping: 16, delay: 0.55 + i * 0.07 }}
-                >
-                  {ch}
-                </motion.span>
-              ))}
+              <NameLetters text={settings.childName} delay={0.55} />
             </span>
             <motion.span
               className="line2"
@@ -309,17 +327,7 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
         {!hero.big && titleRest && (
           <h2 className="im-hero-title im-chapter" aria-label={settings.title}>
             <span className="line1 im-shine" aria-hidden="true">
-              {[...settings.childName].map((ch, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 40, rotate: -8 }}
-                  whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-                  viewport={{ once: true, amount: 0.6 }}
-                  transition={{ type: 'spring', stiffness: 220, damping: 16, delay: i * 0.07 }}
-                >
-                  {ch}
-                </motion.span>
-              ))}
+              <NameLetters text={settings.childName} delay={0} inView />
             </span>
             <motion.span
               className="line2"

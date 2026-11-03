@@ -1325,6 +1325,17 @@
   display: inline-block;
 }
 
+.im-hero-title .line1 {
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.32em;
+  max-width: 100%;
+}
+
+.im-word {
+  display: inline-flex;
+}
+
 .im-hero-title .line2 {
   font-size: clamp(20px, 6vw, 30px);
   font-variation-settings: 'wdth' 100, 'opsz' 24;
@@ -1600,7 +1611,9 @@ html[data-kind='wedding'] .g-card {
 html[data-kind='wedding'] .im-hero-title .line1 {
   letter-spacing: 0.04em;
   font-variation-settings: normal;
-  font-size: clamp(48px, 13.5vw, 84px);
+  font-size: clamp(40px, 12.5vw, 72px);
+  line-height: 1;
+  row-gap: 0.08em;
 }
 
 html[data-kind='wedding'] .im-hero-title .line2 {
