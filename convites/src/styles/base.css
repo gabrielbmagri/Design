@@ -1,0 +1,92 @@
+/* Identidade: cores do convite (rosa, creme, marrom-terra), tipografia limpa. */
+:root {
+  --rose: #e2558f;
+  --rose-deep: #c93a76;
+  --rose-ink: #a72a60;
+  --rose-50: #fff4f8;
+  --rose-100: #fde6ef;
+  --rose-200: #f8c9dc;
+  --cream: #fffcf8;
+  --sand: #f7efe6;
+  --brown: #8a5a4f;
+  --gold: #e8a94a;
+  --ink: #2a1d22;
+  --ink-2: #5b4a50;
+  --ink-3: #8d7c82;
+  --line: #f0e3e8;
+  --ok: #2f8a4f;
+  --ok-50: #eaf6ee;
+  --no: #c2484f;
+  --no-50: #fcecec;
+  --maybe: #a8741f;
+  --maybe-50: #fbf2e1;
+  --surface: #ffffff;
+  --shadow-sm: 0 1px 2px color-mix(in srgb, var(--ink) 5%, transparent), 0 2px 8px color-mix(in srgb, var(--ink) 4%, transparent);
+  --shadow: 0 8px 28px color-mix(in srgb, var(--rose-deep) 12%, transparent);
+  --r-sm: 10px;
+  --r: 16px;
+  --r-lg: 24px;
+  --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-hero: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 3px solid var(--rose-200);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
