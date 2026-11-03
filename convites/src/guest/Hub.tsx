@@ -4,6 +4,7 @@ import type { InviteMatch } from '../lib/data'
 import type { EventSettings, Guest } from '../lib/types'
 import { HOST_LABEL, STATUS_LABEL } from '../lib/types'
 import { themeById } from '../themes'
+import { Link } from 'react-router-dom'
 import { eventDate, firstName, forGroup, guestName, parseISODate, shortDate, waLink } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
 import { Countdown, FloatingAnimals, GiftList, MapEmbed, Sparkles, hostContacts, timeLabel } from './bits'
@@ -98,7 +99,7 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
           <Icon name="menu" size={22} />
         </button>
         <b>
-          <span>{settings.childName}</span> · 1 ano
+          <span>{settings.childName}</span>
         </b>
         <span style={{ width: 44 }} />
       </header>
@@ -125,10 +126,10 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
             >
               <div className="hub-drawer-card">
                 <div className="row">
-                  <span className="badge">1</span>
+                  <span className="badge">{themeById(settings.themeId).emojis[0]}</span>
                   <div className="name">
                     <span className="im-shine">{settings.childName}</span>
-                    <small>faz 1 ano</small>
+                    <small>{settings.title.replace(settings.childName, '').trim()}</small>
                   </div>
                 </div>
                 <div className="meta">
@@ -248,6 +249,9 @@ export default function Hub({ settings, invite, me, section, onSection, onManage
             <ContactButtons settings={settings} me={me} />
           </Card>
         </section>
+        <p style={{ textAlign: 'center', fontSize: 13, margin: '8px 0 28px' }}>
+          <Link to="/privacidade" className="g-link">Privacidade</Link>
+        </p>
       </main>
     </div>
   )

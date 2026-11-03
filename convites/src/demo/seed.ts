@@ -1,6 +1,6 @@
 import { doc, updateDoc, setDoc, writeBatch, serverTimestamp } from 'firebase/firestore'
 import { db } from '../lib/firebase'
-import { guestsCol, invitesCol, logCol, settingsRef } from '../lib/data'
+import { adminsCol, accountsCol, guestsCol, invitesCol, logCol, settingsRef } from '../lib/data'
 import { PRESETS } from '../lib/presets'
 import { saveInvite, type MemberDraft } from '../admin/ops'
 import type { Host, Status } from '../lib/types'
@@ -32,7 +32,10 @@ export function currentPreset() {
 
 export async function seedDemo() {
   if (!__isEmpty()) return
-  await setDoc(doc(db, 'admins', 'demo@convite'), { host: 'gabriel' })
+  await setDoc(doc(adminsCol, 'demo@convite'), { host: 'gabriel' })
+  // conta de exemplo com senha provisória (entra com cliente@exemplo.com / Convite123 e escolhe a própria senha)
+  await setDoc(doc(adminsCol, 'cliente@exemplo.com'), { host: 'gabriel' })
+  await setDoc(doc(accountsCol, 'cliente@exemplo.com'), { mustChange: true })
   await setDoc(settingsRef, currentPreset().settings as never)
   await setDoc(doc(db, 'owners', 'demo@convite'), { ok: true })
   // o resto (convidados e clientes de exemplo) entra em segundo plano, sem travar a abertura
@@ -71,7 +74,7 @@ async function seedClients() {
   const col = collection(db, 'clients')
   const base = { phone: '', source: '', brief: '', notes: '', inviteUrl: '', adminUrl: '', payments: [] as ReturnType<typeof pay>[], createdISO: ago(20), updatedISO: ago(1) }
   const rows = [
-    { name: 'Camila Duarte', phone: '21 98888-1001', source: 'Indicação', eventTitle: 'Théo faz 1 ano', eventDateISO: ahead(40), themeId: 'safari', kind: 'kids', status: 'montagem', pkg: 'completo', price: 399, payments: [pay(6, 200)], updatedISO: ago(2) },
+    { name: 'Camila Duarte', email: 'cliente@exemplo.com', eventId: 'principal', termsISO: ago(18), phone: '21 98888-1001', source: 'Indicação', eventTitle: 'Théo faz 1 ano', eventDateISO: ahead(40), themeId: 'safari', kind: 'kids', status: 'montagem', pkg: 'completo', price: 399, payments: [pay(6, 200)], updatedISO: ago(2) },
     { name: 'Marcos e Paula', phone: '11 97777-2002', source: 'Instagram', eventTitle: 'Casamento Marcos & Paula', eventDateISO: ahead(95), themeId: 'ouro', kind: 'wedding', status: 'aprovacao', pkg: 'premium', price: 649, payments: [pay(10, 325)], updatedISO: ago(1) },
     { name: 'Renata Lopes', phone: '21 96666-3003', source: 'Indicação', eventTitle: 'Alice faz 1 ano', eventDateISO: ahead(9), themeId: 'jardim', kind: 'kids', status: 'montagem', pkg: 'completo', price: 399, payments: [pay(15, 399)], updatedISO: ago(1) },
     { name: 'Fábio Teixeira', phone: '31 95555-4004', source: 'Instagram', eventTitle: 'Bento faz 2 anos', eventDateISO: ahead(60), themeId: 'novo', kind: 'kids', status: 'briefing', pkg: 'premium', price: 649, brief: 'Quer tema Astronauta: azul-marinho, estrelas, foguete e planetas.', updatedISO: ago(5) },

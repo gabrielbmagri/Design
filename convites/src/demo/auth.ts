@@ -9,15 +9,20 @@ export interface User {
 const KEY = 'convite-demo-admin'
 const ADMIN: User = { uid: 'demo-admin', email: 'demo@convite', displayName: 'Demonstração', isAnonymous: false }
 
-function savedAdmin() {
+const EMAIL_KEY = 'convite-demo-email'
+const userFor = (email: string): User => ({ uid: 'demo-' + email, email, displayName: null, isAnonymous: false })
+
+function savedUser(): User | null {
   try {
-    return localStorage.getItem(KEY) === '1'
+    const e = localStorage.getItem(EMAIL_KEY)
+    if (e) return userFor(e)
+    return localStorage.getItem(KEY) === '1' ? ADMIN : null
   } catch {
-    return false
+    return null
   }
 }
 
-const auth: { currentUser: User | null } = { currentUser: savedAdmin() || /^#(admin|super)/.test(location.hash) ? ADMIN : null }
+const auth: { currentUser: User | null } = { currentUser: savedUser() ?? (/^#(admin|super)/.test(location.hash) ? ADMIN : null) }
 const subs = new Set<(u: User | null) => void>()
 const set = (u: User | null) => {
   auth.currentUser = u
@@ -56,8 +61,30 @@ export async function signInWithPopup() {
 }
 export const signInWithRedirect = signInWithPopup
 export const signInWithCredential = signInWithPopup
+// ---- e-mail e senha (na demonstração as senhas ficam no navegador) ----
+const pwKey = (email: string) => 'convite-demo-pw:' + email.toLowerCase()
+const DEMO_PASSWORD = 'Convite123'
+const authErr = (code: string) => Object.assign(new Error(code), { code })
+export async function signInWithEmailAndPassword(_a: unknown, email: string, password: string) {
+  const e = email.trim().toLowerCase()
+  let pw = DEMO_PASSWORD
+  try { pw = localStorage.getItem(pwKey(e)) ?? DEMO_PASSWORD } catch { /* ignore */ }
+  if (!e.includes('@') || password !== pw) throw authErr('auth/invalid-credential')
+  try { localStorage.setItem(EMAIL_KEY, e) } catch { /* ignore */ }
+  const u = userFor(e)
+  set(u)
+  return { user: u }
+}
+export async function updatePassword(user: User, password: string) {
+  try { localStorage.setItem(pwKey(user.email ?? ''), password) } catch { /* ignore */ }
+}
+export async function sendPasswordResetEmail() {
+  /* demonstração: não envia e-mail */
+}
+
 export async function signOut() {
   try {
+    localStorage.removeItem(EMAIL_KEY)
     localStorage.removeItem(KEY)
   } catch {
     /* ignore */

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut, type User } from 'firebase/auth'
+import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, signInWithPopup, signInWithRedirect, signOut, type User } from 'firebase/auth'
 import { doc, getDoc, onSnapshot } from 'firebase/firestore'
 import { auth, db, firebaseConfigured } from '../lib/firebase'
 import Icon, { type IconName } from '../lib/Icon'
@@ -25,6 +25,13 @@ const NAV: { id: Tab; label: string; icon: IconName }[] = [
   { id: 'temas', label: 'Temas', icon: 'sparkle' },
   { id: 'config', label: 'Configurações', icon: 'settings' },
 ]
+
+// Só nos testes locais com emulador: login falso de Google.
+if (import.meta.env.VITE_USE_EMULATOR === '1')
+  Object.assign(window, {
+    __testLoginOwner: (email: string) =>
+      signInWithCredential(auth, GoogleAuthProvider.credential(JSON.stringify({ sub: email, email, email_verified: true }))),
+  })
 
 function Login() {
   const [msg, setMsg] = useState('')

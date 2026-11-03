@@ -1,0 +1,40 @@
+{
+  "slug": "theo-2027",
+  "tipo": "aniversario",
+  "tema": "safari",
+  "pacote": "completo",
+  "preco": 399,
+  "aceitouTermos": true,
+  "contratante": { "nome": "Camila Duarte", "email": "camila@exemplo.com", "whatsapp": "21 98888-1001" },
+  "festejado": { "nome": "Théo", "artigo": "o", "nascimento": "2026-03-20T10:00", "faz": "1 ano" },
+  "anfitrioes": ["Camila", "Rafael"],
+  "anfitrioesWhatsapp": ["21 98888-1001", "21 97777-2002"],
+  "evento": {
+    "data": "2027-03-20", "hora": "15:00", "local": "Espaço Safari Park",
+    "endereco": "Rua das Acácias, 120 – Jardim América, São Paulo – SP",
+    "mapa": "", "traje": "Venha com roupa de explorador!", "prazoConfirmacao": "2027-03-06"
+  },
+  "historia": [
+    { "titulo": "20 de março de 2026 · 10h", "foto": "fotos/01.jpg" },
+    { "titulo": "Os primeiros dias", "foto": "fotos/02.jpg" },
+    { "titulo": "Os primeiros sorrisos", "foto": "fotos/03.jpg" },
+    { "titulo": "Descobertas", "foto": "fotos/04.jpg" },
+    { "titulo": "Camila e Rafael", "foto": "fotos/05.jpg" },
+    { "titulo": "1 aninho", "foto": "fotos/06.jpg" }
+  ],
+  "carrossel": ["fotos/06.jpg", "fotos/01.jpg", "fotos/03.jpg", "fotos/05.jpg", "fotos/04.jpg"],
+  "fotoCapa": "fotos/06.jpg",
+  "conviteImagem": "fotos/convite.jpg",
+  "presentes": {
+    "ativar": false,
+    "pix": "", "nomePix": "", "cidade": "", "aceitouTermos": false,
+    "itens": []
+  },
+  "limitePorAnfitriao": 50,
+  "dicaDia": "Chegando no horário, aproveitamos a festa juntos. O espaço tem estacionamento próprio. 🚗",
+  "convidados": [
+    { "anfitriao": 1, "telefone": "21 99999-0001", "pessoas": [ { "nome": "Maria Silva" }, { "nome": "João Silva" } ] },
+    { "anfitriao": 1, "telefone": "21 99999-0002", "pessoas": [ { "nome": "Ana Souza" }, { "nome": "Pedro Souza", "crianca": true, "idade": 3 } ] },
+    { "anfitriao": 2, "telefone": "21 98888-0003", "acompanhante": true, "pessoas": [ { "nome": "Carlos Mendes" } ] }
+  ]
+}

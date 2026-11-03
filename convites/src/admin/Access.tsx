@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { deleteDoc, doc, serverTimestamp, setDoc } from 'firebase/firestore'
-import { db } from '../lib/firebase'
+import { adminsCol } from '../lib/data'
 import type { AdminCtx } from './AdminApp'
 import type { Host } from '../lib/types'
 import { HOST_LABEL, STATUS_LABEL } from '../lib/types'
@@ -16,7 +16,7 @@ export default function Access({ admins, user, invites, guests, settings }: Admi
   const addAdmin = async () => {
     const email = newAdmin.trim().toLowerCase()
     if (!email.includes('@')) return
-    await setDoc(doc(db, 'admins', email), { host: newHost, addedBy: user.email, at: serverTimestamp() })
+    await setDoc(doc(adminsCol, email), { host: newHost, addedBy: user.email, at: serverTimestamp() })
     setNewAdmin('')
   }
 
@@ -67,13 +67,13 @@ export default function Access({ admins, user, invites, guests, settings }: Admi
                   <b>{a.email}</b>
                   <small>{a.email === user.email ? 'Você' : 'Administrador'}</small>
                 </div>
-                <select className="ad-select" style={{ width: 120 }} value={a.host ?? ''} onChange={(e) => setDoc(doc(db, 'admins', a.email), { host: e.target.value || null }, { merge: true })}>
+                <select className="ad-select" style={{ width: 120 }} value={a.host ?? ''} onChange={(e) => setDoc(doc(adminsCol, a.email), { host: e.target.value || null }, { merge: true })}>
                   <option value="">—</option>
                   <option value="gabriel">Gabriel</option>
                   <option value="luiza">Luiza</option>
                 </select>
                 {a.email !== user.email && (
-                  <button className="ad-icon-btn" aria-label={`Remover ${a.email}`} onClick={() => confirm(`Remover ${a.email}?`) && deleteDoc(doc(db, 'admins', a.email))}>
+                  <button className="ad-icon-btn" aria-label={`Remover ${a.email}`} onClick={() => confirm(`Remover ${a.email}?`) && deleteDoc(doc(adminsCol, a.email))}>
                     <Icon name="x" size={16} />
                   </button>
                 )}

@@ -8,10 +8,19 @@ import { guestName, queryKey } from './text'
 import type { EventSettings, Guest, Status } from './types'
 import { applySettings } from '../themes'
 
-export const guestsCol = collection(db, 'guests')
-export const invitesCol = collection(db, 'invites')
-export const logCol = collection(db, 'rsvpLog')
-export const settingsRef = doc(db, 'settings', 'event')
+/** Cada convite (evento) tem os próprios dados em events/{EVENT_ID}/…; o site de cada cliente aponta para o seu. */
+export const EVENT_ID = (import.meta.env.VITE_EVENT_ID as string | undefined) || 'principal'
+export const eventRef = doc(db, 'events', EVENT_ID)
+const sub = (name: string) => collection(eventRef, name)
+
+export const guestsCol = sub('guests')
+export const invitesCol = sub('invites')
+export const logCol = sub('rsvpLog')
+export const adminsCol = sub('admins')
+export const accountsCol = sub('accounts')
+export const giftsCol = sub('gifts')
+export const giftClaimsCol = sub('giftClaims')
+export const settingsRef = doc(eventRef, 'settings', 'event')
 
 export function withDefaults(data: Partial<EventSettings> | undefined): EventSettings {
   return { ...DEFAULT_SETTINGS, ...(data ?? {}) }
@@ -69,7 +78,7 @@ export async function loadInvite(inviteId: string): Promise<InviteMatch | null> 
 
 export async function loadGuest(id: string) {
   await ensureGuestSession()
-  const s = await getDoc(doc(db, 'guests', id))
+  const s = await getDoc(doc(guestsCol, id))
   return s.exists() ? toGuest(s) : null
 }
 
@@ -107,7 +116,7 @@ export async function saveAnswers(
       patch.age = a.age
       if (source === 'guest') patch.ageFromGuest = true
     }
-    batch.update(doc(db, 'guests', g.id), patch)
+    batch.update(doc(guestsCol, g.id), patch)
     batch.set(doc(logCol), {
       guestId: g.id,
       guestName: g.isPlusOne ? guestName({ ...g, plusOneName: a.plusOneName ?? g.plusOneName }) : g.name,

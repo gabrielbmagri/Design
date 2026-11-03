@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import Icon, { type IconName } from '../lib/Icon'
 import type { EventSettings } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
+import GiftShop from './GiftShop'
 import { fmtTime, parseISODate } from '../lib/text'
 
 /** Fotos passando da direita para a esquerda, sem parar, de ponta a ponta da tela. */
@@ -200,6 +201,7 @@ const GIFT_ICONS: [RegExp, IconName][] = [
 const giftIcon = (title: string): IconName => GIFT_ICONS.find(([re]) => re.test(title))?.[1] ?? 'gift'
 
 export function GiftList({ settings, animate = false }: { settings: EventSettings; animate?: boolean }) {
+  if (settings.giftsEnabled) return <GiftShop settings={settings} />
   const groups: { name: string; items: EventSettings['gifts'] }[] = []
   for (const g of settings.gifts) {
     const name = g.group || ''

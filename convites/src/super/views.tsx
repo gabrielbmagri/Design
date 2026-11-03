@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../lib/firebase'
 import type { SuperCtx } from './SuperApp'
 import Icon from '../lib/Icon'
 import { fillTemplate, parseISODate, plural, shortDate, waLink } from '../lib/text'
@@ -61,7 +63,7 @@ const csv = (name: string, rows: (string | number)[][]) => {
 }
 
 const wa = (c: Client, tpl: string, extra: Record<string, string> = {}) =>
-  waLink(c.phone, fillTemplate(tpl, { nome: c.name.split(' ')[0], saldo: money(balanceOf(c)), convite: c.inviteUrl || '(link do convite)', painel: c.adminUrl || '(link do painel)', ...extra }))
+  waLink(c.phone, fillTemplate(tpl, { nome: c.name.split(' ')[0], saldo: money(balanceOf(c)), convite: c.inviteUrl || '(link do convite)', painel: c.adminUrl || '(link do painel)', email: c.email || '(e-mail)', senha: extra.senha ?? 'Convite123', termos: (c.inviteUrl || '') + '/termos', ...extra }))
 
 /* ------------------------------------------------------------ visão geral */
 export function OverviewView({ clients, go }: SuperCtx) {
@@ -167,6 +169,8 @@ export function ClientsView({ clients, owner, filter }: SuperCtx) {
                 <span className="ad-tag">{themeName(c.themeId)}</span>
                 {bal > 0 && <span className="sp-pill warn">Saldo {money(bal)}</span>}
                 {bal === 0 && c.price > 0 && c.status !== 'cancelado' && <span className="sp-pill ok">Pago</span>}
+                <AccessTag c={c} />
+                {c.eventId && !c.termsISO && <span className="sp-pill warn">Sem aceite dos termos</span>}
                 <span className="ad-meta">{c.phone}</span>
               </div>
               <div style={{ fontSize: 14, color: 'var(--muted)' }}>
@@ -174,7 +178,7 @@ export function ClientsView({ clients, owner, filter }: SuperCtx) {
               </div>
               <div className="ad-row">
                 <a className="ad-btn sm wa" href={wa(c, owner.briefingMessage)} target="_blank" rel="noreferrer" onClick={() => c.status === 'lead' && setClientStatus(c, 'briefing')}>Enviar briefing</a>
-                <a className="ad-btn sm wa" href={wa(c, owner.deliveryMessage)} target="_blank" rel="noreferrer">Enviar links</a>
+                <a className="ad-btn sm wa" href={wa(c, owner.deliveryMessage, { senha: owner.initialPassword })} target="_blank" rel="noreferrer">Enviar links</a>
                 {bal > 0 && <a className="ad-btn sm wa" href={wa(c, owner.chargeMessage)} target="_blank" rel="noreferrer">Cobrar saldo</a>}
                 {c.inviteUrl && <a className="ad-btn sm" href={c.inviteUrl} target="_blank" rel="noreferrer">Abrir convite</a>}
                 <button className="ad-btn sm" onClick={() => setEditing({ ...c })}><Icon name="edit" size={14} /> Editar</button>
@@ -186,6 +190,19 @@ export function ClientsView({ clients, owner, filter }: SuperCtx) {
       {editing && <ClientEditor draft={editing} owner={owner} onClose={() => setEditing(null)} />}
     </>
   )
+}
+
+/** Mostra se o cliente já trocou a senha provisória (lê events/{id}/accounts/{email}). */
+function AccessTag({ c }: { c: Client }) {
+  const [st, setSt] = useState<'' | 'novo' | 'ativo'>('')
+  useEffect(() => {
+    if (!c.eventId || !c.email) return
+    getDoc(doc(db, 'events', c.eventId, 'accounts', c.email))
+      .then((d) => setSt(d.exists() ? (d.get('mustChange') === true ? 'novo' : 'ativo') : ''))
+      .catch(() => setSt(''))
+  }, [c.eventId, c.email])
+  if (!st) return null
+  return <span className={`sp-pill ${st === 'ativo' ? 'ok' : 'warn'}`}>{st === 'ativo' ? 'Acesso ativo' : 'Aguardando 1º acesso'}</span>
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -231,6 +248,14 @@ function ClientEditor({ draft, owner, onClose }: { draft: Omit<Client, 'id'> & {
           <Field label="Valor combinado (R$)"><input className="ad-input" type="number" value={d.price} onChange={(e) => set('price', Number(e.target.value))} /></Field>
           <Field label="Como chegou"><input className="ad-input" value={d.source} onChange={(e) => set('source', e.target.value)} placeholder="Indicação, Instagram…" /></Field>
         </div>
+        <div className="ad-grid2">
+          <Field label="E-mail de acesso do cliente"><input className="ad-input" type="email" value={d.email ?? ''} onChange={(e) => set('email', e.target.value.trim().toLowerCase())} placeholder="cliente@email.com" /></Field>
+          <Field label="Id do evento (endereço)"><input className="ad-input" value={d.eventId ?? ''} onChange={(e) => set('eventId', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} placeholder="theo-2027" /></Field>
+        </div>
+        <label className="ad-row" style={{ gap: 8, fontWeight: 700 }}>
+          <input type="checkbox" checked={!!d.termsISO} onChange={(e) => set('termsISO', e.target.checked ? todayISO() : '')} />
+          Cliente aceitou os termos de uso e a privacidade{d.termsISO ? ` (${shortDate(d.termsISO)})` : ''}
+        </label>
         <Field label="Link do convite"><input className="ad-input" value={d.inviteUrl} onChange={(e) => set('inviteUrl', e.target.value)} placeholder="https://" /></Field>
         <Field label="Link do painel do cliente"><input className="ad-input" value={d.adminUrl} onChange={(e) => set('adminUrl', e.target.value)} placeholder="https://…/admin" /></Field>
         <Field label="O que o cliente imagina (briefing)"><textarea className="ad-input" rows={3} value={d.brief} onChange={(e) => set('brief', e.target.value)} /></Field>
@@ -411,9 +436,15 @@ export function SettingsViewOwner({ owner }: SuperCtx) {
           </div>
         ))}
       </div>
-      <h3 style={h3}>Mensagens (use {'{nome} {saldo} {convite} {painel}'})</h3>
+      <h3 style={h3}>Mensagens (use {'{nome} {saldo} {convite} {painel} {email} {senha} {termos}'})</h3>
       <Field label="Briefing: o formulário que você envia pelo WhatsApp"><textarea className="ad-input" rows={12} value={s.briefingMessage} onChange={(e) => setS({ ...s, briefingMessage: e.target.value })} /></Field>
       <Field label="Entrega dos links"><textarea className="ad-input" rows={6} value={s.deliveryMessage} onChange={(e) => setS({ ...s, deliveryMessage: e.target.value })} /></Field>
+      <Field label="Senha provisória que você entrega ao cliente (ele troca no primeiro acesso)">
+        <input className="ad-input" value={s.initialPassword} onChange={(e) => setS({ ...s, initialPassword: e.target.value })} />
+      </Field>
+      {s.initialPassword.toLowerCase() === 'convite123' && (
+        <div className="ad-note">Atenção: uma senha igual para todos é fácil de adivinhar. Quem souber o e-mail do cliente consegue entrar antes dele. O script de cadastro aceita <code>--aleatoria</code> para gerar uma senha diferente por cliente.</div>
+      )}
       <Field label="Cobrança do saldo"><textarea className="ad-input" rows={3} value={s.chargeMessage} onChange={(e) => setS({ ...s, chargeMessage: e.target.value })} /></Field>
     </>
   )

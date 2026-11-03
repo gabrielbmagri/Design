@@ -66,6 +66,12 @@ export interface Invite {
 }
 
 export interface GiftItem {
+  /** identificador estável (não muda se a lista for reordenada) */
+  id?: string
+  /** "item" = presente físico, só uma pessoa escolhe; "cota" = valor em dinheiro via Pix (qualquer um pode contribuir) */
+  kind?: 'item' | 'cota'
+  /** valor da cota em reais; vazio = valor livre */
+  amount?: number
   /** grupo na tela, ex.: "Ela adora" */
   group?: string
   title: string
@@ -115,7 +121,15 @@ export interface EventSettings {
   carousel: string[]
   gifts: GiftItem[]
   giftNote: string
+  /** chave Pix de quem recebe (loja de presentes) */
   pix: string
+  pixName: string
+  pixCity: string
+  /** loja de presentes opcional: mostra Pix e cotas; precisa do aceite dos termos */
+  giftsEnabled: boolean
+  giftsTitle: string
+  /** quando o cliente aceitou os termos da loja de presentes (AAAA-MM-DD) */
+  giftsTermsISO: string
   hostsPhone: string
   /** WhatsApp de cada anfitrião (botão "Falar com…" e assinatura das mensagens) */
   gabrielPhone: string
@@ -135,6 +149,20 @@ export interface EventSettings {
   inviteImage: string
   /** foto de capa no topo da imersão */
   heroPhoto: string
+}
+
+/** Presente informado por um convidado (aparece só no painel). */
+export interface Gift {
+  id: string
+  itemId: string
+  itemTitle: string
+  amount: number
+  from: string
+  message: string
+  anonymous: boolean
+  status: 'declared' | 'confirmed'
+  at: Timestamp
+  confirmedAt?: Timestamp | null
 }
 
 export interface RsvpLog {

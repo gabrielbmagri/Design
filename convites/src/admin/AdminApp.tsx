@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, signInWithPopup, signInWithRedirect, signOut, type User } from 'firebase/auth'
-import { collection, doc, getDoc, limit, onSnapshot, orderBy, query } from 'firebase/firestore'
-import { auth, db, firebaseConfigured } from '../lib/firebase'
-import { guestsCol, invitesCol, logCol, watchSettings } from '../lib/data'
+import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, signOut, type User } from 'firebase/auth'
+import { doc, getDoc, limit, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { auth } from '../lib/firebase'
+import { accountsCol, adminsCol, giftsCol, guestsCol, invitesCol, logCol, watchSettings } from '../lib/data'
+import Login from './Login'
+import ChangePassword from './ChangePassword'
 import { DEFAULT_SETTINGS } from '../lib/defaults'
 import { themeById } from '../themes'
-import type { EventSettings, Guest, Host, Invite, RsvpLog } from '../lib/types'
+import type { EventSettings, Gift, Guest, Host, Invite, RsvpLog } from '../lib/types'
 import { computeStats } from './stats'
 import Dashboard from './Dashboard'
 import People from './People'
@@ -18,6 +20,7 @@ import Invites from './Invites'
 import Reminders from './Reminders'
 import Kids from './Kids'
 import History from './History'
+import Gifts from './Gifts'
 import SettingsView from './SettingsView'
 import '../styles/admin.css'
 
@@ -26,6 +29,7 @@ export interface AdminCtx {
   invites: Invite[]
   guests: Guest[]
   logs: RsvpLog[]
+  gifts: Gift[]
   settings: EventSettings
   stats: ReturnType<typeof computeStats>
   admins: { email: string; host?: Host }[]
@@ -34,7 +38,7 @@ export interface AdminCtx {
   filter: string
 }
 
-export type Tab = 'inicio' | 'convites' | 'pessoas' | 'reservas' | 'criancas' | 'lembretes' | 'historico' | 'festa' | 'acesso'
+export type Tab = 'inicio' | 'convites' | 'pessoas' | 'reservas' | 'criancas' | 'lembretes' | 'historico' | 'presentes' | 'festa' | 'acesso'
 
 const NAV: { group: string; items: { id: Tab; icon: IconName; label: string }[] }[] = [
   { group: '', items: [{ id: 'inicio', icon: 'home', label: 'Visão geral' }] },
@@ -52,6 +56,7 @@ const NAV: { group: string; items: { id: Tab; icon: IconName; label: string }[] 
     items: [
       { id: 'lembretes', icon: 'bell', label: 'Envios e lembretes' },
       { id: 'historico', icon: 'history', label: 'Histórico' },
+      { id: 'presentes', icon: 'gift', label: 'Presentes' },
     ],
   },
   {
@@ -72,46 +77,15 @@ if (import.meta.env.VITE_USE_EMULATOR === '1')
       signInWithCredential(auth, GoogleAuthProvider.credential(JSON.stringify({ sub: email, email, email_verified: true }))),
   })
 
-function Login({ error }: { error?: string }) {
-  const [msg, setMsg] = useState('')
-  const login = async () => {
-    setMsg('')
-    const p = new GoogleAuthProvider()
-    try {
-      await signInWithPopup(auth, p)
-    } catch (e) {
-      const code = (e as { code?: string }).code ?? ''
-      if (code.includes('popup')) await signInWithRedirect(auth, p)
-      else setMsg('Não foi possível entrar. ' + code)
-    }
-  }
-  return (
-    <div className="ad ad-login" style={{ display: 'grid' }}>
-      <div className="ad-card" style={{ maxWidth: 380, textAlign: 'center', display: 'grid', gap: 14, padding: 28 }}>
-        <div className="ad-brand" style={{ padding: 0, justifyContent: 'center' }}>
-          <span className="logo">1</span>
-          <div style={{ textAlign: 'left' }}>
-            <b>Painel do convite</b>
-            <small>Painel dos anfitriões</small>
-          </div>
-        </div>
-        {!firebaseConfigured && <div className="ad-note">Firebase ainda não configurado (.env.local).</div>}
-        <button className="ad-btn primary" style={{ justifyContent: 'center', height: 44 }} onClick={login}>
-          Entrar com Google
-        </button>
-        {(error || msg) && <div className="ad-note">{error || msg}</div>}
-      </div>
-    </div>
-  )
-}
-
 export default function AdminApp() {
   const navigate = useNavigate()
   const [user, setUser] = useState<User | null | undefined>(undefined)
   const [allowed, setAllowed] = useState<boolean | undefined>(undefined)
+  const [mustChange, setMustChange] = useState<boolean | undefined>(undefined)
   const [invites, setInvites] = useState<Invite[]>([])
   const [guests, setGuests] = useState<Guest[]>([])
   const [logs, setLogs] = useState<RsvpLog[]>([])
+  const [gifts, setGifts] = useState<Gift[]>([])
   const [admins, setAdmins] = useState<{ email: string; host?: Host }[]>([])
   const [settings, setSettings] = useState<EventSettings>(DEFAULT_SETTINGS)
   const [tab, setTab] = useState<Tab>('inicio')
@@ -123,24 +97,33 @@ export default function AdminApp() {
   useEffect(() => {
     setAllowed(undefined)
     if (!user?.email) return
-    getDoc(doc(db, 'admins', user.email))
+    getDoc(doc(adminsCol, user.email))
       .then((d) => setAllowed(d.exists()))
       .catch(() => setAllowed(false))
   }, [user])
 
   useEffect(() => {
-    if (!allowed) return
+    setMustChange(undefined)
+    if (!allowed || !user?.email) return
+    getDoc(doc(accountsCol, user.email))
+      .then((d) => setMustChange(d.exists() && d.get('mustChange') === true))
+      .catch(() => setMustChange(false))
+  }, [allowed, user])
+
+  useEffect(() => {
+    if (!allowed || mustChange !== false) return
     const offs = [
       onSnapshot(invitesCol, (s) => setInvites(s.docs.map((d) => ({ id: d.id, memberPhones: {}, tags: [], ...d.data() }) as unknown as Invite))),
       onSnapshot(guestsCol, (s) => setGuests(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Guest))),
       onSnapshot(query(logCol, orderBy('at', 'desc'), limit(400)), (s) =>
         setLogs(s.docs.map((d) => ({ id: d.id, ...d.data() }) as RsvpLog)),
       ),
-      onSnapshot(collection(db, 'admins'), (s) => setAdmins(s.docs.map((d) => ({ email: d.id, host: d.get('host') as Host | undefined })))),
+      onSnapshot(adminsCol, (s) => setAdmins(s.docs.map((d) => ({ email: d.id, host: d.get('host') as Host | undefined })))),
+      onSnapshot(giftsCol, (s) => setGifts(s.docs.map((d) => ({ id: d.id, ...d.data() }) as unknown as Gift))),
       watchSettings(setSettings),
     ]
     return () => offs.forEach((f) => f())
-  }, [allowed])
+  }, [allowed, mustChange])
 
   const stats = useMemo(() => computeStats(invites, guests, settings), [invites, guests, settings])
 
@@ -162,6 +145,9 @@ export default function AdminApp() {
       </div>
     )
 
+  if (mustChange === undefined) return <div className="ad ad-login">Verificando acesso…</div>
+  if (mustChange) return <ChangePassword user={user} onDone={() => setMustChange(false)} />
+
   const go = (t: Tab, f = '') => {
     setTab(t)
     setFilter(f)
@@ -169,10 +155,11 @@ export default function AdminApp() {
     window.scrollTo({ top: 0 })
   }
   const myHost = admins.find((a) => a.email === user.email)?.host
-  const ctx: AdminCtx = { user, invites, guests, logs, settings, stats, admins, myHost, go, filter }
+  const ctx: AdminCtx = { user, invites, guests, logs, gifts, settings, stats, admins, myHost, go, filter }
   const badge: Partial<Record<Tab, number>> = {
     lembretes: stats.reminders.length + stats.notSent.length,
     criancas: stats.kidsNoAge.length,
+    presentes: gifts.filter((g) => g.status === 'declared').length,
   }
   const name = user.displayName?.split(' ')[0] || user.email?.split('@')[0] || ''
   const demo = import.meta.env.MODE === 'demo'
@@ -222,7 +209,7 @@ export default function AdminApp() {
 
       <header className="ad-mobile-top">
         <div className="ad-brand" style={{ padding: 0 }}>
-          <span className="logo" style={{ width: 30, height: 30, fontSize: 15 }}>1</span>
+          <span className="logo" style={{ width: 30, height: 30, fontSize: 15 }}>{themeById(settings.themeId).emojis[0]}</span>
           <b>{ALL.find((t) => t.id === tab)?.label}</b>
         </div>
         <button className="ad-icon-btn" aria-label="Sair" onClick={() => signOut(auth)}>
@@ -238,6 +225,7 @@ export default function AdminApp() {
         {tab === 'criancas' && <Kids {...ctx} />}
         {tab === 'lembretes' && <Reminders {...ctx} />}
         {tab === 'historico' && <History {...ctx} />}
+        {tab === 'presentes' && <Gifts {...ctx} />}
         {tab === 'festa' && <SettingsView {...ctx} />}
         {tab === 'acesso' && <Access {...ctx} />}
       </main>

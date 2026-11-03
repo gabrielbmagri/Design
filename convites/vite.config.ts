@@ -9,6 +9,8 @@ const r = (p: string) => fileURLToPath(new URL(p, import.meta.url))
 export default defineConfig(({ mode }) => ({
   plugins: [react()],
   base: mode === 'demo' ? './' : '/',
+  // o provisionamento monta uma pasta public só com os arquivos de cada cliente
+  publicDir: process.env.PUBLIC_DIR || 'public',
   resolve: {
     alias:
       mode === 'demo'

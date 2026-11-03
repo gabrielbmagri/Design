@@ -42,6 +42,13 @@ export interface Client {
   notes: string
   inviteUrl: string
   adminUrl: string
+  /** acesso do cliente ao painel dele */
+  email?: string
+  /** id do evento no banco (events/{eventId}) */
+  eventId?: string
+  /** quando o cliente aceitou os termos de uso (combinado pelo WhatsApp) */
+  termsISO?: string
+  accessCreatedISO?: string
   createdISO: string
   updatedISO: string
   archived?: boolean
@@ -54,6 +61,8 @@ export interface OwnerSettings {
   briefingMessage: string
   deliveryMessage: string
   chargeMessage: string
+  /** senha provisória de quem recebe o acesso; a pessoa troca no primeiro login */
+  initialPassword: string
 }
 
 export const DEFAULT_OWNER: OwnerSettings = {
@@ -63,10 +72,11 @@ export const DEFAULT_OWNER: OwnerSettings = {
     { id: 'completo', name: 'Completo', price: 399, includes: 'Essencial + lembretes prontos para WhatsApp, lista para impressão e história com fotos' },
     { id: 'premium', name: 'Premium', price: 649, includes: 'Completo + tema sob encomenda e filme de retrospectiva' },
   ],
+  initialPassword: 'Convite123',
   briefingMessage:
     'Oi, {nome}! Que bom ter você por aqui 💗\n\nPara montar o seu convite, me responda estas perguntas (pode ser por áudio):\n\n1) Quem é o homenageado ou quem são os noivos? Nomes e, se for criança, a data de nascimento.\n2) Data, horário e local da festa (com endereço).\n3) Tema: temos Safari, Jardim Encantado, Casamento Ouro e Casamento Prata. Ou me conte como você imagina o seu: cores, bichinhos ou símbolos, estilo.\n4) De 6 a 10 fotos para a história (e uma foto de capa).\n5) Quem são os anfitriões? Se forem duas pessoas, a lista de convidados é dividida entre elas.\n6) Mais ou menos quantos convidados? Alguma dica de traje ou observação importante?\n\nCom isso eu monto uma prévia e te mando para aprovar.',
   deliveryMessage:
-    'Oi, {nome}! Seu convite está pronto 🎉\n\n🔗 Convite: {convite}\n🛠️ Painel (só você e quem você escolher): {painel}\n\nNo painel você cadastra os convidados, acompanha as confirmações e envia os convites e lembretes pelo WhatsApp com um toque.\n\nQualquer ajuste, é só me chamar!',
+    'Oi, {nome}! Seu convite está pronto 🎉\n\n🔗 Convite: {convite}\n🛠️ Painel: {painel}\n\nPara entrar no painel:\n• E-mail: {email}\n• Senha provisória: {senha}\nNo primeiro acesso o sistema pede para você criar uma senha só sua.\n\nNo painel você acompanha as confirmações e envia os convites e lembretes pelo WhatsApp com um toque.\n\nAo usar o convite você concorda com os termos e a privacidade: {termos}\n\nQualquer ajuste, é só me chamar!',
   chargeMessage:
     'Oi, {nome}! Tudo bem? Passando para lembrar do saldo de {saldo} do seu convite. Pode ser por Pix. Qualquer dúvida estou por aqui 💗',
 }

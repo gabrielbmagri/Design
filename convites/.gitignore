@@ -1,8 +1,15 @@
 node_modules
 dist
+dist-clientes
+.stage
 .env*.local
 .firebase
 *.log
 service-account*.json
 vite.config.ts.timestamp-*
 dist-demo
+firebase.*.json
+!firebase.json
+# dados reais de clientes ficam fora do repositório
+clients/*
+!clients/_modelo

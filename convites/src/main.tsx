@@ -4,6 +4,7 @@ import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom'
 import GuestApp from './guest/GuestApp'
 const AdminApp = React.lazy(() => import('./admin/AdminApp'))
 const SuperApp = React.lazy(() => import('./super/SuperApp'))
+const LegalPage = React.lazy(() => import('./legal/LegalPage'))
 import './styles/base.css'
 
 const DEMO = import.meta.env.MODE === 'demo'
@@ -28,6 +29,8 @@ async function start() {
       <Routes>
         <Route path="/admin/*" element={<React.Suspense fallback={null}><AdminApp /></React.Suspense>} />
         <Route path="/super/*" element={<React.Suspense fallback={null}><SuperApp /></React.Suspense>} />
+        <Route path="/termos" element={<React.Suspense fallback={null}><LegalPage doc="termos" /></React.Suspense>} />
+        <Route path="/privacidade" element={<React.Suspense fallback={null}><LegalPage doc="privacidade" /></React.Suspense>} />
         <Route path="/c/:inviteId" element={<GuestApp />} />
         <Route path="*" element={<GuestApp />} />
       </Routes>

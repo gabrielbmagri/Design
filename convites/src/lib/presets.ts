@@ -10,6 +10,11 @@ const COMMON = {
   wazeUrl: '',
   rsvpOpen: true,
   pix: '',
+  pixName: '',
+  pixCity: '',
+  giftsEnabled: false,
+  giftsTitle: 'Presentes',
+  giftsTermsISO: '',
   hostsPhone: '',
   gabrielPhone: '',
   luizaPhone: '',
@@ -190,12 +195,21 @@ const OURO: EventSettings = {
     'Obrigado por fazer parte da nossa história. Cada pessoa convidada para este dia tem um pedacinho dela: num conselho, numa visita, numa oração. Queremos muito viver esse momento ao seu lado.',
   letterSign: 'Com amor, Helena e Rafael',
   carousel: [1, 2, 3, 4, 5, 6, 7, 8].map((n) => img('ouro', n)),
+  giftsEnabled: true,
+  giftsTitle: 'Lista de presentes',
+  pix: 'helena.exemplo@email.com',
+  pixName: 'Helena Silva',
+  pixCity: 'Campinas',
+  giftsTermsISO: '2027-03-01',
   gifts: [
-    { group: 'Nossa casa nova', title: 'Utensílios de cozinha' },
-    { group: 'Nossa casa nova', title: 'Cama, mesa e banho' },
-    { group: 'Lua de mel', title: 'Cota de viagem', detail: 'Qualquer valor ajuda a realizar o sonho' },
+    { id: 'jantar', kind: 'cota', amount: 150, group: 'Lua de mel', title: 'Jantar à luz de velas' },
+    { id: 'passeio', kind: 'cota', amount: 300, group: 'Lua de mel', title: 'Passeio de barco ao pôr do sol' },
+    { id: 'hotel', kind: 'cota', amount: 500, group: 'Lua de mel', title: 'Uma noite no hotel dos sonhos' },
+    { id: 'livre', kind: 'cota', group: 'Lua de mel', title: 'Contribuir com outro valor', detail: 'Qualquer valor ajuda a realizar o sonho' },
+    { id: 'cafeteira', kind: 'item', group: 'Nossa casa nova', title: 'Cafeteira italiana', detail: 'Cor inox' },
+    { id: 'jogo-cama', kind: 'item', group: 'Nossa casa nova', title: 'Jogo de cama casal', detail: 'Branco, 400 fios' },
   ],
-  giftNote: 'A sua presença é o nosso maior presente. Se quiser nos presentear, aqui vão algumas ideias:',
+  giftNote: 'A sua presença é o nosso maior presente. Se quiser nos presentear, escolha abaixo:',
   capPerHost: 80,
   inviteImage: img('ouro', 'invite'),
   heroPhoto: img('ouro', 6),
@@ -247,8 +261,11 @@ const PRATA: EventSettings = {
 
 SAFARI.story = SAFARI.story.map((s) => ({ ...s }))
 PRATA.story = PRATA.story.map((s) => ({ ...s }))
-// no tema prata a estrutura de presentes é a mesma do ouro
+// no tema prata a estrutura de presentes é a mesma do ouro, com outra conta
 PRATA.gifts = OURO.gifts.map((g) => ({ ...g }))
+PRATA.pix = 'julia.exemplo@email.com'
+PRATA.pixName = 'Julia Andrade'
+PRATA.pixCity = 'Petropolis'
 
 export const PRESETS: Preset[] = [
   { id: 'safari', label: 'Safari', tagline: 'Aniversário de menino', settings: SAFARI },

@@ -1,0 +1,5 @@
+.lg { max-width: 720px; margin: 0 auto; padding: 24px 18px 80px; font-size: 16px; line-height: 1.55; color: var(--ink); }
+.lg h1 { font-size: 26px; margin: 12px 0 8px; }
+.lg h3 { font-size: 17px; margin: 22px 0 4px; }
+.lg p, .lg li { color: var(--ink-2); }
+.lg-back { border: 0; background: var(--rose-100); color: var(--rose-ink); border-radius: 99px; padding: 8px 14px; font-weight: 700; }

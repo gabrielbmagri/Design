@@ -88,14 +88,16 @@ export const persistentMultipleTabManager = () => ({})
 export const connectFirestoreEmulator = () => {}
 export const getFirestore = () => ({})
 
-export function collection(_db: unknown, name: string): ColRef {
-  return { kind: 'col', name }
+export function collection(a: unknown, ...segs: string[]): ColRef {
+  const parent = a as ColRef | DocRef
+  if (parent && (parent as DocRef).kind === 'doc') return { kind: 'col', name: [(parent as DocRef).col, (parent as DocRef).id, ...segs].join('/') }
+  return { kind: 'col', name: segs.join('/') }
 }
 
-export function doc(a: unknown, b?: string, c?: string): DocRef {
+export function doc(a: unknown, ...segs: string[]): DocRef {
   const ref = a as ColRef
-  if (ref && ref.kind === 'col') return { kind: 'doc', col: ref.name, id: b ?? rid() }
-  return { kind: 'doc', col: b!, id: c! }
+  if (ref && ref.kind === 'col') return { kind: 'doc', col: ref.name, id: segs[0] ?? rid() }
+  return { kind: 'doc', col: segs.slice(0, -1).join('/'), id: segs[segs.length - 1] }
 }
 
 export const where = (f: string, op: string, v: unknown): Constraint => ({ t: 'where', f, op, v })

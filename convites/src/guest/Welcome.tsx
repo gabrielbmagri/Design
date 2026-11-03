@@ -4,6 +4,7 @@ import { firstName } from '../lib/text'
 import Icon from '../lib/Icon'
 import { FloatingAnimals, Marquee } from './bits'
 import { themeById } from '../themes'
+import { Link } from 'react-router-dom'
 
 interface Props {
   settings: EventSettings
@@ -82,6 +83,9 @@ export default function Welcome({ settings, busy, error, saved, onSearch, onCont
           <button className="g-link" onClick={onVisitor}>
             Só quero ver os detalhes
           </button>
+          <div style={{ marginTop: 6 }}>
+            <Link to="/privacidade" className="g-link" style={{ fontSize: 13 }}>Privacidade</Link>
+          </div>
         </div>
       </div>
     </main>

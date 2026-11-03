@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { AdminCtx } from './AdminApp'
 import type { EventSettings } from '../lib/types'
 import { HOST_LABEL } from '../lib/types'
+import { LEGAL_TITLE, LegalBody } from '../legal/content'
 import { saveSettings } from './ops'
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -26,6 +27,7 @@ export default function SettingsView({ settings }: AdminCtx) {
   const [s, setS] = useState<EventSettings>(settings)
   const [dirty, setDirty] = useState(false)
   const [msg, setMsg] = useState('')
+  const [terms, setTerms] = useState(false)
 
   useEffect(() => {
     if (!dirty) setS(settings)
@@ -159,23 +161,55 @@ export default function SettingsView({ settings }: AdminCtx) {
 
         {sub === 'presentes' && (
         <div className="ad-card" style={{ display: 'grid', gap: 10 }}>
-          <h3>Sugestões de presente</h3>
-          <Field label="Texto">{area('giftNote', 2)}</Field>
+          <h3>Loja de presentes (opcional)</h3>
+          <p style={{ margin: 0, color: 'var(--muted)', fontSize: 14 }}>
+            Mostra aos convidados itens para reservar e cotas em dinheiro com Pix. O dinheiro cai direto na sua conta; o site não recebe nem guarda pagamentos.
+          </p>
+          <label className="ad-row" style={{ gap: 8, fontWeight: 700 }}>
+            <input type="checkbox" checked={!!s.giftsTermsISO} onChange={(e) => { set('giftsTermsISO', e.target.checked ? new Date().toISOString().slice(0, 10) : ''); if (!e.target.checked) set('giftsEnabled', false) }} />
+            Li e aceito os <button type="button" className="ad-link" onClick={() => setTerms(true)}>termos da loja de presentes</button>
+          </label>
+          <label className="ad-row" style={{ gap: 8, fontWeight: 700, opacity: s.giftsTermsISO ? 1 : 0.5 }}>
+            <input type="checkbox" disabled={!s.giftsTermsISO} checked={s.giftsEnabled} onChange={(e) => set('giftsEnabled', e.target.checked)} />
+            Ligar a loja de presentes no convite
+          </label>
+          {s.giftsEnabled && !s.pix && <div className="ad-note">Falta a chave Pix: sem ela os convidados não conseguem contribuir.</div>}
+          <Field label="Nome da seção (ex.: Lista de presentes)">{text('giftsTitle')}</Field>
+          <Field label="Chave Pix de quem recebe (em seu nome)">{text('pix')}</Field>
+          <small style={{ color: 'var(--muted)', marginTop: -6 }}>E-mail, CPF/CNPJ só com números, chave aleatória ou celular com +55 e DDD (ex.: +5521999990000).</small>
+          <div className="ad-grid2">
+            <Field label="Nome de quem recebe (como no banco)">{text('pixName')}</Field>
+            <Field label="Cidade">{text('pixCity')}</Field>
+          </div>
+          <Field label="Texto de apresentação">{area('giftNote', 2)}</Field>
           {s.gifts.map((g, i) => (
-            <div key={i} className="ad-member" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr auto' }}>
-              <input className="ad-input" placeholder="Grupo (ex.: Ele adora)" value={g.group ?? ''} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, group: e.target.value } : x)))} />
+            <div key={i} className="ad-member" style={{ gridTemplateColumns: '1fr 1fr 110px 90px 1fr auto' }}>
+              <input className="ad-input" placeholder="Grupo (ex.: Lua de mel)" value={g.group ?? ''} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, group: e.target.value } : x)))} />
               <input className="ad-input" placeholder="Presente" value={g.title} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, title: e.target.value } : x)))} />
-              <input className="ad-input" placeholder="Detalhe (tamanho…)" value={g.detail ?? ''} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, detail: e.target.value } : x)))} />
-              <input className="ad-input" placeholder="Link (opcional)" value={g.link ?? ''} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, link: e.target.value } : x)))} />
+              <select className="ad-input" value={g.kind ?? 'item'} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, kind: e.target.value as 'item' | 'cota' } : x)))}>
+                <option value="item">Item</option>
+                <option value="cota">Cota Pix</option>
+              </select>
+              <input className="ad-input" placeholder="R$" inputMode="decimal" disabled={g.kind !== 'cota'} value={g.amount ?? ''} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, amount: Number(e.target.value.replace(',', '.')) || undefined } : x)))} />
+              <input className="ad-input" placeholder="Detalhe ou link" value={g.detail ?? ''} onChange={(e) => set('gifts', s.gifts.map((x, k) => (k === i ? { ...x, detail: e.target.value } : x)))} />
               <button className="ad-btn sm danger" onClick={() => set('gifts', s.gifts.filter((_, k) => k !== i))}>✕</button>
             </div>
           ))}
-          <button className="ad-btn" onClick={() => set('gifts', [...s.gifts, { group: s.gifts[s.gifts.length - 1]?.group ?? '', title: '' }])}>+ Presente</button>
-          <Field label="Chave Pix (opcional)">{text('pix')}</Field>
+          <button className="ad-btn" onClick={() => set('gifts', [...s.gifts, { id: 'g' + Date.now().toString(36), kind: 'item', group: s.gifts[s.gifts.length - 1]?.group ?? '', title: '' }])}>+ Presente</button>
+          <small style={{ color: 'var(--muted)' }}>“Cota Pix” aceita vários contribuintes e deixa o valor vazio para o convidado escolher. “Item” só pode ser reservado por uma pessoa.</small>
         </div>
         )}
 
       </div>
+      {terms && (
+        <div className="ad-modal-bg" onClick={(e) => e.target === e.currentTarget && setTerms(false)}>
+          <div className="ad-modal">
+            <h2>{LEGAL_TITLE.presentes}</h2>
+            <LegalBody doc="presentes" />
+            <div className="ad-row" style={{ justifyContent: 'flex-end' }}><button className="ad-btn primary" onClick={() => setTerms(false)}>Fechar</button></div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

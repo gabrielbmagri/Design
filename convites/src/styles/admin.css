@@ -883,3 +883,8 @@ button.ad-kpi:hover {
   border-color: var(--rose-deep, #c93a76);
   color: #fff;
 }
+
+/* usados também fora do painel do dono */
+.ad-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 640px) { .ad-grid2 { grid-template-columns: 1fr; } }
+.ad-link { border: 0; background: none; padding: 0; color: var(--rose-deep, #c93a76); font: inherit; font-weight: 800; text-decoration: underline; cursor: pointer; }

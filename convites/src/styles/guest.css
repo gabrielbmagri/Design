@@ -1625,3 +1625,23 @@ html[data-kind='wedding'] .im-hero-title .line2 {
 html[data-kind='wedding'] .im-animals span {
   opacity: 0.55;
 }
+
+/* ---------- loja de presentes ---------- */
+.gs-gift { align-items: center; }
+.gs-gift.taken { opacity: 0.55; }
+.gs-amount { display: block; font-weight: 800; color: var(--rose-deep); }
+.gs-btn { flex: none; width: auto; padding: 0 16px; min-height: 40px; }
+.gs-legal { font-size: 13px; color: var(--ink-3); margin: 14px 0 0; line-height: 1.4; }
+.gs-bg { position: fixed; inset: 0; z-index: 200; background: rgba(20, 16, 18, 0.55); display: grid; align-items: end; justify-items: center; }
+.gs-sheet { position: relative; width: min(520px, 100%); max-height: 92vh; overflow: auto; background: var(--cream); border-radius: 22px 22px 0 0; padding: 22px 20px 28px; display: grid; gap: 12px; }
+.gs-sheet h3 { margin: 0 34px 0 0; font-size: 20px; }
+.gs-x { position: absolute; top: 12px; right: 12px; border: 0; background: var(--rose-100); border-radius: 50%; width: 36px; height: 36px; display: grid; place-items: center; }
+.gs-who { margin: 0; font-size: 16px; }
+.gs-qr { width: 220px; height: 220px; justify-self: center; border-radius: 12px; background: #fff; padding: 8px; }
+.gs-code { font-size: 12px; }
+.gs-hint { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.4; }
+.gs-err { margin: 0; color: var(--no); font-weight: 700; font-size: 14px; }
+.gs-ok { margin: 0; font-size: 22px; font-weight: 800; }
+.gs-check { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+html[data-kind='wedding'] .gs-sheet { border-radius: 4px 4px 0 0; }
+@media (min-width: 640px) { .gs-bg { align-items: center; } .gs-sheet { border-radius: 14px; } }

@@ -4,7 +4,7 @@ import { __resetDemo } from './firestore'
 import { PRESETS } from '../lib/presets'
 import { PRESET_KEY, currentPreset } from './seed'
 import { THEMES } from '../themes'
-import { demoLogin } from './auth'
+import { demoLogin, signOut as demoSignOut } from './auth'
 
 export default function DemoBar() {
   const [open, setOpen] = useState(false)
@@ -31,7 +31,7 @@ export default function DemoBar() {
       </button>
       {open && (
         <>
-          <span style={{ fontWeight: 600 }}>Dados de exemplo, salvos só neste navegador. Experimente digitar "Maria", "Ana" ou "Vó Lourdes".</span>
+          <span style={{ fontWeight: 600 }}>Dados de exemplo, salvos só neste navegador. Experimente digitar "Maria", "Ana" ou "Vó Lourdes". Login do cliente: cliente@exemplo.com / Convite123.</span>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
             {PRESETS.map((p) => {
               const t = THEMES.find((x) => x.id === p.settings.themeId)!
@@ -48,6 +48,9 @@ export default function DemoBar() {
           </button>
           <button style={{ ...btn, background: '#fff', color: '#222' }} onClick={() => { demoLogin(); nav('/admin'); setOpen(false); window.scrollTo(0, 0) }}>
             Ver painel do cliente
+          </button>
+          <button style={{ ...btn, background: '#fff', color: '#222' }} onClick={() => { void demoSignOut(); nav('/admin'); setOpen(false); window.scrollTo(0, 0) }}>
+            Ver tela de login do cliente
           </button>
           <button style={{ ...btn, background: '#fff', color: '#222' }} onClick={() => { demoLogin(); nav('/super'); setOpen(false); window.scrollTo(0, 0) }}>
             Ver meu painel (dono)

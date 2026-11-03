@@ -1,13 +1,17 @@
 rules_version = '2';
 
-// Modelo de segurança
-// - settings/event ........ leitura pública, escrita só admin
-// - guests/{id} ........... convidado (sem telefone). Leitura pública limitada;
-//                           o convidado só pode alterar a própria resposta.
-// - invites/{id} .......... dados internos do convite (telefones, notas, envio). Só admin.
-// - rsvpLog/{id} .......... histórico de respostas. Só cria — ninguém edita nem apaga,
-//                           nem o admin. É a garantia de que nenhuma confirmação se perde.
-// - admins/{email} ........ quem pode entrar no painel (criado pelo console na 1ª vez).
+// Modelo de segurança (um banco para vários convites)
+// - events/{eventId}/settings ....... leitura pública, escrita só do admin do evento
+// - events/{eventId}/guests ......... convidado (sem telefone). Leitura pública limitada;
+//                                     o convidado só altera a própria resposta.
+// - events/{eventId}/invites ........ telefones e dados internos. Só admin do evento.
+// - events/{eventId}/rsvpLog ........ histórico: só cria, ninguém edita nem apaga.
+// - events/{eventId}/admins ......... quem entra no painel do evento (criado pelo dono).
+// - events/{eventId}/accounts ....... controle da senha provisória do cliente.
+// - events/{eventId}/gifts .......... presentes que os convidados informaram (só admin lê).
+// - events/{eventId}/giftClaims ..... "item já escolhido" (sem nome; público; só cria).
+// - owners, clients, ownerSettings .. painel do dono do produto.
+// O dono (owners/<email>) também consegue ler e ajudar em qualquer evento.
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -15,16 +19,31 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isAdmin() {
+    function verifiedEmail() {
       return signedIn()
         && request.auth.token.email != null
-        && request.auth.token.email_verified == true
-        && exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+        && request.auth.token.email_verified == true;
     }
 
-    function rsvpOpen() {
-      let path = /databases/$(database)/documents/settings/event;
+    function isOwner() {
+      return verifiedEmail()
+        && exists(/databases/$(database)/documents/owners/$(request.auth.token.email));
+    }
+
+    function isAdmin(eventId) {
+      return isOwner()
+        || (verifiedEmail()
+            && exists(/databases/$(database)/documents/events/$(eventId)/admins/$(request.auth.token.email)));
+    }
+
+    function rsvpOpen(eventId) {
+      let path = /databases/$(database)/documents/events/$(eventId)/settings/event;
       return !exists(path) || get(path).data.get('rsvpOpen', true) != false;
+    }
+
+    function giftsOpen(eventId) {
+      let path = /databases/$(database)/documents/events/$(eventId)/settings/event;
+      return exists(path) && get(path).data.get('giftsEnabled', false) == true;
     }
 
     function validStatus(s) {
@@ -33,14 +52,6 @@ service cloud.firestore {
 
     function validAge(a) {
       return a == null || (a is int && a >= 0 && a <= 17);
-    }
-
-    // Painel do dono do produto (clientes, financeiro). Só quem está em owners/.
-    function isOwner() {
-      return signedIn()
-        && request.auth.token.email != null
-        && request.auth.token.email_verified == true
-        && exists(/databases/$(database)/documents/owners/$(request.auth.token.email));
     }
 
     match /owners/{email} {
@@ -56,52 +67,94 @@ service cloud.firestore {
       allow read, write: if isOwner();
     }
 
-    match /admins/{email} {
-      allow read: if signedIn() && request.auth.token.email == email || isAdmin();
-      allow write: if isAdmin();
-    }
+    match /events/{eventId} {
 
-    match /settings/{doc} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
+      allow read: if isAdmin(eventId);
+      allow write: if isOwner();
 
-    match /invites/{id} {
-      allow read, write: if isAdmin();
-    }
+      match /settings/{doc} {
+        allow read: if true;
+        allow write: if isAdmin(eventId);
+      }
 
-    match /guests/{id} {
-      allow get: if isAdmin() || (signedIn() && resource.data.active == true);
-      allow list: if isAdmin() || (signedIn() && request.query.limit <= 30 && resource.data.active == true);
-      allow create, delete: if isAdmin();
-      allow update: if isAdmin() || (
-        signedIn()
-        && resource.data.active == true
-        && rsvpOpen()
-        && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(['status', 'age', 'respondedAt', 'respondedBy', 'updatedAt', 'ageFromGuest', 'plusOneName'])
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['plusOneName'])
-            || (resource.data.get('isPlusOne', false) == true
-                && (request.resource.data.plusOneName == null
-                    || (request.resource.data.plusOneName is string && request.resource.data.plusOneName.size() <= 60))))
-        && validStatus(request.resource.data.status)
-        && validAge(request.resource.data.get('age', null))
-        && request.resource.data.updatedAt == request.time
-      );
-    }
+      match /admins/{email} {
+        allow read: if (signedIn() && request.auth.token.email == email) || isAdmin(eventId);
+        allow write: if isAdmin(eventId);
+      }
 
-    match /rsvpLog/{id} {
-      allow read: if isAdmin();
-      allow create: if signedIn()
-        && request.resource.data.keys().hasOnly(['guestId', 'guestName', 'inviteId', 'status', 'age', 'by', 'source', 'at'])
-        && validStatus(request.resource.data.status)
-        && request.resource.data.at == request.time
-        && request.resource.data.by is string && request.resource.data.by.size() <= 80
-        && validAge(request.resource.data.get('age', null))
-        && request.resource.data.source in ['guest', 'admin']
-        && (request.resource.data.source == 'guest' || isAdmin())
-        && exists(/databases/$(database)/documents/guests/$(request.resource.data.guestId));
-      allow update, delete: if false;
+      // Senha provisória: o dono cria; a própria pessoa só pode marcar que já trocou.
+      match /accounts/{email} {
+        allow read: if (signedIn() && request.auth.token.email == email) || isAdmin(eventId);
+        allow create, delete: if isOwner();
+        allow update: if isOwner()
+          || (signedIn() && request.auth.token.email == email
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['mustChange', 'changedAt'])
+              && request.resource.data.mustChange == false);
+      }
+
+      match /invites/{id} {
+        allow read, write: if isAdmin(eventId);
+      }
+
+      match /guests/{id} {
+        allow get: if isAdmin(eventId) || (signedIn() && resource.data.active == true);
+        allow list: if isAdmin(eventId) || (signedIn() && request.query.limit <= 30 && resource.data.active == true);
+        allow create, delete: if isAdmin(eventId);
+        allow update: if isAdmin(eventId) || (
+          signedIn()
+          && resource.data.active == true
+          && rsvpOpen(eventId)
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'age', 'respondedAt', 'respondedBy', 'updatedAt', 'ageFromGuest', 'plusOneName'])
+          && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['plusOneName'])
+              || (resource.data.get('isPlusOne', false) == true
+                  && (request.resource.data.plusOneName == null
+                      || (request.resource.data.plusOneName is string && request.resource.data.plusOneName.size() <= 60))))
+          && validStatus(request.resource.data.status)
+          && validAge(request.resource.data.get('age', null))
+          && request.resource.data.updatedAt == request.time
+        );
+      }
+
+      match /rsvpLog/{id} {
+        allow read: if isAdmin(eventId);
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['guestId', 'guestName', 'inviteId', 'status', 'age', 'by', 'source', 'at'])
+          && validStatus(request.resource.data.status)
+          && request.resource.data.at == request.time
+          && request.resource.data.by is string && request.resource.data.by.size() <= 80
+          && validAge(request.resource.data.get('age', null))
+          && request.resource.data.source in ['guest', 'admin']
+          && (request.resource.data.source == 'guest' || isAdmin(eventId))
+          && exists(/databases/$(database)/documents/events/$(eventId)/guests/$(request.resource.data.guestId));
+        allow update, delete: if false;
+      }
+
+      // Presentes: o convidado informa "já enviei"; só o admin lê e confirma.
+      match /gifts/{id} {
+        allow read: if isAdmin(eventId);
+        allow create: if signedIn()
+          && giftsOpen(eventId)
+          && request.resource.data.keys().hasOnly(['itemId', 'itemTitle', 'amount', 'from', 'message', 'anonymous', 'status', 'at'])
+          && request.resource.data.status == 'declared'
+          && request.resource.data.at == request.time
+          && request.resource.data.from is string && request.resource.data.from.size() <= 80
+          && request.resource.data.message is string && request.resource.data.message.size() <= 400
+          && request.resource.data.itemTitle is string && request.resource.data.itemTitle.size() <= 120
+          && request.resource.data.amount is number && request.resource.data.amount >= 0 && request.resource.data.amount <= 100000;
+        allow update: if isAdmin(eventId);
+        allow delete: if isAdmin(eventId);
+      }
+
+      // "Item já escolhido": sem nome do convidado; o primeiro a escolher vence.
+      match /giftClaims/{itemId} {
+        allow read: if true;
+        allow create: if signedIn() && giftsOpen(eventId)
+          && request.resource.data.keys().hasOnly(['at'])
+          && request.resource.data.at == request.time;
+        allow update: if false;
+        allow delete: if isAdmin(eventId);
+      }
     }
   }
 }
