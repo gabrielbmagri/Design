@@ -55,25 +55,28 @@ function scene(t, i) {
 .side{position:absolute;left:${i % 2 ? 10 : 62}%;top:${i % 2 ? 66 : 70}%;font-size:260px;filter:drop-shadow(0 18px 24px rgba(0,0,0,.2))}</style>
 ${parts.join('')}${decos}<div class="hill"></div><div class="hill2"></div><div class="main">${big}</div><div class="side">${mid}</div></body></html>`
 }
-function invite(t) {
+function invite(t, id) {
+  const f = `public/demo/${id}/p6.jpg`
+  const photo = fs.existsSync(f) ? `data:image/jpeg;base64,${fs.readFileSync(f).toString('base64')}` : ''
   return `<html><body style="margin:0;width:1080px;height:1920px;overflow:hidden;background:linear-gradient(170deg,${t.bg[0][0]},${t.bg[0][1]});position:relative;text-align:center;font-family:'Playfair Display',Georgia,serif;color:${t.c}">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Dancing+Script:wght@700&family=Nunito:wght@900&display=swap" rel="stylesheet">
 <div style="position:absolute;inset:50px;border-radius:70px;background:${t.paper};box-shadow:0 30px 70px rgba(0,0,0,.18)"></div>
-<div style="position:absolute;top:150px;left:0;right:0;font-size:120px">${t.deco.join(' ')}</div>
-<div style="position:absolute;top:360px;left:0;right:0;font:900 ${t.title.length > 12 ? 112 : (t.title.length > 8 ? 150 : 230)}px/1 'Playfair Display',serif">${t.title}</div>
-<div style="position:absolute;top:${t.title.length > 8 ? 540 : 620}px;left:0;right:0;font:900 76px 'Playfair Display',serif;color:${t.c2}">${t.sub}</div>
-<div style="position:absolute;top:800px;left:80px;right:80px;font:700 88px/1.15 'Dancing Script',cursive;color:${t.c}">${t.line}</div>
-<div style="position:absolute;top:1130px;left:0;right:0;font-size:250px">${t.em[0]} ${t.em[1]}</div>
-<div style="position:absolute;top:1480px;left:0;right:0;font:900 84px Nunito,sans-serif;color:${t.c2}">${t.date}</div>
-<div style="position:absolute;top:1610px;left:0;right:0;font:900 48px Nunito,sans-serif;color:${t.c}">${t.place}</div></body></html>`
+${photo ? `<div style="position:absolute;left:100px;right:100px;top:100px;height:960px;border-radius:52px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.25)"><img src="${photo}" style="width:100%;height:100%;object-fit:cover;object-position:50% 25%"></div>` : `<div style="position:absolute;top:150px;left:0;right:0;font-size:120px">${t.deco.join(' ')}</div>`}
+<div style="position:absolute;top:${photo ? 1090 : 360}px;left:0;right:0;font:900 ${t.title.length > 12 ? 112 : (t.title.length > 8 ? 150 : 200)}px/1 'Playfair Display',serif">${t.title}</div>
+<div style="position:absolute;top:${photo ? 1300 : 620}px;left:0;right:0;font:900 70px 'Playfair Display',serif;color:${t.c2}">${t.sub}</div>
+<div style="position:absolute;top:${photo ? 1410 : 800}px;left:80px;right:80px;font:700 78px/1.15 'Dancing Script',cursive;color:${t.c}">${t.line}</div>
+<div style="position:absolute;top:${photo ? 1620 : 1480}px;left:0;right:0;font:900 80px Nunito,sans-serif;color:${t.c2}">${t.date}</div>
+<div style="position:absolute;top:${photo ? 1740 : 1610}px;left:0;right:0;font:900 46px Nunito,sans-serif;color:${t.c}">${t.place}</div></body></html>`
 }
 ;(async () => {
   const b = await chromium.launch()
   for (const [id, t] of Object.entries(T)) {
     const dir = path.join('public/demo', id); fs.mkdirSync(dir, { recursive: true })
     const p = await b.newPage({ viewport: { width: 1200, height: 1600 } })
-    for (let i = 0; i < 8; i++) { await p.setContent(LUX[id] ? luxScene(id, i) : scene(t, i)); await p.waitForTimeout(400); await p.waitForTimeout(150); await p.screenshot({ path: `${dir}/p${i + 1}.jpg`, type: 'jpeg', quality: 82 }) }
-    await p.setViewportSize({ width: 1080, height: 1920 }); await p.setContent(LUX[id] ? luxInvite(id) : invite(t)); await p.waitForTimeout(1200); await p.screenshot({ path: `${dir}/invite.jpg`, type: 'jpeg', quality: 86 })
+    // safari e jardim já têm fotos de IA em p1..p8: não sobrescrever
+    const FOTOS_PRONTAS = id === 'safari' || id === 'jardim'
+    for (let i = 0; i < 8 && !FOTOS_PRONTAS; i++) { await p.setContent(LUX[id] ? luxScene(id, i) : scene(t, i)); await p.waitForTimeout(400); await p.waitForTimeout(150); await p.screenshot({ path: `${dir}/p${i + 1}.jpg`, type: 'jpeg', quality: 82 }) }
+    await p.setViewportSize({ width: 1080, height: 1920 }); await p.setContent(LUX[id] ? luxInvite(id) : invite(t, id)); await p.waitForTimeout(1200); await p.screenshot({ path: `${dir}/invite.jpg`, type: 'jpeg', quality: 86 })
     console.log('ok', id)
   }
   await b.close()

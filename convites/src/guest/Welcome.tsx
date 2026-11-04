@@ -83,9 +83,8 @@ export default function Welcome({ settings, busy, error, saved, onSearch, onCont
           <button className="g-link" onClick={onVisitor}>
             Só quero ver os detalhes
           </button>
-          <div style={{ marginTop: 6 }}>
-            <Link to="/privacidade" className="g-link" style={{ fontSize: 13 }}>Privacidade</Link>
-          </div>
+          <span style={{ color: 'var(--ink-3)' }}> · </span>
+          <Link to="/privacidade" className="g-link" style={{ fontSize: 13 }}>Privacidade</Link>
         </div>
       </div>
     </main>
