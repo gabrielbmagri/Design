@@ -1,0 +1,22 @@
+const { chromium } = require('playwright')
+const fs = require('fs'); const path = require('path')
+const D = '/tmp/claude-0/-home-user-Design/a301d730-512a-5d99-9d23-2d6ae1294b3b/scratchpad/reel/'
+;(async () => {
+  const args = process.argv.slice(2)
+  const mode = args[0]
+  const b = await chromium.launch({ args: ['--allow-file-access-from-files', '--disable-web-security'] })
+  const ctx = await b.newContext({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 })
+  const p = await ctx.newPage(); const errs = []
+  p.on('pageerror', (e) => errs.push(String(e))); p.on('console', (m) => m.type() === 'error' && errs.push(m.text().slice(0, 200)))
+  await p.goto('file://' + D + 'reel.html'); await p.evaluate(() => window.ready); await p.waitForTimeout(800)
+  if (mode === 'snap') {
+    fs.mkdirSync(D + 'snap', { recursive: true })
+    for (const t of args.slice(1).map(Number)) { await p.evaluate((t) => render(t), t); await p.screenshot({ path: D + `snap/t${String(t).replace('.', '_')}.jpg`, type: 'jpeg', quality: 90 }) }
+  } else if (mode === 'events') {
+    const r = await p.evaluate(async () => ({ events: await collectEvents(), total: window.TOTAL, t0: window.T0 })); fs.writeFileSync(D + 'events.json', JSON.stringify(r)); console.log(r.events.length, 'eventos; total', r.total)
+  } else if (mode === 'render') {
+    const [a, c, out] = [Number(args[1]), Number(args[2]), args[3]]; fs.mkdirSync(out, { recursive: true })
+    for (let f = a; f < c; f++) { await p.evaluate((t) => render(t), f / 30); await p.screenshot({ path: path.join(out, `f${String(f).padStart(5, '0')}.jpg`), type: 'jpeg', quality: 92 }) }
+  }
+  console.log('erros:', errs.slice(0, 5)); await b.close()
+})()

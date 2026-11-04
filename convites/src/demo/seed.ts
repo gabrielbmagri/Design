@@ -23,6 +23,33 @@ const SAMPLE: { host: Host; phone: string; members: MemberDraft[]; status?: Stat
   { host: 'luiza', phone: '21 98888-0005', members: [m('Beatriz Alves')], reserve: true },
 ]
 
+/** Conjunto maior e variado, usado só para gravar o vídeo de vendas (localStorage convite-demo-reel = 1). */
+function reelSample(): typeof SAMPLE {
+  const first = ['Marina', 'Lucas', 'Patrícia', 'Rodrigo', 'Juliana', 'Felipe', 'Aline', 'Bruno', 'Camila', 'Diego', 'Fernanda', 'Gustavo', 'Helena', 'Igor', 'Larissa', 'Marcelo', 'Natália', 'Otávio', 'Paula', 'Ricardo', 'Sabrina', 'Thiago', 'Vanessa', 'William', 'Yasmin', 'Eduardo', 'Renata', 'André', 'Bianca', 'Caio', 'Débora', 'Everton', 'Flávia', 'Gabriela', 'Henrique', 'Isabela', 'Jorge', 'Karen', 'Leandro', 'Mônica']
+  const last = ['Almeida', 'Barbosa', 'Carvalho', 'Dias', 'Esteves', 'Ferreira', 'Gomes', 'Lacerda', 'Moreira', 'Nogueira', 'Pereira', 'Queiroz', 'Ramos', 'Santos', 'Teixeira', 'Vieira']
+  let seed = 7
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
+  const out: typeof SAMPLE = []
+  for (let n = 0; n < 40; n++) {
+    const fam = last[n % last.length]
+    const adults = rnd() < 0.55 ? 2 : 1
+    const kids = rnd() < 0.5 ? (rnd() < 0.4 ? 2 : 1) : 0
+    const members: MemberDraft[] = []
+    for (let a = 0; a < adults; a++) members.push(m(`${first[(n * 2 + a) % first.length]} ${fam}`))
+    for (let k = 0; k < kids; k++) members.push(m(`${first[(n * 3 + k + 11) % first.length]} ${fam}`, true, Math.floor(rnd() * 8) + 1))
+    const r = rnd()
+    const st = (x: Status) => members.map(() => x)
+    let status: Status[] | undefined
+    if (r < 0.62) status = st('yes')
+    else if (r < 0.7) status = st('no')
+    else if (r < 0.78) status = members.map((_, i) => (i === 0 ? 'maybe' : 'pending'))
+    else if (r < 0.86) status = members.map((x) => (x.isChild ? 'pending' : 'yes'))
+    out.push({ host: n % 2 ? 'luiza' : 'gabriel', phone: `21 9${String(8000 + n * 37).slice(0, 4)}-${String(1000 + n * 91).slice(0, 4)}`, members, status, sentDaysAgo: 3 + Math.floor(rnd() * 11), tags: n % 3 ? ['família'] : ['amigos'] })
+  }
+  return out
+}
+const isReel = () => { try { return localStorage.getItem('convite-demo-reel') === '1' } catch { return false } }
+
 export const PRESET_KEY = 'convite-demo-preset'
 export function currentPreset() {
   let id = ''
@@ -44,7 +71,7 @@ export async function seedDemo() {
 }
 
 async function seedRest() {
-  for (const s of SAMPLE) {
+  for (const s of isReel() ? reelSample() : SAMPLE) {
     const id = await saveInvite(
       { label: '', host: s.host, phone: s.phone, notes: '', tags: s.tags ?? [], reserve: !!s.reserve, members: s.members, plusOne: s.plusOne },
       [],

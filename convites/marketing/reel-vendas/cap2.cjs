@@ -1,0 +1,15 @@
+const { chromium, devices } = require('playwright')
+const O = '/tmp/claude-0/-home-user-Design/a301d730-512a-5d99-9d23-2d6ae1294b3b/scratchpad/reel/stills/'
+;(async () => {
+  const b = await chromium.launch(); const c = await b.newContext({ ...devices['iPhone 13'], viewport: { width: 390, height: 844 }, deviceScaleFactor: 3 })
+  await c.addInitScript(() => { try { localStorage.setItem('convite-demo-preset', 'safari'); localStorage.setItem('convite-demo-reel', '1') } catch {} })
+  const p = await c.newPage(); await p.goto('http://127.0.0.1:5180/#admin')
+  await p.waitForFunction(() => { try { return Object.keys(JSON.parse(localStorage.getItem('convite-demo-db') || '{}')['events/principal/invites'] || {}).length >= 40 } catch { return false } }, null, { timeout: 60000 })
+  await p.waitForTimeout(1200); await p.reload(); await p.waitForTimeout(3000)
+  await p.addStyleTag({ content: 'div[style*="z-index: 999"]{display:none!important}' })
+  await p.locator('.ad-mobile-nav').getByRole('button', { name: 'Lembretes' }).click(); await p.waitForTimeout(900)
+  await p.evaluate(() => { const h = [...document.querySelectorAll('h3')].find((x) => /Lembrar agora/i.test(x.textContent)); if (h) { h.scrollIntoView(); window.scrollBy(0, -80) } }); await p.waitForTimeout(600); await p.screenshot({ path: O + 'a-4b-lembrar.png' })
+  await p.locator('.ad-mobile-nav').getByRole('button', { name: 'Convites' }).click(); await p.waitForTimeout(900)
+  await p.evaluate(() => { const a = document.querySelector('a.ad-btn.wa'); if (a) { a.scrollIntoView(); window.scrollBy(0, -330) } }); await p.waitForTimeout(600); await p.screenshot({ path: O + 'a-3b-enviar.png' })
+  await b.close()
+})()

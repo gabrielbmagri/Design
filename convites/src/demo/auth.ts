@@ -1,4 +1,5 @@
 // Login de mentira para a demonstração.
+import { PRESETS } from '../lib/presets'
 export interface User {
   uid: string
   email: string | null
@@ -7,7 +8,15 @@ export interface User {
 }
 
 const KEY = 'convite-demo-admin'
-const ADMIN: User = { uid: 'demo-admin', email: 'demo@convite', displayName: 'Demonstração', isAnonymous: false }
+function hostName() {
+  try {
+    const id = localStorage.getItem('convite-demo-preset')
+    return PRESETS.find((p) => p.id === id)?.settings.hostAName ?? 'Demonstração'
+  } catch {
+    return 'Demonstração'
+  }
+}
+const ADMIN: User = { uid: 'demo-admin', email: 'demo@convite', displayName: hostName(), isAnonymous: false }
 
 const EMAIL_KEY = 'convite-demo-email'
 const userFor = (email: string): User => ({ uid: 'demo-' + email, email, displayName: null, isAnonymous: false })
