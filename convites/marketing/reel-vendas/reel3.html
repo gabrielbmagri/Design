@@ -18,22 +18,25 @@
   .w { display:inline-block; will-change:transform,opacity }
   .chip { position:absolute; display:flex; align-items:center; gap:12px; padding:16px 18px; border-radius:24px; font-weight:800; font-size:27px; line-height:1.12; background:#fff; border:3px solid var(--ac,#2f6b3a); box-shadow:0 16px 40px rgba(40,40,70,.16); max-width:300px; color:var(--ink) }
   .chip i { font-style:normal; font-size:34px }
-  .gc { position:absolute; width:246px; padding:20px 18px 22px; border-radius:28px; font-weight:800; font-size:26px; line-height:1.16; color:var(--ink);
+  .gc { position:absolute; width:256px; padding:20px 18px 22px; border-radius:28px; font-weight:800; font-size:26px; line-height:1.16; color:var(--ink);
     background:linear-gradient(140deg,rgba(255,255,255,.66),rgba(255,255,255,.24)); -webkit-backdrop-filter:blur(18px) saturate(1.5); backdrop-filter:blur(18px) saturate(1.5);
     border:1.5px solid rgba(255,255,255,.9); box-shadow:0 20px 54px rgba(40,40,70,.13), 0 0 0 1px color-mix(in srgb,var(--ac) 40%,transparent), 0 0 38px color-mix(in srgb,var(--ac) 30%,transparent), inset 0 1px 0 #fff; overflow:hidden }
   .gc i { display:block; font-style:normal; font-size:42px; margin-bottom:10px }
   .gc b { position:absolute; right:16px; top:14px; font:700 15px 'JetBrains Mono',monospace; letter-spacing:.14em; color:var(--ac) }
   .gc::after { content:''; position:absolute; left:18px; bottom:10px; width:46px; height:4px; border-radius:3px; background:var(--ac); box-shadow:0 0 12px var(--ac) }
   .gc::before { content:''; position:absolute; inset:0; background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%); transform:translateX(var(--sh,-120%)); pointer-events:none }
-  .phone { position:absolute; width:560px; height:1212px; border-radius:76px; background:#14161f; border:3px solid #2d303d; box-shadow:0 0 0 2px #0c0d14, 0 34px 90px rgba(40,40,70,.34), 0 0 70px var(--glow,rgba(142,91,181,.28)); transform-origin:50% 0 }
-  .phone .screen { position:absolute; left:14px; top:14px; width:532px; height:1184px; border-radius:64px; overflow:hidden; background:#000 }
-  .phone .shot { position:absolute; left:0; top:0; width:532px; height:1152px; object-fit:cover; object-position:top }
-  .phone .notch { position:absolute; left:50%; top:26px; width:170px; height:44px; margin-left:-85px; border-radius:24px; background:#000; z-index:5 }
+  .phone { position:absolute; z-index:1; width:660px; height:1190px; transform-origin:50% 0; filter:drop-shadow(0 30px 60px var(--glow,rgba(142,91,181,.30))) }
+  .phone .screen { position:absolute; inset:0; border-radius:46px; overflow:hidden; background:#fff; opacity:.95;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 80%,transparent); -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 80%,transparent); mask-composite:intersect }
+  .phone .shot { position:absolute; left:0; top:0; width:660px; height:1428px; object-fit:cover; object-position:top }
+  .phone .notch { display:none }
+  .kc::after { display:none }
   .brk { position:absolute; width:64px; height:64px; border:6px solid var(--bc,#8e5bb5); filter:drop-shadow(0 0 8px rgba(142,91,181,.4)) }
   .big { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; letter-spacing:-.03em; line-height:.95 }
   .btn { position:absolute; left:140px; width:800px; height:160px; border-radius:90px; display:flex; align-items:center; justify-content:center; gap:22px; font-weight:800; font-size:54px; color:#fff; background:linear-gradient(95deg,#22c55e,#10b981); box-shadow:0 24px 60px rgba(16,185,129,.4) }
   #flash { position:absolute; inset:0; background:radial-gradient(circle,rgba(255,255,255,.95),rgba(142,91,181,.25)); opacity:0; z-index:50; pointer-events:none }
-  .wa { position:absolute; border-radius:46px; overflow:hidden; background:#efeae2; border:3px solid #d5d1c7; box-shadow:0 34px 80px rgba(40,40,70,.28) }
+  .wa { position:absolute; z-index:1; border-radius:46px; -webkit-mask-image:linear-gradient(to bottom,#000 84%,transparent); mask-image:linear-gradient(to bottom,#000 84%,transparent); overflow:hidden; background:#efeae2; border:3px solid #d5d1c7; box-shadow:0 34px 80px rgba(40,40,70,.28) }
   .wa .hd { height:120px; background:#008069; color:#fff; display:flex; align-items:center; gap:22px; padding:0 30px; font-weight:800; font-size:38px }
   .wa .av { width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#f9a8d4,#fcd34d); display:grid; place-items:center; font-size:38px }
   .wa .bd { padding:26px 22px 40px; background:#efeae2; position:relative; height:880px }
@@ -108,28 +111,29 @@ function playShots(ph, seq, t, xf = .28) {
   })
 }
 function counter(el, t, t0, d, from, to) { el.textContent = Math.round(lerp(from, to, E.out(P(t, t0, d)))) }
-function chipEl(icon, text, ac) { return $(`<div class="chip" style="--ac:${ac}"><i>${icon}</i><span>${text}</span></div>`) }
+let GCN = 0
+function chipEl(icon, text, ac) { return gcEl(String(++GCN).padStart(2, '0'), icon, text.replace(/<br>/g, ' '), ac) }
 function gcEl(n, icon, text, ac) { return $(`<div class="gc" style="--ac:${ac}"><b>${n}</b><i>${icon}</i><span>${text}</span></div>`) }
 // o card sai de trás do celular (centro) e desliza até a lateral
 function gcAnim(el, t, t0, side, y) {
-  const k = E.out(P(t, t0, .75)), fx = side < 0 ? 12 : 822, x = lerp(540 - 123, fx, k), fl = Math.sin(t * 1.6 + y) * 7 * k
-  el.style.opacity = clamp(P(t, t0, .18)) * .97
+  const w = el.offsetWidth || 256, k = E.out(P(t, t0, .75)), fx = side < 0 ? 4 : 1076 - w, x = lerp(540 - w / 2, fx, k), fl = Math.sin(t * 1.6 + y) * 7 * k
+  el.style.opacity = clamp(P(t, t0, .18)) * .97; el.style.zIndex = k < .5 ? 0 : 3   // sai de trás, depois fica na frente
   el.style.transform = `translate(${x}px,${y + fl}px) scale(${.55 + .45 * E.back(P(t, t0, .6))}) rotate(${(1 - k) * side * 5}deg)`
   el.style.setProperty('--sh', (-120 + 260 * E.io(P(t, t0 + .5, .9))) + '%')
 }
 function chipAnim(el, t, t0, x, y, side = 1) { const k = E.back(P(t, t0, .5)), fl = Math.sin(t * 1.7 + x) * 6; el.style.opacity = clamp(P(t, t0, .2)); el.style.transform = `translate(${x + (1 - k) * 90 * side}px,${y + fl}px) scale(${.7 + .3 * k})` }
-function brackets(box, col) { ['tl', 'tr', 'bl', 'br'].forEach((p) => { const b = $('<div class="brk"></div>'); b.style.cssText += `--bc:${col};margin:-28px;` + (p[0] === 't' ? 'top:0;' : 'bottom:0;') + (p[1] === 'l' ? 'left:0;' : 'right:0;') + `border-${p[0] === 't' ? 'bottom' : 'top'}:none;border-${p[1] === 'l' ? 'right' : 'left'}:none;`; box.appendChild(b) }) }
+function brackets() {}
 
 /* ============================ cenas ============================ */
 const scenes = []
-const add = (i, build, update) => { const el = $('<div class="sc"></div>'); stage.appendChild(el); const ctx = build(el, S(i)); scenes.push({ i, el, ctx, update, ...S(i) }) }
+const add = (i, build, update) => { GCN = 0; const el = $('<div class="sc"></div>'); stage.appendChild(el); const ctx = build(el, S(i)); scenes.push({ i, el, ctx, update, ...S(i) }) }
 let VIDEO_IMG = null
 
 /* ---- A. O DIFERENCIAL: a experiência (gravação real) ---- */
 add(0, (el) => {
   const tag = $('<div class="mono abs" style="left:80px;top:236px">// o diferencial</div>')
   const h = $('<div class="h1 abs" style="left:80px;top:230px;width:920px"></div>'); const ws = words(h, 'Imagina um convite assim pra {{sua festa}}')
-  const ph = mkPhone([REC.frames.length ? 'rec_j/' + REC.frames[0] : ''], 'rgba(228,87,156,.28)'); ph.style.left = '260px'; ph.style.top = '505px'
+  const ph = mkPhone([REC.frames.length ? 'rec_j/' + REC.frames[0] : ''], 'rgba(228,87,156,.28)'); ph.style.left = '210px'; ph.style.top = '505px'
   VIDEO_IMG = ph.querySelector('.shot'); brackets(ph, '#e4579c')
   const chips = [
     gcEl('01', '📸', 'Fotos da criança na história', '#8e5bb5'),
@@ -143,7 +147,7 @@ add(0, (el) => {
   const lt = t - s.a
   setT(c.tag, 0, 0, E.out(P(lt, .05, .3))); revealWords(c.ws, lt, .1, .13)
   const k = E.back(P(lt, .05, .6)); c.ph.style.opacity = clamp(P(lt, .05, .25))
-  c.ph.style.transform = `translateY(${(1 - k) * 220}px) scale(${.95 * (.85 + .15 * k)}) rotate(${(1 - k) * 4}deg)`
+  c.ph.style.transform = `translateY(${(1 - k) * 220}px) scale(${1 * (.85 + .15 * k)}) rotate(${(1 - k) * 4}deg)`
   // quadro da gravação real
   const vk = clamp(Math.floor((lt - .35) * 30), 0, REC.frames.length - 1); VIDEO_IMG.src = 'rec_j/' + REC.frames[vk]
   const pos = [[-1, 670], [1, 890], [-1, 1120], [1, 1340]]; const t0s = [3.4, 6.4, 9.4, 12.0]
@@ -156,27 +160,27 @@ add(0, (el) => {
 add(1, (el) => {
   const tag = $('<div class="mono abs" style="left:80px;top:236px;color:var(--p)">// no whatsapp</div>')
   const h = $('<div class="h2 abs" style="left:80px;top:250px;width:920px"></div>'); const ws = words(h, 'Chega {{lindo}} no WhatsApp.')
-  const wa = $(`<div class="wa" style="left:36px;top:520px;width:640px"><div class="hd"><div class="av">🦋</div><div>Tia Marcela<div style="font-size:24px;font-weight:500;color:rgba(255,255,255,.8)">online</div></div></div>
+  const wa = $(`<div class="wa" style="left:220px;top:530px;width:640px"><div class="hd"><div class="av">🦋</div><div>Tia Marcela<div style="font-size:24px;font-weight:500;color:rgba(255,255,255,.8)">online</div></div></div>
     <div class="bd">
       <div class="msg m1" style="top:30px"><div class="pv"><img src="stills/og-jardim.jpg"><div class="tx"><div class="tt">Convite da Lara 🦋🌸🐝</div><div class="ds">Você é nosso convidado especial! Toque para ver o convite e confirmar sua presença.</div></div></div>
         <div class="tx2">Oi, Marcela! 🦋 O jardim está em flor! Venha celebrar o aniversário da Lara.\n\nConfirme por aqui, leva 1 minuto:</div><div class="tm">14:02 ✓✓</div></div>
       <div class="msg m2" style="top:640px;opacity:0"><div class="tx2" style="padding-top:8px">🤖 <b>Lembrete · Aniversário da Lara</b>\n\nOi, Marcela! Ainda não consta a sua confirmação. Leva 1 minuto 💗</div><div class="tm">14:05 ✓✓</div></div>
     </div></div>`)
-  const ring = $('<div class="abs" style="left:16px;top:640px;width:690px;height:372px;border-radius:44px;border:8px solid var(--o);box-shadow:0 0 40px rgba(228,87,156,.5)"></div>')
+  const ring = $('<div class="abs" style="left:14px;top:22px;width:612px;height:330px;border-radius:36px;border:8px solid var(--o);box-shadow:0 0 40px rgba(228,87,156,.5)"></div>')
   const lab = chipEl('⬆️', 'Imagem GRANDE,<br>nome da festa', '#e4579c')
   const chips = [chipEl('👆', 'Mensagem pronta<br>em 1 toque', '#8e5bb5'), chipEl('🔗', 'Link pessoal<br>de cada família', '#2e9f7a')]
-  el.append(h, wa, ring, lab); chips.forEach((c) => el.appendChild(c))
+  wa.querySelector('.bd').appendChild(ring); el.append(h, lab); chips.forEach((c) => el.appendChild(c)); el.append(wa)
   return { tag, ws, wa, ring, lab, chips }
 }, (c, t, s) => {
   const lt = t - s.a
   setT(c.tag, 0, 0, E.out(P(lt, .05, .3))); revealWords(c.ws, lt, .1, .1)
-  const k = E.back(P(lt, .05, .6)); c.wa.style.opacity = clamp(P(lt, .05, .25)); c.wa.style.transform = `translateY(${(1 - k) * 160}px) scale(${.93 * (.85 + .15 * k)})`
+  const k = E.back(P(lt, .05, .6)); c.wa.style.opacity = clamp(P(lt, .05, .25)); c.wa.style.transform = `translateY(${(1 - k) * 160}px) scale(${1.04 * (.85 + .15 * k)})`
   const m1 = c.wa.querySelector('.m1'), m2 = c.wa.querySelector('.m2'); m2.style.top = (m1.offsetTop + m1.offsetHeight + 26) + 'px'
   const a1 = E.back(P(lt, .35, .5)); m1.style.opacity = clamp(P(lt, .35, .2)); m1.style.transform = `translateY(${(1 - a1) * 80}px) scale(${.94 + .06 * a1})`; ev(s.a + .35, 'pop')
   const rk = E.out(P(lt, 1.0, .4)) * (1 - P(lt, 2.6, .4)); c.ring.style.opacity = rk; c.ring.style.transform = `scale(${1 + .03 * Math.sin(lt * 8)})`
-  chipAnim(c.lab, lt, 1.1, 700, 760, 1); c.lab.style.opacity = rk; ev(s.a + 1.0, 'chime')
+  gcAnim(c.lab, lt, 1.1, -1, 720); c.lab.style.opacity = rk * .97; ev(s.a + 1.0, 'chime')
   const a2 = E.back(P(lt, 2.6, .5)); m2.style.opacity = clamp(P(lt, 2.6, .2)); m2.style.transform = `translateY(${(1 - a2) * 80}px) scale(${.94 + .06 * a2})`; ev(s.a + 2.6, 'pop')
-  chipAnim(c.chips[0], lt, 1.7, 700, 1000, 1); chipAnim(c.chips[1], lt, 3.1, 700, 1180, 1); ev(s.a + 1.7, 'pop'); ev(s.a + 3.1, 'pop')
+  gcAnim(c.chips[0], lt, 1.7, 1, 940); gcAnim(c.chips[1], lt, 3.1, -1, 1200); ev(s.a + 1.7, 'pop'); ev(s.a + 3.1, 'pop')
   ev(s.a + .02, 'whoosh')
 })
 
@@ -185,26 +189,25 @@ add(2, (el) => {
   const tag = $('<div class="mono abs" style="left:80px;top:236px;color:var(--g)">// no seu painel</div>')
   const h = $('<div class="h2 abs" style="left:80px;top:250px;width:920px"></div>'); const ws = words(h, 'Tudo contado, {{ao vivo.}}')
   const sub = $('<div class="abs" style="left:80px;top:396px;width:920px;font-size:34px;font-weight:700;color:var(--mut)">Chega de planilha e de grupo bagunçado.</div>')
-  const ph = mkPhone(['stills_j/a-1-visao.png', 'stills_j/a-2-visao2.png', 'stills_j/a-4b-lembrar.png'], 'rgba(111,191,155,.3)'); ph.style.left = '40px'; ph.style.top = '520px'; brackets(ph, '#8e5bb5')
-  const k1 = $('<div class="abs" style="left:610px;top:530px;width:430px"><div class="big" style="font-size:180px"><span class="n1">0</span><span style="font-size:60px;color:var(--mut)">/100</span></div><div class="mono" style="font-size:28px;color:var(--m)">confirmados</div></div>')
-  const k2 = $('<div class="abs" style="left:610px;top:800px;width:430px"><div class="big grad" style="font-size:140px"><span class="n2">0</span>%</div><div class="mono" style="font-size:28px;color:var(--p)">já responderam</div></div>')
-  const k3 = $('<div class="abs" style="left:610px;top:1040px;width:430px;font-weight:800;font-size:36px;line-height:1.2"><div class="mono" style="margin-bottom:12px;color:var(--mut);font-size:26px">vagas por anfitrião</div><div>Marina <b class="n3">0</b>/50</div><div style="height:16px;border-radius:9px;background:rgba(29,27,38,.10);margin:8px 0 16px"><i class="f3" style="display:block;height:100%;width:0;border-radius:9px;background:var(--o)"></i></div><div>Bruno <b class="n4">0</b>/50</div><div style="height:16px;border-radius:9px;background:rgba(29,27,38,.10);margin:8px 0 0"><i class="f4" style="display:block;height:100%;width:0;border-radius:9px;background:var(--p)"></i></div></div>')
+  const ph = mkPhone(['stills_j/a-1-visao.png', 'stills_j/a-2-visao2.png', 'stills_j/a-4b-lembrar.png'], 'rgba(111,191,155,.3)'); ph.style.left = '210px'; ph.style.top = '520px'
+  const k1 = $('<div class="gc kc" style="--ac:#2e9f7a;width:270px"><b>01</b><div class="big" style="font-size:104px"><span class="n1">0</span><span style="font-size:40px;color:var(--mut)">/100</span></div><div class="mono" style="font-size:21px;color:var(--m);margin-top:6px">confirmados</div></div>')
+  const k2 = $('<div class="gc kc" style="--ac:#e4579c;width:270px"><b>02</b><div class="big grad" style="font-size:112px"><span class="n2">0</span>%</div><div class="mono" style="font-size:21px;color:var(--p);margin-top:6px">já responderam</div></div>')
+  const k3 = $('<div class="gc kc" style="--ac:#8e5bb5;width:296px;font-size:27px;line-height:1.2"><b>03</b><div class="mono" style="margin-bottom:10px;color:var(--mut);font-size:19px">vagas por anfitrião</div><div>Marina <b class="n3" style="position:static;font:inherit;color:inherit;letter-spacing:0">0</b>/50</div><div style="height:14px;border-radius:8px;background:rgba(29,27,38,.10);margin:6px 0 12px"><em class="f3" style="display:block;font-style:normal;height:100%;width:0;border-radius:8px;background:var(--o)"></em></div><div>Bruno <b class="n4" style="position:static;font:inherit;color:inherit;letter-spacing:0">0</b>/50</div><div style="height:14px;border-radius:8px;background:rgba(29,27,38,.10);margin:6px 0 0"><em class="f4" style="display:block;font-style:normal;height:100%;width:0;border-radius:8px;background:var(--p)"></em></div></div>')
   const chips = [chipEl('🎟️', 'Controle de gratuidades<br>por idade', '#8e5bb5'), chipEl('⏰', 'Lembretes e lista pra<br>imprimir, em 1 toque', '#e4579c')]
-  el.append(h, sub, ph, k1, k2, k3); chips.forEach((c) => el.appendChild(c))
+  el.append(h, sub, k1, k2, k3); chips.forEach((c) => el.appendChild(c)); el.append(ph)
   return { tag, ws, sub, ph, k1, k2, k3, chips }
 }, (c, t, s) => {
   const lt = t - s.a
   setT(c.tag, 0, 0, E.out(P(lt, .05, .3))); revealWords(c.ws, lt, .1, .12); setT(c.sub, 0, 0, E.out(P(lt, .5, .4)))
-  const k = E.back(P(lt, .05, .6)); c.ph.style.opacity = clamp(P(lt, .05, .25)); c.ph.style.transform = `translateY(${(1 - k) * 160}px) scale(${.9 * (.85 + .15 * k)}) rotate(${(1 - k) * -4}deg)`
+  const k = E.back(P(lt, .05, .6)); c.ph.style.opacity = clamp(P(lt, .05, .25)); c.ph.style.transform = `translateY(${(1 - k) * 160}px) scale(${1 * (.85 + .15 * k)}) rotate(${(1 - k) * -4}deg)`
   playShots(c.ph, [{ i: 0, a: 0, b: 2.5 }, { i: 1, a: 2.2, b: 4.3, mode: 'up' }, { i: 2, a: 4.0, b: 6.1, mode: 'up' }], lt)
-  const f = (el, a) => { el.style.opacity = E.out(P(lt, a, .35)); el.style.transform = `translateX(${(1 - E.out(P(lt, a, .5))) * 90}px)` }
-  f(c.k1, .6); f(c.k2, 1.0); f(c.k3, 1.4)
+  gcAnim(c.k1, lt, .5, -1, 640); gcAnim(c.k2, lt, .9, 1, 790); gcAnim(c.k3, lt, 1.3, -1, 960)
   counter(c.k1.querySelector('.n1'), lt, .7, 1.4, 0, 48); counter(c.k2.querySelector('.n2'), lt, 1.1, 1.4, 0, 76)
   counter(c.k3.querySelector('.n3'), lt, 1.6, 1.3, 0, 28); counter(c.k3.querySelector('.n4'), lt, 1.6, 1.3, 0, 36)
   c.k3.querySelector('.f3').style.width = E.out(P(lt, 1.6, 1.3)) * 56 + '%'; c.k3.querySelector('.f4').style.width = E.out(P(lt, 1.6, 1.3)) * 72 + '%'
   for (let i = 0; i < 16; i++) ev(s.a + .65 + i * .09, 'tick')
-  chipAnim(c.chips[0], lt, 2.8, 600, 1300, 1); chipAnim(c.chips[1], lt, 4.2, 600, 1470, 1)
-  c.chips.forEach((ch) => { ch.style.maxWidth = '450px'; ch.style.fontSize = '30px' }); ev(s.a + 2.8, 'pop'); ev(s.a + 4.2, 'pop'); ev(s.a + 2.2, 'swipe'); ev(s.a + 4.0, 'swipe'); ev(s.a + .02, 'whoosh')
+  gcAnim(c.chips[0], lt, 2.8, 1, 1130); gcAnim(c.chips[1], lt, 4.2, -1, 1340)
+  ev(s.a + 2.8, 'pop'); ev(s.a + 4.2, 'pop'); ev(s.a + 2.2, 'swipe'); ev(s.a + 4.0, 'swipe'); ev(s.a + .02, 'whoosh')
 })
 
 /* ---- D. PROVA + CHAMADA ---- */
