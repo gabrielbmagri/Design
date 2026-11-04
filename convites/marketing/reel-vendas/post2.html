@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@500;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root { --c1:#8e5bb5; --c2:#e4579c; --c3:#2e9f7a; --glow:rgba(142,91,181,.30) }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html,body { width:1080px; height:1350px; overflow:hidden; background:#f4f4f6; font-family:'Plus Jakarta Sans',sans-serif; color:#1d1b26 }
+  #bg { position:absolute; inset:0 }
+  .h { position:absolute; left:0; top:96px; width:1080px; text-align:center; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:84px; line-height:1.03; letter-spacing:-.025em }
+  .grad { background:linear-gradient(95deg,var(--c1),var(--c2) 55%,var(--c3)); -webkit-background-clip:text; background-clip:text; color:transparent }
+  .panel { position:absolute; left:220px; top:340px; width:640px; height:1010px; filter:drop-shadow(0 30px 60px var(--glow)) }
+  .panel .s { position:absolute; inset:0; border-radius:46px; overflow:hidden; background:#fff; opacity:.96;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 76%,transparent); -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 76%,transparent); mask-composite:intersect }
+  .panel img { position:absolute; left:0; width:640px; height:1385px; object-fit:cover }
+  .gc { position:absolute; display:flex; align-items:center; gap:16px; padding:20px 24px; border-radius:28px; font-weight:800; font-size:29px; line-height:1.15; z-index:3; max-width:330px;
+    background:linear-gradient(140deg,rgba(255,255,255,.74),rgba(255,255,255,.3)); backdrop-filter:blur(18px) saturate(1.5); border:1.5px solid rgba(255,255,255,.9);
+    box-shadow:0 20px 54px rgba(40,40,70,.12), 0 0 0 1px color-mix(in srgb,var(--ac) 40%,transparent), 0 0 38px color-mix(in srgb,var(--ac) 28%,transparent), inset 0 1px 0 #fff }
+  .gc i { font-style:normal; font-size:42px }
+  .hint { position:absolute; right:60px; bottom:48px; font:700 24px 'JetBrains Mono',monospace; letter-spacing:.14em; text-transform:uppercase; color:rgba(29,27,38,.5); z-index:4 }
+  .btn { position:absolute; left:140px; top:760px; width:800px; height:150px; border-radius:90px; display:flex; align-items:center; justify-content:center; gap:22px; font-weight:800; font-size:52px; color:#fff; background:linear-gradient(95deg,#22c55e,#10b981); box-shadow:0 24px 60px rgba(16,185,129,.4) }
+  .bub { position:absolute; padding:22px 30px; border-radius:34px 34px 34px 8px; background:#fff; font-weight:700; font-size:36px; box-shadow:0 14px 40px rgba(40,40,70,.14); border:2px solid rgba(29,27,38,.06); color:#3a3a46 }
+  .badge { position:absolute; display:flex; align-items:center; justify-content:center; width:190px; height:190px; border-radius:50%; background:#25d366; box-shadow:0 20px 50px rgba(37,211,102,.35) }
+  .badge b { position:absolute; right:-18px; top:-12px; min-width:104px; height:74px; padding:0 20px; border-radius:40px; background:#e5484d; color:#fff; font:800 44px 'Plus Jakarta Sans'; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(229,72,77,.4) }
+  .row { position:absolute; left:90px; width:900px; display:flex; align-items:center; gap:26px; padding:28px 34px; border-radius:32px; background:rgba(255,255,255,.7); backdrop-filter:blur(14px); border:1.5px solid rgba(255,255,255,.9); box-shadow:0 16px 44px rgba(40,40,70,.10); font-weight:800; font-size:40px; line-height:1.15 }
+  .row i { font-style:normal; font-size:56px }
+  .row em { margin-left:auto; font-style:normal; width:64px; height:64px; border-radius:50%; display:grid; place-items:center; background:rgba(229,72,77,.12); color:#e5484d; font-size:38px; flex:none }
+</style></head><body>
+<canvas id="bg" width="1080" height="1350"></canvas>
+<div class="h" id="h"></div>
+<div id="ct"></div>
+<div class="hint" id="hint">deslize →</div>
+<script>
+const S = [
+ { kind:'chaos', h:'Quantos convidados<br>vão <span class="grad">mesmo</span> à festa?' },
+ { kind:'old', h:'O jeito <span style="color:#e5484d">antigo</span>' },
+ { kind:'turn', h:'E se o próprio convite<br>cuidasse de <span class="grad">tudo isso?</span>' },
+ { h:'O jeito <span class="grad">novo</span>', img:'stills_j/a-1-visao.png', y:-20, cards:[['📊','Tudo contado, ao vivo',-1,575,'#8e5bb5'],['👨‍👩‍👧','Resposta por família',1,860,'#e4579c'],['🎟️','Controle de gratuidades',-1,1250,'#2e9f7a']] },
+ { h:'Quem não respondeu?<br><span class="grad">1 toque</span> e pronto', img:'stills_j/a-4b-lembrar.png', y:-20, cards:[['⏰','Lembrete em 1 toque',-1,700,'#e4579c'],['💬','Mensagem pronta no WhatsApp',1,1000,'#2e9f7a']] },
+ { cta:true }
+]
+const n = +(new URLSearchParams(location.search).get('s') || 1) - 1, sl = S[n]
+const cx = document.getElementById('bg').getContext('2d'), rnd = (s) => { const x = Math.sin(s*127.1+311.7)*43758.5453; return x-Math.floor(x) }
+const pal = ['142,91,181','228,87,156','46,159,122','181,127,214','240,171,205','111,191,155']
+const g = cx.createLinearGradient(0,0,0,1350); g.addColorStop(0,'#fff'); g.addColorStop(.55,'#f3f3f6'); g.addColorStop(1,'#e6e7ec'); cx.fillStyle = g; cx.fillRect(0,0,1080,1350)
+const orb = (x,y,rad,c,a) => { const rg = cx.createRadialGradient(x,y,0,x,y,rad); rg.addColorStop(0,`rgba(${c},${a})`); rg.addColorStop(1,`rgba(${c},0)`); cx.fillStyle = rg; cx.fillRect(x-rad,y-rad,rad*2,rad*2) }
+const o = n * 120; orb(180,300+o%200,600,pal[1],.12); orb(920,420,560,pal[3],.10); orb(240,1180,640,pal[0],.10); orb(900,1150,600,pal[4],.10)
+cx.strokeStyle = 'rgba(90,90,110,.5)'; cx.lineWidth = 2
+for (let i=0;i<10;i++){ const k=i/10, y=1030+Math.pow(k,2.1)*320; cx.globalAlpha=.05+k*.2; cx.beginPath(); cx.moveTo(0,y); cx.lineTo(1080,y); cx.stroke() }
+cx.globalAlpha=.14; for (let i=-9;i<=9;i++){ cx.beginPath(); cx.moveTo(540+i*36,1030); cx.lineTo(540+i*170,1350); cx.stroke() }
+cx.globalAlpha=1
+for (let i=0;i<46;i++){ cx.fillStyle=`rgba(${pal[i%6]},${.12+.2*rnd(i+3+n)})`; cx.beginPath(); cx.arc(rnd(i+n)*1080,rnd(i+99+n)*1350,3+rnd(i+5)*7,0,6.3); cx.fill() }
+const ct = document.getElementById('ct'), h = document.getElementById('h')
+if (sl.kind === 'chaos') {
+  h.innerHTML = sl.h
+  const B = [['Quem vai?? 🤔',70,470,-4],['Confirmo depois!',470,590,3],['Posso levar +2?',90,730,2],['Qual horário mesmo?',430,880,-3],['Vou, acho que vou',140,1010,4],['Alguém confirmou?',500,1130,-2]]
+  ct.innerHTML = B.map(([t,x,y,r]) => `<div class="bub" style="left:${x}px;top:${y}px;transform:rotate(${r}deg)">${t}</div>`).join('') +
+    `<div class="badge" style="left:790px;top:420px"><svg width="104" height="104" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg><b>99+</b></div>`
+  window.ready = document.fonts.ready
+} else if (sl.kind === 'old') {
+  h.innerHTML = sl.h
+  const R = [['📋','Planilha que ninguém atualiza'],['💬','Grupo de WhatsApp bagunçado'],['📞','Ligar um por um'],['🧮','Contar adultos e crianças no braço']]
+  ct.innerHTML = R.map(([ic,t],i) => `<div class="row" style="top:${360 + i*190}px"><i>${ic}</i><span>${t}</span><em>✕</em></div>`).join('') +
+    `<div style="position:absolute;left:0;top:1150px;width:1080px;text-align:center;font-weight:700;font-size:38px;color:rgba(29,27,38,.6)">Festa já dá trabalho demais.</div>`
+  window.ready = document.fonts.ready
+} else if (sl.kind === 'turn') {
+  document.getElementById('hint').style.display = 'none'
+  h.style.top = '330px'; h.style.fontSize = '88px'; h.innerHTML = sl.h
+  ct.innerHTML = `<div style="position:absolute;left:140px;top:790px;width:800px;height:26px;border-radius:14px;background:rgba(29,27,38,.10);overflow:hidden"><div style="width:100%;height:100%;border-radius:14px;background:linear-gradient(95deg,#8e5bb5,#e4579c 55%,#2e9f7a);box-shadow:0 0 24px rgba(228,87,156,.5)"></div></div>
+   <div style="position:absolute;left:140px;top:840px;width:800px;display:flex;justify-content:space-between;font:700 28px 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,27,38,.55)"><span><span style="display:inline-block;width:16px;height:16px;border-radius:50%;background:#22c55e;margin-right:12px;box-shadow:0 0 14px #22c55e"></span>sistema ativo</span><span>100%</span></div>`
+  window.ready = document.fonts.ready
+} else if (sl.cta) {
+  document.getElementById('hint').style.display = 'none'
+  h.style.top = '300px'; h.style.fontSize = '100px'; h.innerHTML = 'Quer um desses<br>na <span class="grad">sua festa?</span>'
+  ct.innerHTML = `<div class="btn" style="top:700px"><svg width="76" height="76" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg><span>Chama no WhatsApp</span></div>
+   <div style="position:absolute;left:0;top:900px;width:1080px;text-align:center;font-weight:800;font-size:44px"><span style="font-size:60px;display:inline-block">☝️</span><br>Link na bio</div>
+   <img src="stills/logo.png" style="position:absolute;left:330px;top:1020px;width:420px;mix-blend-mode:multiply">`
+  window.ready = Promise.all([document.fonts.ready, new Promise(r => { const i = ct.querySelector('img'); i.complete ? r() : i.onload = r })])
+} else {
+  h.innerHTML = sl.h
+  ct.innerHTML = `<div class="panel"><div class="s"><img id="shot" src="${sl.img.includes('/') ? sl.img : 'stills/' + sl.img}" style="top:${sl.y}px"></div></div>` +
+    sl.cards.map(([ic,tx,side,y,ac]) => `<div class="gc" style="--ac:${ac};top:${y - 340 + 340}px;${side<0 ? 'left:36px' : 'right:36px'}"><i>${ic}</i><span>${tx}</span></div>`).join('')
+  if (n === 5) document.getElementById('hint').style.display = 'none'
+  window.ready = Promise.all([document.fonts.ready, new Promise(r => { const i = document.getElementById('shot'); i.complete ? r() : i.onload = r })])
+}
+</script></body></html>
