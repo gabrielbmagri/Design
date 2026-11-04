@@ -2,9 +2,9 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  :root { --pink:#ff4d8d; --violet:#8b5cf6; --cyan:#22d3ee; --mint:#5eead4; --gold:#fbbf24; --red:#ff4d5e; --ink:#fff; --mut:rgba(255,255,255,.66); }
+  :root { --pink:#ff3d85; --violet:#7c4dff; --cyan:#0891b2; --mint:#059669; --gold:#f59e0b; --red:#ef4444; --ink:#1c1633; --mut:rgba(28,22,51,.62); }
   * { box-sizing:border-box; margin:0; padding:0 }
-  html,body { width:1080px; height:1920px; overflow:hidden; background:#070a14; font-family:'Plus Jakarta Sans',system-ui,sans-serif; color:var(--ink) }
+  html,body { width:1080px; height:1920px; overflow:hidden; background:#fbf7ff; font-family:'Plus Jakarta Sans',system-ui,sans-serif; color:var(--ink) }
   #bg { position:absolute; inset:0; width:1080px; height:1920px }
   #stage { position:absolute; inset:0; overflow:hidden }
   .sc { position:absolute; inset:0; display:none }
@@ -14,33 +14,33 @@
   .grad { background:linear-gradient(95deg,var(--pink),var(--violet) 55%,var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent }
   .abs { position:absolute }
   .w { display:inline-block; will-change:transform,opacity }
-  .chip { position:absolute; display:flex; align-items:center; gap:16px; padding:20px 28px; border-radius:26px; font-weight:800; font-size:38px; line-height:1.12; background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.05)); border:2px solid rgba(255,255,255,.22); box-shadow:0 18px 50px rgba(0,0,0,.45), inset 0 0 30px rgba(139,92,246,.18); max-width:470px }
+  .chip { position:absolute; display:flex; align-items:center; gap:16px; padding:20px 28px; border-radius:26px; font-weight:800; font-size:38px; line-height:1.12; background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(255,255,255,.82)); border:2px solid rgba(124,77,255,.22); box-shadow:0 18px 44px rgba(80,60,150,.18); max-width:470px; color:var(--ink) }
   .chip i { font-style:normal; font-size:44px }
-  .card { position:absolute; left:80px; width:920px; border-radius:32px; background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04)); border:2px solid rgba(255,255,255,.2); box-shadow:0 20px 60px rgba(0,0,0,.45) }
-  .phone { position:absolute; width:560px; height:1212px; border-radius:76px; background:#0c0f1c; border:3px solid #2b3150; box-shadow:0 0 0 2px #0a0d18, 0 40px 120px rgba(0,0,0,.65), 0 0 90px var(--glow,rgba(139,92,246,.45)); transform-origin:50% 50% }
+  .card { position:absolute; left:80px; width:920px; border-radius:32px; background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(255,255,255,.84)); border:2px solid rgba(124,77,255,.2); box-shadow:0 20px 56px rgba(80,60,150,.18); color:var(--ink) }
+  .phone { position:absolute; width:560px; height:1212px; border-radius:76px; background:#0c0f1c; border:3px solid #2b3150; box-shadow:0 0 0 2px #0a0d18, 0 36px 90px rgba(60,40,130,.32), 0 0 80px var(--glow,rgba(124,77,255,.30)); transform-origin:50% 50% }
   .phone .screen { position:absolute; left:14px; top:14px; width:532px; height:1184px; border-radius:64px; overflow:hidden; background:#000 }
   .phone .shot { position:absolute; left:0; top:0; width:532px; height:1152px; object-fit:cover; object-position:top }
   .phone .notch { position:absolute; left:50%; top:26px; width:170px; height:44px; margin-left:-85px; border-radius:24px; background:#000; z-index:5 }
-  .phone .scan { position:absolute; left:0; right:0; height:220px; background:linear-gradient(180deg,transparent,rgba(34,211,238,.28),transparent); z-index:4; mix-blend-mode:screen }
-  .brk { position:absolute; width:70px; height:70px; border:6px solid var(--cyan); filter:drop-shadow(0 0 12px var(--cyan)) }
+  .phone .scan { position:absolute; left:0; right:0; height:220px; background:linear-gradient(180deg,transparent,rgba(8,145,178,.14),transparent); z-index:4 }
+  .brk { position:absolute; width:70px; height:70px; border:6px solid var(--violet); filter:drop-shadow(0 0 8px rgba(124,77,255,.45)) }
   .ripple { position:absolute; width:120px; height:120px; margin:-60px 0 0 -60px; border-radius:50%; border:6px solid #fff; z-index:6 }
-  .bubble { position:absolute; padding:24px 32px; border-radius:34px; font-weight:700; font-size:38px; max-width:560px; background:#202c33; color:#e9edef; box-shadow:0 14px 40px rgba(0,0,0,.45) }
+  .bubble { position:absolute; padding:24px 32px; border-radius:34px; font-weight:700; font-size:38px; max-width:560px; background:#fff; color:var(--ink); border:2px solid rgba(124,77,255,.18); box-shadow:0 14px 36px rgba(80,60,150,.16) }
   .big { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; letter-spacing:-.03em; line-height:.95 }
   .btn { position:absolute; left:140px; width:800px; height:170px; border-radius:90px; display:flex; align-items:center; justify-content:center; gap:22px; font-weight:800; font-size:56px; background:linear-gradient(95deg,#22c55e,#10b981); box-shadow:0 0 0 0 rgba(34,197,94,.6), 0 24px 80px rgba(16,185,129,.5) }
-  #flash { position:absolute; inset:0; background:#fff; opacity:0; z-index:50; pointer-events:none }
-  #vig { position:absolute; inset:0; z-index:40; pointer-events:none; background:radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0,0,0,.55)) }
-  .wa { position:absolute; width:700px; border-radius:46px; overflow:hidden; background:#0b141a; border:3px solid #2b3150; box-shadow:0 40px 120px rgba(0,0,0,.65), 0 0 90px rgba(34,197,94,.35) }
-  .wa .hd { height:120px; background:#202c33; display:flex; align-items:center; gap:22px; padding:0 30px; font-weight:800; font-size:38px }
+  #flash { position:absolute; inset:0; background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.9),rgba(124,77,255,.35)); opacity:0; z-index:50; pointer-events:none }
+  #vig { position:absolute; inset:0; z-index:40; pointer-events:none; background:radial-gradient(120% 90% at 50% 45%, transparent 60%, rgba(110,80,190,.12)) }
+  .wa { position:absolute; width:700px; border-radius:46px; overflow:hidden; background:#efeae2; border:3px solid #d5d1c7; box-shadow:0 36px 90px rgba(60,40,130,.28), 0 0 70px rgba(34,197,94,.22) }
+  .wa .hd { height:120px; background:#008069; color:#fff; display:flex; align-items:center; gap:22px; padding:0 30px; font-weight:800; font-size:38px }
   .wa .av { width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#f9a8d4,#fcd34d); display:grid; place-items:center; font-size:38px }
-  .wa .bd { padding:26px 22px 40px; background:#0b141a; position:relative; height:1000px }
-  .msg { position:absolute; left:18px; width:590px; background:#005c4b; border-radius:30px 30px 30px 8px; padding:12px; box-shadow:0 8px 30px rgba(0,0,0,.4) }
-  .msg .pv { border-radius:22px; overflow:hidden; background:#0f2a24 }
+  .wa .bd { padding:26px 22px 40px; background:#efeae2; position:relative; height:1070px }
+  .msg { position:absolute; left:18px; width:590px; color:#111; background:#d9fdd3; border-radius:30px 30px 30px 8px; padding:12px; box-shadow:0 8px 30px rgba(0,0,0,.4) }
+  .msg .pv { border-radius:22px; overflow:hidden; background:#c5ecc0 }
   .msg .pv img { width:100%; display:block }
   .msg .pv .tx { padding:14px 18px 16px }
-  .msg .tt { font-weight:800; font-size:30px; color:#fff }
-  .msg .ds { font-size:25px; color:rgba(255,255,255,.7); margin-top:4px; line-height:1.25 }
-  .msg .tx2 { padding:16px 10px 6px; font-size:31px; line-height:1.28; color:#e9edef; white-space:pre-line }
-  .msg .tm { text-align:right; font-size:22px; color:rgba(255,255,255,.55); padding:0 8px 4px }
+  .msg .tt { font-weight:800; font-size:30px; color:#111 }
+  .msg .ds { font-size:25px; color:rgba(17,17,17,.65); margin-top:4px; line-height:1.25 }
+  .msg .tx2 { padding:16px 10px 6px; font-size:31px; line-height:1.28; color:#111; white-space:pre-line }
+  .msg .tm { text-align:right; font-size:22px; color:rgba(17,17,17,.45); padding:0 8px 4px }
 </style></head>
 <body>
 <canvas id="bg" width="1080" height="1920"></canvas>
@@ -75,20 +75,20 @@ const rnd = (s) => { const x = Math.sin(s * 127.1 + 311.7) * 43758.5453; return 
 const stars = Array.from({ length: 150 }, (_, i) => ({ x: rnd(i) * 1080, y: rnd(i + 99) * 1920, r: .6 + rnd(i + 5) * 2.1, f: 1 + rnd(i + 9) * 3 }))
 function drawBg(t) {
   const beat = Math.exp(-((t % BEAT) / BEAT) * 5)
-  const g = cx.createLinearGradient(0, 0, 0, 1920); g.addColorStop(0, '#070a14'); g.addColorStop(.55, '#0e0a24'); g.addColorStop(1, '#1b0a2e')
+  const g = cx.createLinearGradient(0, 0, 0, 1920); g.addColorStop(0, '#fff8fc'); g.addColorStop(.5, '#f5f1ff'); g.addColorStop(1, '#e9f6ff')
   cx.fillStyle = g; cx.fillRect(0, 0, 1080, 1920)
   const orb = (x, y, r, c, a) => { const rg = cx.createRadialGradient(x, y, 0, x, y, r); rg.addColorStop(0, c.replace('A', a)); rg.addColorStop(1, c.replace('A', 0)); cx.fillStyle = rg; cx.fillRect(x - r, y - r, r * 2, r * 2) }
-  orb(220 + Math.sin(t * .5) * 120, 420 + Math.cos(t * .4) * 100, 620, 'rgba(255,77,141,A)', .26 + beat * .1)
-  orb(900 + Math.cos(t * .45) * 100, 1250 + Math.sin(t * .35) * 140, 700, 'rgba(34,211,238,A)', .2 + beat * .08)
-  orb(540, 1750, 640, 'rgba(139,92,246,A)', .3)
-  // grade em perspectiva
-  cx.save(); cx.globalAlpha = .55; cx.strokeStyle = 'rgba(139,92,246,.55)'; cx.lineWidth = 2
-  const hy = 1180, sp = (t * .55) % 1
-  for (let i = 0; i < 14; i++) { const k = (i + sp) / 14, y = hy + Math.pow(k, 2.1) * 740; cx.globalAlpha = .12 + k * .55; cx.beginPath(); cx.moveTo(0, y); cx.lineTo(1080, y); cx.stroke() }
-  cx.globalAlpha = .5
+  orb(200 + Math.sin(t * .5) * 120, 420 + Math.cos(t * .4) * 100, 640, 'rgba(255,77,141,A)', .24 + beat * .08)
+  orb(900 + Math.cos(t * .45) * 100, 1180 + Math.sin(t * .35) * 140, 720, 'rgba(34,211,238,A)', .2 + beat * .07)
+  orb(540, 1780, 660, 'rgba(124,77,255,A)', .2)
+  cx.save(); cx.strokeStyle = 'rgba(124,77,255,.55)'; cx.lineWidth = 2
+  const hy = 1250, sp = (t * .55) % 1
+  for (let i = 0; i < 13; i++) { const k = (i + sp) / 13, y = hy + Math.pow(k, 2.1) * 670; cx.globalAlpha = .08 + k * .38; cx.beginPath(); cx.moveTo(0, y); cx.lineTo(1080, y); cx.stroke() }
+  cx.globalAlpha = .3
   for (let i = -9; i <= 9; i++) { cx.beginPath(); cx.moveTo(540 + i * 36, hy); cx.lineTo(540 + i * 215, 1920); cx.stroke() }
   cx.restore()
-  for (const s of stars) { const a = .25 + .6 * (.5 + .5 * Math.sin(t * s.f + s.x)); cx.fillStyle = `rgba(255,255,255,${a})`; cx.beginPath(); cx.arc(s.x, (s.y + t * 6 * s.f) % 1920, s.r, 0, 6.3); cx.fill() }
+  const cols = ['255,77,141', '124,77,255', '8,145,178']
+  stars.forEach((s_, i) => { const a = .12 + .3 * (.5 + .5 * Math.sin(t * s_.f + s_.x)); cx.fillStyle = `rgba(${cols[i % 3]},${a})`; cx.beginPath(); cx.arc(s_.x, (s_.y + t * 6 * s_.f) % 1920, s_.r * 1.2, 0, 6.3); cx.fill() })
 }
 
 /* ============================ componentes ============================ */
@@ -143,8 +143,8 @@ add(0, (el, s) => {
   const ws = words(h, 'Você sabe quantos convidados vão {{MESMO}} à festa?')
   const bub = ['vai ou não vai? 🤔', 'esqueci de responder 😅', 'quantas crianças vão?', 'me manda o endereço de novo']
     .map((tx, i) => { const b = $(`<div class="bubble">${tx}</div>`); el.appendChild(b); return b })
-  const ico = $('<div class="abs" style="left:760px;top:1010px;width:210px;height:210px;border-radius:52px;background:linear-gradient(135deg,#25d366,#128c7e);display:grid;place-items:center;box-shadow:0 20px 70px rgba(37,211,102,.45)"><svg width="120" height="120" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg></div>')
-  const badge = $('<div class="abs" style="left:900px;top:975px;min-width:96px;height:96px;padding:0 18px;border-radius:48px;background:#ff3b4e;display:grid;place-items:center;font-weight:800;font-size:52px;border:6px solid #0e0a24">1</div>')
+  const ico = $('<div class="abs" style="left:760px;top:1010px;width:210px;height:210px;border-radius:52px;background:linear-gradient(135deg,#25d366,#128c7e);display:grid;place-items:center;box-shadow:0 20px 56px rgba(37,211,102,.4)"><svg width="120" height="120" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg></div>')
+  const badge = $('<div class="abs" style="left:900px;top:975px;min-width:96px;height:96px;padding:0 18px;border-radius:48px;background:#ff3b4e;display:grid;place-items:center;font-weight:800;font-size:52px;border:6px solid #fbf7ff">1</div>')
   el.append(tag, h, ico, badge)
   return { tag, ws, bub, ico, badge }
 }, (c, t, s) => {
@@ -162,7 +162,7 @@ add(0, (el, s) => {
 /* ---- 2. O JEITO ANTIGO ---- */
 const PAIN = [['📋', 'Planilha que ninguém atualiza'], ['💬', 'Grupo de WhatsApp virou bagunça'], ['📞', 'Ligar convidado por convidado'], ['🤯', 'Quantas crianças? Quantos adultos?']]
 add(1, (el, s) => {
-  const tag = $('<div class="mono abs" style="left:80px;top:250px;color:#ff7a89">// o jeito antigo</div>')
+  const tag = $('<div class="mono abs" style="left:80px;top:250px;color:#e11d48">// o jeito antigo</div>')
   const cards = PAIN.map(([ic, tx], i) => {
     const c = $(`<div class="card" style="top:${340 + i * 215}px;height:180px;display:flex;align-items:center;gap:26px;padding:0 160px 0 36px;font-weight:800;font-size:40px;line-height:1.12"><i style="font-style:normal;font-size:70px">${ic}</i><span class="tx">${tx}</span><div class="strike" style="position:absolute;left:30px;top:50%;height:8px;width:740px;background:var(--red);border-radius:4px;transform-origin:left;box-shadow:0 0 24px var(--red)"></div><div class="x" style="position:absolute;right:30px;top:50%;margin-top:-52px;width:104px;height:104px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-size:64px;font-weight:800">✕</div></div>`)
     el.appendChild(c); return c
@@ -191,7 +191,7 @@ add(2, (el, s) => {
   const h = $('<div class="h1 abs" style="left:80px;top:470px;width:920px;text-align:center;font-size:104px"></div>')
   const ws = words(h, 'E se o próprio {{convite}} cuidasse de tudo isso?')
   const lab = $('<div class="mono abs" style="left:80px;top:1100px;width:920px;text-align:center;font-size:28px">iniciando convite inteligente…</div>')
-  const bar = $('<div class="abs" style="left:140px;top:1170px;width:800px;height:34px;border-radius:20px;background:rgba(255,255,255,.12);overflow:hidden"><div class="f" style="height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan));box-shadow:0 0 30px var(--cyan)"></div></div>')
+  const bar = $('<div class="abs" style="left:140px;top:1170px;width:800px;height:34px;border-radius:20px;background:rgba(28,22,51,.10);overflow:hidden"><div class="f" style="height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan));box-shadow:0 0 30px var(--cyan)"></div></div>')
   const pct = $('<div class="big abs" style="left:80px;top:1230px;width:920px;text-align:center;font-size:120px">0%</div>')
   const ok = $('<div class="mono abs" style="left:80px;top:1400px;width:920px;text-align:center;font-size:40px;color:var(--mint)">✓ sistema ativo</div>')
   el.append(h, lab, bar, pct, ok); return { ws, lab, bar, pct, ok }
@@ -240,7 +240,7 @@ add(4, (el, s) => {
   const bs = brackets(ph); bs.forEach((b) => { b.style.margin = '-30px' })
   const k1 = $('<div class="abs" style="left:610px;top:520px;width:430px"><div class="big" style="font-size:190px"><span class="n1">0</span><span style="font-size:64px;color:var(--mut)">/100</span></div><div class="mono" style="font-size:30px;color:var(--mint)">confirmados</div></div>')
   const k2 = $('<div class="abs" style="left:610px;top:800px;width:430px"><div class="big grad" style="font-size:150px"><span class="n2">0</span>%</div><div class="mono" style="font-size:30px">já responderam</div></div>')
-  const k3 = $('<div class="abs" style="left:610px;top:1050px;width:430px;font-weight:800;font-size:38px;line-height:1.2"><div style="margin-bottom:14px;color:var(--mut);font-size:30px" class="mono">vagas por anfitrião</div><div>Carol <b class="n3">0</b>/50</div><div class="bar" style="height:16px;border-radius:9px;background:rgba(255,255,255,.14);margin:8px 0 18px"><i class="f3" style="display:block;height:100%;width:0;border-radius:9px;background:var(--pink)"></i></div><div>Rafa <b class="n4">0</b>/50</div><div class="bar" style="height:16px;border-radius:9px;background:rgba(255,255,255,.14);margin:8px 0 0"><i class="f4" style="display:block;height:100%;width:0;border-radius:9px;background:var(--violet)"></i></div></div>')
+  const k3 = $('<div class="abs" style="left:610px;top:1050px;width:430px;font-weight:800;font-size:38px;line-height:1.2"><div style="margin-bottom:14px;color:var(--mut);font-size:30px" class="mono">vagas por anfitrião</div><div>Carol <b class="n3">0</b>/50</div><div class="bar" style="height:16px;border-radius:9px;background:rgba(28,22,51,.10);margin:8px 0 18px"><i class="f3" style="display:block;height:100%;width:0;border-radius:9px;background:var(--pink)"></i></div><div>Rafa <b class="n4">0</b>/50</div><div class="bar" style="height:16px;border-radius:9px;background:rgba(28,22,51,.10);margin:8px 0 0"><i class="f4" style="display:block;height:100%;width:0;border-radius:9px;background:var(--violet)"></i></div></div>')
   const chips = [chipEl('🧒', 'Crianças até 5 anos<br>já separadas'), chipEl('🎁', 'Lembrancinhas<br>já contadas')]
   el.append(tag, h, ph, k1, k2, k3); chips.forEach((c) => el.appendChild(c))
   return { tag, ws, ph, k1, k2, k3, chips }
@@ -266,13 +266,13 @@ add(4, (el, s) => {
 add(5, (el, s) => {
   const tag = $('<div class="mono abs" style="left:80px;top:240px">03 · o diferencial</div>')
   const h = $('<div class="h2 abs" style="left:80px;top:290px;width:920px"></div>'); const ws = words(h, 'Chega {{lindo}} no WhatsApp.')
-  const wa = $(`<div class="wa" style="left:36px;top:470px;width:640px"><div class="hd"><div class="av">🦁</div><div>Tia Marcela<div style="font-size:24px;font-weight:500;color:rgba(255,255,255,.6)">online</div></div></div>
+  const wa = $(`<div class="wa" style="left:36px;top:470px;width:640px"><div class="hd"><div class="av">🦁</div><div>Tia Marcela<div style="font-size:24px;font-weight:500;color:rgba(255,255,255,.8)">online</div></div></div>
     <div class="bd">
       <div class="msg m1" style="top:30px"><div class="pv"><img src="stills/og-safari.jpg"><div class="tx"><div class="tt">Primeiro Aninho do Théo 🦁🐘🦒</div><div class="ds">Você é nosso convidado especial! Toque para ver o convite e confirmar sua presença.</div></div></div>
-        <div class="tx2">Oi, Marcela! 🦁\n\nA expedição está aberta! O Théo vai fazer 1 aninho e queremos muito você com a gente nessa aventura.\n\n📅 Sábado, 20 de março · ⏰ 15h\n\nConfirme a presença por aqui, leva menos de um minuto:</div><div class="tm">14:02 ✓✓</div></div>
-      <div class="msg m2" style="top:610px;opacity:0"><div class="tx2" style="padding-top:8px">🤖 <b>Lembrete automático · Aniversário do Théo</b>\n\nOi, Marcela! Ainda não consta a confirmação do convite. Leva menos de um minuto 💗</div><div class="tm">14:05 ✓✓</div></div>
+        <div class="tx2">Oi, Marcela! 🦁 A expedição está aberta! O Théo vai fazer 1 aninho.\n\nConfirme por aqui, leva 1 minuto:</div><div class="tm">14:02 ✓✓</div></div>
+      <div class="msg m2" style="top:710px;opacity:0"><div class="tx2" style="padding-top:8px">🤖 <b>Lembrete automático · Aniversário do Théo</b>\n\nOi, Marcela! Ainda não consta a confirmação do convite. Leva 1 minuto 💗</div><div class="tm">14:05 ✓✓</div></div>
     </div></div>`)
-  const ring = $('<div class="abs" style="left:16px;top:590px;width:690px;height:400px;border-radius:44px;border:8px solid var(--gold);box-shadow:0 0 50px var(--gold),inset 0 0 40px rgba(251,191,36,.25)"></div>')
+  const ring = $('<div class="abs" style="left:16px;top:612px;width:690px;height:372px;border-radius:44px;border:8px solid var(--gold);box-shadow:0 0 50px var(--gold),inset 0 0 40px rgba(251,191,36,.25)"></div>')
   const lab = $('<div class="chip abs" style="left:0;top:0;border-color:var(--gold)"><i>⬆️</i><span>Imagem GRANDE,<br>nome da festa</span></div>')
   const chips = [chipEl('👆', 'Mensagem pronta<br>em 1 toque'), chipEl('🔗', 'Link pessoal<br>de cada família')]
   el.append(tag, h, wa, ring, lab); chips.forEach((c) => el.appendChild(c))
@@ -282,6 +282,7 @@ add(5, (el, s) => {
   setT(c.tag, 0, 0, E.out(P(lt, .1, .3))); revealWords(c.ws, lt, .15, .1)
   const k = E.back(P(lt, .05, .6)); c.wa.style.opacity = clamp(P(lt, .05, .25)); c.wa.style.transform = `translateY(${(1 - k) * 160}px) scale(${.93 * (.85 + .15 * k)})`
   const m1 = c.wa.querySelector('.m1'), m2 = c.wa.querySelector('.m2')
+  m2.style.top = (m1.offsetTop + m1.offsetHeight + 26) + 'px'
   const a1 = E.back(P(lt, .5, .5)); m1.style.opacity = clamp(P(lt, .5, .2)); m1.style.transform = `translateY(${(1 - a1) * 80}px) scale(${.94 + .06 * a1})`
   ev(s.a + .5, 'pop')
   const rk = E.out(P(lt, 1.6, .4)) * (1 - P(lt, 3.4, .4)); c.ring.style.opacity = rk; c.ring.style.transform = `scale(${1 + .03 * Math.sin(lt * 8)})`
@@ -336,7 +337,7 @@ add(7, (el, s) => {
 add(8, (el, s) => {
   const h = $('<div class="h1 abs" style="left:60px;top:330px;width:960px;text-align:center;font-size:108px"></div>')
   const ws = words(h, 'Quer um desses na {{sua festa?}}')
-  const sub = $('<div class="abs" style="left:80px;top:790px;width:920px;text-align:center;font-size:44px;font-weight:700;color:var(--mut);line-height:1.3">Convite com história <b style="color:#fff">+ gestão completa</b><br>da lista de convidados</div>')
+  const sub = $('<div class="abs" style="left:80px;top:790px;width:920px;text-align:center;font-size:44px;font-weight:700;color:var(--mut);line-height:1.3">Convite com história <b style="color:var(--ink)">+ gestão completa</b><br>da lista de convidados</div>')
   const btn = $('<div class="btn" style="top:1020px"><svg width="84" height="84" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg><span>Chama no WhatsApp</span></div>')
   const bio = $('<div class="abs" style="left:80px;top:1250px;width:920px;text-align:center;font-weight:800;font-size:48px"><span class="ar" style="display:inline-block;font-size:70px;color:var(--cyan)">☝️</span><br>Link na bio</div>')
   const rain = Array.from({ length: 22 }, (_, i) => { const e = $(`<div class="abs" style="font-size:${50 + rnd(i) * 40}px">${['🦁', '🦋', '🎈', '✨', '🐘', '🌸'][i % 6]}</div>`); el.appendChild(e); return e })
@@ -346,7 +347,7 @@ add(8, (el, s) => {
   revealWords(c.ws, lt, .1, .12)
   setT(c.sub, 0, 0, E.out(P(lt, .9, .4)))
   const bk = E.back(P(lt, 1.4, .6)); c.btn.style.opacity = clamp(P(lt, 1.4, .2)); c.btn.style.transform = `scale(${(.8 + .2 * bk) * (1 + .03 * Math.sin(lt * 9))})`
-  c.btn.style.boxShadow = `0 0 0 ${(lt * 40) % 40}px rgba(34,197,94,${.35 - ((lt * 40) % 40) / 120}), 0 24px 80px rgba(16,185,129,.5)`
+  c.btn.style.boxShadow = `0 0 0 ${(lt * 40) % 40}px rgba(34,197,94,${.35 - ((lt * 40) % 40) / 120}), 0 24px 60px rgba(16,185,129,.4)`
   setT(c.bio, 0, Math.sin(lt * 7) * 10, E.out(P(lt, 2.0, .4)))
   c.rain.forEach((e, i) => { const t0 = .6 + rnd(i + 3) * 2; const k = ((lt - t0) * (.35 + rnd(i) * .3)); const y = -100 + (k % 1) * 2100; e.style.left = 20 + rnd(i + 7) * 1000 + 'px'; e.style.opacity = lt > t0 ? .85 : 0; e.style.transform = `translateY(${y}px) rotate(${Math.sin(lt * 2 + i) * 25}deg)` })
   ev(s.a + .1, 'whoosh'); ev(s.a + 1.4, 'chime')
