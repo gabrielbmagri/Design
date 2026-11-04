@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="rec_j/meta.js"></script>
+<style>
+  /* paleta: Safari (verde, laranja, oliva) e Jardim Encantado (roxo, rosa, menta) sobre fundo cinza/branco */
+  :root { --g:#8e5bb5; --o:#e4579c; --ol:#b57fd6; --p:#6fbf9b; --k:#e4579c; --m:#2e9f7a; --red:#e5484d; --ink:#1d1b26; --mut:rgba(29,27,38,.62); }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html,body { width:1080px; height:1920px; overflow:hidden; background:#f4f4f6; font-family:'Plus Jakarta Sans',system-ui,sans-serif; color:var(--ink) }
+  #bg { position:absolute; inset:0; width:1080px; height:1920px }
+  #stage { position:absolute; inset:0; overflow:hidden }
+  .sc { position:absolute; inset:0; display:none }
+  .mono { font-family:'JetBrains Mono',monospace; font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:30px; color:var(--g) }
+  .h1 { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:98px; line-height:1.02; letter-spacing:-.02em }
+  .h2 { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:84px; line-height:1.04; letter-spacing:-.02em }
+  .grad { background:linear-gradient(95deg,#8e5bb5,#e4579c 50%,#2e9f7a); -webkit-background-clip:text; background-clip:text; color:transparent }
+  .abs { position:absolute }
+  .w { display:inline-block; will-change:transform,opacity }
+  .chip { position:absolute; display:flex; align-items:center; gap:12px; padding:16px 18px; border-radius:24px; font-weight:800; font-size:27px; line-height:1.12; background:#fff; border:3px solid var(--ac,#2f6b3a); box-shadow:0 16px 40px rgba(40,40,70,.16); max-width:300px; color:var(--ink) }
+  .chip i { font-style:normal; font-size:34px }
+  .phone { position:absolute; width:560px; height:1212px; border-radius:76px; background:#14161f; border:3px solid #2d303d; box-shadow:0 0 0 2px #0c0d14, 0 34px 90px rgba(40,40,70,.34), 0 0 70px var(--glow,rgba(142,91,181,.28)); transform-origin:50% 0 }
+  .phone .screen { position:absolute; left:14px; top:14px; width:532px; height:1184px; border-radius:64px; overflow:hidden; background:#000 }
+  .phone .shot { position:absolute; left:0; top:0; width:532px; height:1152px; object-fit:cover; object-position:top }
+  .phone .notch { position:absolute; left:50%; top:26px; width:170px; height:44px; margin-left:-85px; border-radius:24px; background:#000; z-index:5 }
+  .brk { position:absolute; width:64px; height:64px; border:6px solid var(--bc,#8e5bb5); filter:drop-shadow(0 0 8px rgba(142,91,181,.4)) }
+  .big { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; letter-spacing:-.03em; line-height:.95 }
+  .btn { position:absolute; left:140px; width:800px; height:160px; border-radius:90px; display:flex; align-items:center; justify-content:center; gap:22px; font-weight:800; font-size:54px; color:#fff; background:linear-gradient(95deg,#22c55e,#10b981); box-shadow:0 24px 60px rgba(16,185,129,.4) }
+  #flash { position:absolute; inset:0; background:radial-gradient(circle,rgba(255,255,255,.95),rgba(142,91,181,.25)); opacity:0; z-index:50; pointer-events:none }
+  .wa { position:absolute; border-radius:46px; overflow:hidden; background:#efeae2; border:3px solid #d5d1c7; box-shadow:0 34px 80px rgba(40,40,70,.28) }
+  .wa .hd { height:120px; background:#008069; color:#fff; display:flex; align-items:center; gap:22px; padding:0 30px; font-weight:800; font-size:38px }
+  .wa .av { width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#f9a8d4,#fcd34d); display:grid; place-items:center; font-size:38px }
+  .wa .bd { padding:26px 22px 40px; background:#efeae2; position:relative; height:880px }
+  .msg { position:absolute; left:18px; width:590px; color:#111; background:#d9fdd3; border-radius:30px 30px 30px 8px; padding:12px; box-shadow:0 8px 24px rgba(0,0,0,.16) }
+  .msg .pv { border-radius:22px; overflow:hidden; background:#c5ecc0 }
+  .msg .pv img { width:100%; display:block }
+  .msg .pv .tx { padding:14px 18px 16px }
+  .msg .tt { font-weight:800; font-size:30px; color:#111 }
+  .msg .ds { font-size:25px; color:rgba(17,17,17,.65); margin-top:4px; line-height:1.25 }
+  .msg .tx2 { padding:16px 10px 6px; font-size:31px; line-height:1.28; color:#111; white-space:pre-line }
+  .msg .tm { text-align:right; font-size:22px; color:rgba(17,17,17,.45); padding:0 8px 4px }
+</style></head>
+<body>
+<canvas id="bg" width="1080" height="1920"></canvas>
+<div id="stage"></div>
+<div id="flash"></div>
+<script>
+/* ============================ utilidades ============================ */
+const BPM = 120.3, BEAT = 60 / BPM
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x))
+const lerp = (a, b, k) => a + (b - a) * k
+const E = { out: (k) => 1 - Math.pow(1 - k, 3), in: (k) => k * k * k, io: (k) => (k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2), back: (k) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2) } }
+const P = (t, t0, d) => clamp((t - t0) / d)
+const $ = (h) => { const d = document.createElement('div'); d.innerHTML = h.trim(); return d.firstElementChild }
+const stage = document.getElementById('stage')
+const EVENTS = new Map()
+const ev = (t, type) => EVENTS.set(type + '@' + t.toFixed(3), { t: +t.toFixed(3), type })
+const B = [29, 9, 12, 10]          // batidas por cena (60 batidas ≈ 29,9 s)
+const T0 = []; { let a = 0; for (const n of B) { T0.push(a * BEAT); a += n } }
+const TOTAL = B.reduce((a, b) => a + b, 0) * BEAT
+const S = (i) => ({ a: T0[i], b: T0[i] + B[i] * BEAT, d: B[i] * BEAT })
+
+/* ============================ fundo: cinza/branco ============================ */
+const cv = document.getElementById('bg'), cx = cv.getContext('2d')
+const rnd = (s) => { const x = Math.sin(s * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x) }
+const PAL = ['142,91,181', '228,87,156', '46,159,122', '181,127,214', '240,171,205', '111,191,155']   // safari + jardim
+const dots = Array.from({ length: 70 }, (_, i) => ({ x: rnd(i) * 1080, y: rnd(i + 99) * 1920, r: 3 + rnd(i + 5) * 7, f: .5 + rnd(i + 9) * 1.6, c: PAL[i % 6] }))
+function drawBg(t) {
+  const g = cx.createLinearGradient(0, 0, 0, 1920); g.addColorStop(0, '#ffffff'); g.addColorStop(.55, '#f3f3f6'); g.addColorStop(1, '#e6e7ec')
+  cx.fillStyle = g; cx.fillRect(0, 0, 1080, 1920)
+  const orb = (x, y, r, c, a) => { const rg = cx.createRadialGradient(x, y, 0, x, y, r); rg.addColorStop(0, `rgba(${c},${a})`); rg.addColorStop(1, `rgba(${c},0)`); cx.fillStyle = rg; cx.fillRect(x - r, y - r, r * 2, r * 2) }
+  const k = (Math.sin(t * .35) + 1) / 2            // alterna levemente entre as duas paletas
+  orb(180, 380 + Math.sin(t * .5) * 80, 620, PAL[1], .10 * (1 - k) + .04)
+  orb(900, 520, 560, PAL[3], .04 + .09 * k)
+  orb(300, 1560, 640, PAL[0], .05 + .07 * (1 - k))
+  orb(880, 1500 + Math.cos(t * .4) * 90, 640, PAL[4], .05 + .08 * k)
+  cx.save(); cx.strokeStyle = 'rgba(90,90,110,.5)'; cx.lineWidth = 2
+  const hy = 1260, sp = (t * .5) % 1
+  for (let i = 0; i < 12; i++) { const kk = (i + sp) / 12, y = hy + Math.pow(kk, 2.1) * 640; cx.globalAlpha = .05 + kk * .2; cx.beginPath(); cx.moveTo(0, y); cx.lineTo(1080, y); cx.stroke() }
+  cx.globalAlpha = .16
+  for (let i = -9; i <= 9; i++) { cx.beginPath(); cx.moveTo(540 + i * 36, hy); cx.lineTo(540 + i * 215, 1920); cx.stroke() }
+  cx.restore()
+  for (const d of dots) { const a = .10 + .22 * (.5 + .5 * Math.sin(t * d.f + d.x)); cx.fillStyle = `rgba(${d.c},${a})`; cx.beginPath(); cx.arc(d.x, (d.y + t * 9 * d.f) % 1920, d.r, 0, 6.3); cx.fill() }
+}
+
+/* ============================ componentes ============================ */
+function words(el, text) {
+  const toks = []
+  text.replace(/\{\{(.*?)\}\}|(\S+)/g, (m, g, w) => { if (g) g.split(' ').forEach((x) => toks.push([x, true])); else toks.push([w, false]) })
+  el.innerHTML = toks.map(([w, gr]) => `<span class="w ${gr ? 'grad' : ''}">${w}</span>`).join(' ')
+  return [...el.querySelectorAll('.w')]
+}
+function revealWords(ws, t, t0, step = .09, dur = .4) { ws.forEach((w, i) => { const k = E.out(P(t, t0 + i * step, dur)); w.style.opacity = k; w.style.transform = `translateY(${(1 - k) * 46}px) scale(${.94 + .06 * k})`; w.style.filter = `blur(${(1 - k) * 10}px)` }) }
+function setT(el, x, y, o = 1, s = 1, r = 0) { el.style.opacity = o; el.style.transform = `translate(${x}px,${y}px) scale(${s}) rotate(${r}deg)` }
+function mkPhone(imgs, glow) { const ph = $(`<div class="phone"><div class="screen">${imgs.map((s) => `<img class="shot" src="${s}">`).join('')}</div><div class="notch"></div></div>`); if (glow) ph.style.setProperty('--glow', glow); return ph }
+function playShots(ph, seq, t, xf = .28) {
+  ph.querySelectorAll('.shot').forEach((im, i) => {
+    const s = seq.find((q) => q.i === i); if (!s) { im.style.opacity = 0; return }
+    const inK = E.out(P(t, s.a, xf)), outK = 1 - E.in(P(t, s.b - xf, xf))
+    im.style.opacity = Math.min(inK, outK) * (t >= s.a && t <= s.b ? 1 : 0)
+    im.style.transform = `translateY(${s.mode === 'up' ? (1 - inK) * 120 : 0}px)`
+  })
+}
+function counter(el, t, t0, d, from, to) { el.textContent = Math.round(lerp(from, to, E.out(P(t, t0, d)))) }
+function chipEl(icon, text, ac) { return $(`<div class="chip" style="--ac:${ac}"><i>${icon}</i><span>${text}</span></div>`) }
+function chipAnim(el, t, t0, x, y, side = 1) { const k = E.back(P(t, t0, .5)), fl = Math.sin(t * 1.7 + x) * 6; el.style.opacity = clamp(P(t, t0, .2)); el.style.transform = `translate(${x + (1 - k) * 90 * side}px,${y + fl}px) scale(${.7 + .3 * k})` }
+function brackets(box, col) { ['tl', 'tr', 'bl', 'br'].forEach((p) => { const b = $('<div class="brk"></div>'); b.style.cssText += `--bc:${col};margin:-28px;` + (p[0] === 't' ? 'top:0;' : 'bottom:0;') + (p[1] === 'l' ? 'left:0;' : 'right:0;') + `border-${p[0] === 't' ? 'bottom' : 'top'}:none;border-${p[1] === 'l' ? 'right' : 'left'}:none;`; box.appendChild(b) }) }
+
+/* ============================ cenas ============================ */
+const scenes = []
+const add = (i, build, update) => { const el = $('<div class="sc"></div>'); stage.appendChild(el); const ctx = build(el, S(i)); scenes.push({ i, el, ctx, update, ...S(i) }) }
+let VIDEO_IMG = null
+
+/* ---- A. O DIFERENCIAL: a experiência (gravação real) ---- */
+add(0, (el) => {
+  const tag = $('<div class="mono abs" style="left:80px;top:236px">// o diferencial</div>')
+  const h = $('<div class="h1 abs" style="left:80px;top:290px;width:920px"></div>'); const ws = words(h, 'Imagina um convite assim pra {{sua festa}}')
+  const ph = mkPhone([REC.frames.length ? 'rec_j/' + REC.frames[0] : ''], 'rgba(228,87,156,.28)'); ph.style.left = '260px'; ph.style.top = '600px'
+  VIDEO_IMG = ph.querySelector('.shot'); brackets(ph, '#e4579c')
+  const chips = [
+    chipEl('📸', 'Fotos da criança<br>na história', '#8e5bb5'),
+    chipEl('🦋', 'Os emojis do tema<br>caem na tela', '#e4579c'),
+    chipEl('💌', '“Você está convidado”<br>com boas-vindas', '#2e9f7a'),
+    chipEl('📵', 'Sem app e<br>sem cadastro', '#b57fd6'),
+  ]
+  el.append(tag, h, ph); chips.forEach((c) => el.appendChild(c))
+  return { tag, ws, ph, chips }
+}, (c, t, s) => {
+  const lt = t - s.a
+  setT(c.tag, 0, 0, E.out(P(lt, .05, .3))); revealWords(c.ws, lt, .1, .13)
+  const k = E.back(P(lt, .05, .6)); c.ph.style.opacity = clamp(P(lt, .05, .25))
+  c.ph.style.transform = `translateY(${(1 - k) * 220}px) scale(${.8 * (.85 + .15 * k)}) rotate(${(1 - k) * 4}deg)`
+  // quadro da gravação real
+  const vk = clamp(Math.floor((lt - .35) * 30), 0, REC.frames.length - 1); VIDEO_IMG.src = 'rec_j/' + REC.frames[vk]
+  const pos = [[6, 640, -1], [774, 860, 1], [6, 1080, -1], [774, 1300, 1]]; const t0s = [3.4, 6.4, 9.4, 12.0]
+  c.chips.forEach((ch, i) => { chipAnim(ch, lt, t0s[i], pos[i][0], pos[i][1], pos[i][2]); ev(s.a + t0s[i], 'pop') })
+  ev(s.a + .05, 'whoosh')
+  REC.events.forEach((e) => { if (e.type !== 'key' || true) ev(s.a + .35 + e.t, e.type) })
+})
+
+/* ---- B. WHATSAPP ---- */
+add(1, (el) => {
+  const tag = $('<div class="mono abs" style="left:80px;top:236px;color:var(--p)">// no whatsapp</div>')
+  const h = $('<div class="h2 abs" style="left:80px;top:290px;width:920px"></div>'); const ws = words(h, 'Chega {{lindo}} no WhatsApp.')
+  const wa = $(`<div class="wa" style="left:36px;top:520px;width:640px"><div class="hd"><div class="av">🦋</div><div>Tia Marcela<div style="font-size:24px;font-weight:500;color:rgba(255,255,255,.8)">online</div></div></div>
+    <div class="bd">
+      <div class="msg m1" style="top:30px"><div class="pv"><img src="stills/og-jardim.jpg"><div class="tx"><div class="tt">Convite da Lara 🦋🌸🐝</div><div class="ds">Você é nosso convidado especial! Toque para ver o convite e confirmar sua presença.</div></div></div>
+        <div class="tx2">Oi, Marcela! 🦋 O jardim está em flor! Venha celebrar o aniversário da Lara.\n\nConfirme por aqui, leva 1 minuto:</div><div class="tm">14:02 ✓✓</div></div>
+      <div class="msg m2" style="top:640px;opacity:0"><div class="tx2" style="padding-top:8px">🤖 <b>Lembrete · Aniversário da Lara</b>\n\nOi, Marcela! Ainda não consta a sua confirmação. Leva 1 minuto 💗</div><div class="tm">14:05 ✓✓</div></div>
+    </div></div>`)
+  const ring = $('<div class="abs" style="left:16px;top:640px;width:690px;height:372px;border-radius:44px;border:8px solid var(--o);box-shadow:0 0 40px rgba(228,87,156,.5)"></div>')
+  const lab = chipEl('⬆️', 'Imagem GRANDE,<br>nome da festa', '#e4579c')
+  const chips = [chipEl('👆', 'Mensagem pronta<br>em 1 toque', '#8e5bb5'), chipEl('🔗', 'Link pessoal<br>de cada família', '#2e9f7a')]
+  el.append(tag, h, wa, ring, lab); chips.forEach((c) => el.appendChild(c))
+  return { tag, ws, wa, ring, lab, chips }
+}, (c, t, s) => {
+  const lt = t - s.a
+  setT(c.tag, 0, 0, E.out(P(lt, .05, .3))); revealWords(c.ws, lt, .1, .1)
+  const k = E.back(P(lt, .05, .6)); c.wa.style.opacity = clamp(P(lt, .05, .25)); c.wa.style.transform = `translateY(${(1 - k) * 160}px) scale(${.93 * (.85 + .15 * k)})`
+  const m1 = c.wa.querySelector('.m1'), m2 = c.wa.querySelector('.m2'); m2.style.top = (m1.offsetTop + m1.offsetHeight + 26) + 'px'
+  const a1 = E.back(P(lt, .35, .5)); m1.style.opacity = clamp(P(lt, .35, .2)); m1.style.transform = `translateY(${(1 - a1) * 80}px) scale(${.94 + .06 * a1})`; ev(s.a + .35, 'pop')
+  const rk = E.out(P(lt, 1.0, .4)) * (1 - P(lt, 2.6, .4)); c.ring.style.opacity = rk; c.ring.style.transform = `scale(${1 + .03 * Math.sin(lt * 8)})`
+  chipAnim(c.lab, lt, 1.1, 700, 760, 1); c.lab.style.opacity = rk; ev(s.a + 1.0, 'chime')
+  const a2 = E.back(P(lt, 2.6, .5)); m2.style.opacity = clamp(P(lt, 2.6, .2)); m2.style.transform = `translateY(${(1 - a2) * 80}px) scale(${.94 + .06 * a2})`; ev(s.a + 2.6, 'pop')
+  chipAnim(c.chips[0], lt, 1.7, 700, 1000, 1); chipAnim(c.chips[1], lt, 3.1, 700, 1180, 1); ev(s.a + 1.7, 'pop'); ev(s.a + 3.1, 'pop')
+  ev(s.a + .02, 'whoosh')
+})
+
+/* ---- C. PAINEL ---- */
+add(2, (el) => {
+  const tag = $('<div class="mono abs" style="left:80px;top:236px;color:var(--g)">// no seu painel</div>')
+  const h = $('<div class="h2 abs" style="left:80px;top:290px;width:920px"></div>'); const ws = words(h, 'Tudo contado, {{ao vivo.}}')
+  const sub = $('<div class="abs" style="left:80px;top:396px;width:920px;font-size:34px;font-weight:700;color:var(--mut)">Chega de planilha e de grupo bagunçado.</div>')
+  const ph = mkPhone(['stills_j/a-1-visao.png', 'stills_j/a-2-visao2.png', 'stills_j/a-4b-lembrar.png'], 'rgba(111,191,155,.3)'); ph.style.left = '40px'; ph.style.top = '520px'; brackets(ph, '#8e5bb5')
+  const k1 = $('<div class="abs" style="left:610px;top:530px;width:430px"><div class="big" style="font-size:180px"><span class="n1">0</span><span style="font-size:60px;color:var(--mut)">/100</span></div><div class="mono" style="font-size:28px;color:var(--m)">confirmados</div></div>')
+  const k2 = $('<div class="abs" style="left:610px;top:800px;width:430px"><div class="big grad" style="font-size:140px"><span class="n2">0</span>%</div><div class="mono" style="font-size:28px;color:var(--p)">já responderam</div></div>')
+  const k3 = $('<div class="abs" style="left:610px;top:1040px;width:430px;font-weight:800;font-size:36px;line-height:1.2"><div class="mono" style="margin-bottom:12px;color:var(--mut);font-size:26px">vagas por anfitrião</div><div>Marina <b class="n3">0</b>/50</div><div style="height:16px;border-radius:9px;background:rgba(29,27,38,.10);margin:8px 0 16px"><i class="f3" style="display:block;height:100%;width:0;border-radius:9px;background:var(--o)"></i></div><div>Bruno <b class="n4">0</b>/50</div><div style="height:16px;border-radius:9px;background:rgba(29,27,38,.10);margin:8px 0 0"><i class="f4" style="display:block;height:100%;width:0;border-radius:9px;background:var(--p)"></i></div></div>')
+  const chips = [chipEl('🎟️', 'Controle de gratuidades<br>por idade', '#8e5bb5'), chipEl('⏰', 'Lembretes e lista pra<br>imprimir, em 1 toque', '#e4579c')]
+  el.append(tag, h, sub, ph, k1, k2, k3); chips.forEach((c) => el.appendChild(c))
+  return { tag, ws, sub, ph, k1, k2, k3, chips }
+}, (c, t, s) => {
+  const lt = t - s.a
+  setT(c.tag, 0, 0, E.out(P(lt, .05, .3))); revealWords(c.ws, lt, .1, .12); setT(c.sub, 0, 0, E.out(P(lt, .5, .4)))
+  const k = E.back(P(lt, .05, .6)); c.ph.style.opacity = clamp(P(lt, .05, .25)); c.ph.style.transform = `translateY(${(1 - k) * 160}px) scale(${.9 * (.85 + .15 * k)}) rotate(${(1 - k) * -4}deg)`
+  playShots(c.ph, [{ i: 0, a: 0, b: 2.5 }, { i: 1, a: 2.2, b: 4.3, mode: 'up' }, { i: 2, a: 4.0, b: 6.1, mode: 'up' }], lt)
+  const f = (el, a) => { el.style.opacity = E.out(P(lt, a, .35)); el.style.transform = `translateX(${(1 - E.out(P(lt, a, .5))) * 90}px)` }
+  f(c.k1, .6); f(c.k2, 1.0); f(c.k3, 1.4)
+  counter(c.k1.querySelector('.n1'), lt, .7, 1.4, 0, 48); counter(c.k2.querySelector('.n2'), lt, 1.1, 1.4, 0, 76)
+  counter(c.k3.querySelector('.n3'), lt, 1.6, 1.3, 0, 28); counter(c.k3.querySelector('.n4'), lt, 1.6, 1.3, 0, 36)
+  c.k3.querySelector('.f3').style.width = E.out(P(lt, 1.6, 1.3)) * 56 + '%'; c.k3.querySelector('.f4').style.width = E.out(P(lt, 1.6, 1.3)) * 72 + '%'
+  for (let i = 0; i < 16; i++) ev(s.a + .65 + i * .09, 'tick')
+  chipAnim(c.chips[0], lt, 2.8, 600, 1300, 1); chipAnim(c.chips[1], lt, 4.2, 600, 1470, 1)
+  c.chips.forEach((ch) => { ch.style.maxWidth = '450px'; ch.style.fontSize = '30px' }); ev(s.a + 2.8, 'pop'); ev(s.a + 4.2, 'pop'); ev(s.a + 2.2, 'swipe'); ev(s.a + 4.0, 'swipe'); ev(s.a + .02, 'whoosh')
+})
+
+/* ---- D. PROVA + CHAMADA ---- */
+add(3, (el) => {
+  const tag = $('<div class="mono abs" style="left:80px;top:560px;width:920px;text-align:center;color:var(--o)">// testado em festa real</div>')
+  const row = $('<div class="abs" style="left:60px;top:660px;width:960px;display:flex;justify-content:space-around;text-align:center"></div>')
+  const mk = (id, lab) => `<div style="width:420px"><div class="big grad" style="font-size:190px"><span class="${id}">0</span></div><div class="mono" style="font-size:28px;color:var(--mut)">${lab}</div></div>`
+  row.innerHTML = mk('p1', 'convidados') + mk('p2', 'confirmaram')
+  const mais = $('<div class="abs" style="left:80px;top:1020px;width:920px;text-align:center;font-weight:800;font-size:46px">Mais de 100 convidados<br>numa festa real</div>')
+  const h = $('<div class="h1 abs" style="left:60px;top:290px;width:960px;text-align:center;font-size:100px"></div>'); const ws = words(h, 'Quer um desses na {{sua festa?}}')
+  const btn = $('<div class="btn" style="top:880px"><svg width="80" height="80" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg><span>Chama no WhatsApp</span></div>')
+  const logo = $('<img class="abs" src="stills/logo.png" style="left:290px;top:1080px;width:500px;mix-blend-mode:multiply">')
+  const bio = $('<div class="abs" style="left:80px;top:1530px;width:920px;text-align:center;font-weight:800;font-size:46px"><span style="display:inline-block;font-size:64px">☝️</span><br>Link na bio</div>')
+  const rain = Array.from({ length: 22 }, (_, i) => { const e = $(`<div class="abs" style="font-size:${46 + rnd(i) * 40}px">${['🦋', '🌸', '🐝', '🌷', '🍄', '🌼'][i % 6]}</div>`); el.appendChild(e); return e })
+  rain.forEach((r) => el.prepend(r)); el.append(tag, row, mais, h, btn, logo, bio); return { tag, row, mais, h, ws, btn, logo, bio, rain }
+}, (c, t, s) => {
+  const lt = t - s.a
+  const prova = 1 - E.in(P(lt, 1.6, .35))
+  setT(c.tag, 0, 0, E.out(P(lt, .05, .25)) * prova); c.row.style.opacity = E.out(P(lt, .05, .3)) * prova; c.mais.style.opacity = E.out(P(lt, .6, .3)) * prova
+  counter(c.row.querySelector('.p1'), lt, .1, .9, 0, 113); counter(c.row.querySelector('.p2'), lt, .1, .9, 0, 111)
+  for (let i = 0; i < 10; i++) ev(s.a + .1 + i * .08, 'tick'); ev(s.a + .02, 'whoosh')
+  c.row.style.transform = `translateY(${-(1 - prova) * 80}px)`
+  const hk = E.out(P(lt, 1.8, .3)); c.h.style.display = lt > 1.7 ? 'block' : 'none'
+  revealWords(c.ws, lt, 1.85, .1)
+  const bk = E.back(P(lt, 2.4, .55)); c.btn.style.opacity = clamp(P(lt, 2.4, .2)); c.btn.style.transform = `scale(${(.8 + .2 * bk) * (1 + .03 * Math.sin(lt * 9))})`
+  setT(c.logo, 0, 0, E.out(P(lt, 3.0, .5)) , .92 + .08 * E.out(P(lt, 3.0, .5)))
+  setT(c.bio, 0, Math.sin(lt * 7) * 10, E.out(P(lt, 3.5, .4)))
+  c.rain.forEach((e, i) => { const t0 = 1.9 + rnd(i + 3) * 1; const kk = (lt - t0) * (.4 + rnd(i) * .3); e.style.left = 20 + rnd(i + 7) * 1000 + 'px'; e.style.opacity = lt > t0 ? .55 : 0; e.style.transform = `translateY(${-100 + (kk % 1) * 2100}px) rotate(${Math.sin(lt * 2 + i) * 25}deg)` })
+  ev(s.a + 1.8, 'whoosh'); ev(s.a + 2.4, 'chime')
+})
+
+/* ============================ renderização ============================ */
+const flash = document.getElementById('flash')
+function render(t) {
+  drawBg(t)
+  for (const sc of scenes) {
+    const on = t >= sc.a - .0001 && t < sc.b + .0001
+    sc.el.style.display = on ? 'block' : 'none'
+    if (on) { sc.el.style.opacity = E.out(P(t, sc.a, .2)); sc.update(sc.ctx, t, sc) }
+  }
+  let f = 0; for (const a of T0.slice(1)) { const d = t - a; if (d >= 0 && d < .16) f = Math.max(f, .5 * (1 - d / .16)) }
+  flash.style.opacity = f
+}
+async function collectEvents() { EVENTS.clear(); for (let t = 0; t <= TOTAL; t += 1 / 10) render(t); return [...EVENTS.values()].filter((e) => e.t >= 0 && e.t <= TOTAL).sort((a, b) => a.t - b.t) }
+window.render = render; window.TOTAL = TOTAL; window.T0 = T0; window.collectEvents = collectEvents
+window.decodeVideo = () => (VIDEO_IMG ? VIDEO_IMG.decode().catch(() => 0) : Promise.resolve())
+window.ready = document.fonts.ready.then(() => new Promise((r) => { Promise.all([...document.images].map((i) => (i.complete ? 1 : new Promise((res) => { i.onload = i.onerror = res })))).then(r) }))
+</script>
+</body></html>
