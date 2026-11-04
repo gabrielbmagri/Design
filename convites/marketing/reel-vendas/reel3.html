@@ -18,6 +18,13 @@
   .w { display:inline-block; will-change:transform,opacity }
   .chip { position:absolute; display:flex; align-items:center; gap:12px; padding:16px 18px; border-radius:24px; font-weight:800; font-size:27px; line-height:1.12; background:#fff; border:3px solid var(--ac,#2f6b3a); box-shadow:0 16px 40px rgba(40,40,70,.16); max-width:300px; color:var(--ink) }
   .chip i { font-style:normal; font-size:34px }
+  .gc { position:absolute; width:246px; padding:20px 18px 22px; border-radius:28px; font-weight:800; font-size:26px; line-height:1.16; color:var(--ink);
+    background:linear-gradient(140deg,rgba(255,255,255,.66),rgba(255,255,255,.24)); -webkit-backdrop-filter:blur(18px) saturate(1.5); backdrop-filter:blur(18px) saturate(1.5);
+    border:1.5px solid rgba(255,255,255,.9); box-shadow:0 20px 54px rgba(40,40,70,.13), 0 0 0 1px color-mix(in srgb,var(--ac) 40%,transparent), 0 0 38px color-mix(in srgb,var(--ac) 30%,transparent), inset 0 1px 0 #fff; overflow:hidden }
+  .gc i { display:block; font-style:normal; font-size:42px; margin-bottom:10px }
+  .gc b { position:absolute; right:16px; top:14px; font:700 15px 'JetBrains Mono',monospace; letter-spacing:.14em; color:var(--ac) }
+  .gc::after { content:''; position:absolute; left:18px; bottom:10px; width:46px; height:4px; border-radius:3px; background:var(--ac); box-shadow:0 0 12px var(--ac) }
+  .gc::before { content:''; position:absolute; inset:0; background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%); transform:translateX(var(--sh,-120%)); pointer-events:none }
   .phone { position:absolute; width:560px; height:1212px; border-radius:76px; background:#14161f; border:3px solid #2d303d; box-shadow:0 0 0 2px #0c0d14, 0 34px 90px rgba(40,40,70,.34), 0 0 70px var(--glow,rgba(142,91,181,.28)); transform-origin:50% 0 }
   .phone .screen { position:absolute; left:14px; top:14px; width:532px; height:1184px; border-radius:64px; overflow:hidden; background:#000 }
   .phone .shot { position:absolute; left:0; top:0; width:532px; height:1152px; object-fit:cover; object-position:top }
@@ -102,6 +109,14 @@ function playShots(ph, seq, t, xf = .28) {
 }
 function counter(el, t, t0, d, from, to) { el.textContent = Math.round(lerp(from, to, E.out(P(t, t0, d)))) }
 function chipEl(icon, text, ac) { return $(`<div class="chip" style="--ac:${ac}"><i>${icon}</i><span>${text}</span></div>`) }
+function gcEl(n, icon, text, ac) { return $(`<div class="gc" style="--ac:${ac}"><b>${n}</b><i>${icon}</i><span>${text}</span></div>`) }
+// o card sai de trás do celular (centro) e desliza até a lateral
+function gcAnim(el, t, t0, side, y) {
+  const k = E.out(P(t, t0, .75)), fx = side < 0 ? 12 : 822, x = lerp(540 - 123, fx, k), fl = Math.sin(t * 1.6 + y) * 7 * k
+  el.style.opacity = clamp(P(t, t0, .18)) * .97
+  el.style.transform = `translate(${x}px,${y + fl}px) scale(${.55 + .45 * E.back(P(t, t0, .6))}) rotate(${(1 - k) * side * 5}deg)`
+  el.style.setProperty('--sh', (-120 + 260 * E.io(P(t, t0 + .5, .9))) + '%')
+}
 function chipAnim(el, t, t0, x, y, side = 1) { const k = E.back(P(t, t0, .5)), fl = Math.sin(t * 1.7 + x) * 6; el.style.opacity = clamp(P(t, t0, .2)); el.style.transform = `translate(${x + (1 - k) * 90 * side}px,${y + fl}px) scale(${.7 + .3 * k})` }
 function brackets(box, col) { ['tl', 'tr', 'bl', 'br'].forEach((p) => { const b = $('<div class="brk"></div>'); b.style.cssText += `--bc:${col};margin:-28px;` + (p[0] === 't' ? 'top:0;' : 'bottom:0;') + (p[1] === 'l' ? 'left:0;' : 'right:0;') + `border-${p[0] === 't' ? 'bottom' : 'top'}:none;border-${p[1] === 'l' ? 'right' : 'left'}:none;`; box.appendChild(b) }) }
 
@@ -113,26 +128,26 @@ let VIDEO_IMG = null
 /* ---- A. O DIFERENCIAL: a experiência (gravação real) ---- */
 add(0, (el) => {
   const tag = $('<div class="mono abs" style="left:80px;top:236px">// o diferencial</div>')
-  const h = $('<div class="h1 abs" style="left:80px;top:290px;width:920px"></div>'); const ws = words(h, 'Imagina um convite assim pra {{sua festa}}')
-  const ph = mkPhone([REC.frames.length ? 'rec_j/' + REC.frames[0] : ''], 'rgba(228,87,156,.28)'); ph.style.left = '260px'; ph.style.top = '600px'
+  const h = $('<div class="h1 abs" style="left:80px;top:230px;width:920px"></div>'); const ws = words(h, 'Imagina um convite assim pra {{sua festa}}')
+  const ph = mkPhone([REC.frames.length ? 'rec_j/' + REC.frames[0] : ''], 'rgba(228,87,156,.28)'); ph.style.left = '260px'; ph.style.top = '505px'
   VIDEO_IMG = ph.querySelector('.shot'); brackets(ph, '#e4579c')
   const chips = [
-    chipEl('📸', 'Fotos da criança<br>na história', '#8e5bb5'),
-    chipEl('🦋', 'Os emojis do tema<br>caem na tela', '#e4579c'),
-    chipEl('💌', '“Você está convidado”<br>com boas-vindas', '#2e9f7a'),
-    chipEl('📵', 'Sem app e<br>sem cadastro', '#b57fd6'),
+    gcEl('01', '📸', 'Fotos da criança na história', '#8e5bb5'),
+    gcEl('02', '🦋', 'Emojis do tema caem na tela', '#e4579c'),
+    gcEl('03', '💌', '“Você está convidado” com boas-vindas', '#2e9f7a'),
+    gcEl('04', '📵', 'Sem app e sem cadastro', '#b57fd6'),
   ]
-  el.append(tag, h, ph); chips.forEach((c) => el.appendChild(c))
+  el.append(h); chips.forEach((c) => el.appendChild(c)); el.append(ph)   // cards ficam ATRÁS do celular
   return { tag, ws, ph, chips }
 }, (c, t, s) => {
   const lt = t - s.a
   setT(c.tag, 0, 0, E.out(P(lt, .05, .3))); revealWords(c.ws, lt, .1, .13)
   const k = E.back(P(lt, .05, .6)); c.ph.style.opacity = clamp(P(lt, .05, .25))
-  c.ph.style.transform = `translateY(${(1 - k) * 220}px) scale(${.8 * (.85 + .15 * k)}) rotate(${(1 - k) * 4}deg)`
+  c.ph.style.transform = `translateY(${(1 - k) * 220}px) scale(${.95 * (.85 + .15 * k)}) rotate(${(1 - k) * 4}deg)`
   // quadro da gravação real
   const vk = clamp(Math.floor((lt - .35) * 30), 0, REC.frames.length - 1); VIDEO_IMG.src = 'rec_j/' + REC.frames[vk]
-  const pos = [[6, 640, -1], [774, 860, 1], [6, 1080, -1], [774, 1300, 1]]; const t0s = [3.4, 6.4, 9.4, 12.0]
-  c.chips.forEach((ch, i) => { chipAnim(ch, lt, t0s[i], pos[i][0], pos[i][1], pos[i][2]); ev(s.a + t0s[i], 'pop') })
+  const pos = [[-1, 670], [1, 890], [-1, 1120], [1, 1340]]; const t0s = [3.4, 6.4, 9.4, 12.0]
+  c.chips.forEach((ch, i) => { gcAnim(ch, lt, t0s[i], pos[i][0], pos[i][1]); ev(s.a + t0s[i], 'pop'); ev(s.a + t0s[i], 'swipe') })
   ev(s.a + .05, 'whoosh')
   REC.events.forEach((e) => { if (e.type !== 'key' || true) ev(s.a + .35 + e.t, e.type) })
 })
@@ -140,7 +155,7 @@ add(0, (el) => {
 /* ---- B. WHATSAPP ---- */
 add(1, (el) => {
   const tag = $('<div class="mono abs" style="left:80px;top:236px;color:var(--p)">// no whatsapp</div>')
-  const h = $('<div class="h2 abs" style="left:80px;top:290px;width:920px"></div>'); const ws = words(h, 'Chega {{lindo}} no WhatsApp.')
+  const h = $('<div class="h2 abs" style="left:80px;top:250px;width:920px"></div>'); const ws = words(h, 'Chega {{lindo}} no WhatsApp.')
   const wa = $(`<div class="wa" style="left:36px;top:520px;width:640px"><div class="hd"><div class="av">🦋</div><div>Tia Marcela<div style="font-size:24px;font-weight:500;color:rgba(255,255,255,.8)">online</div></div></div>
     <div class="bd">
       <div class="msg m1" style="top:30px"><div class="pv"><img src="stills/og-jardim.jpg"><div class="tx"><div class="tt">Convite da Lara 🦋🌸🐝</div><div class="ds">Você é nosso convidado especial! Toque para ver o convite e confirmar sua presença.</div></div></div>
@@ -150,7 +165,7 @@ add(1, (el) => {
   const ring = $('<div class="abs" style="left:16px;top:640px;width:690px;height:372px;border-radius:44px;border:8px solid var(--o);box-shadow:0 0 40px rgba(228,87,156,.5)"></div>')
   const lab = chipEl('⬆️', 'Imagem GRANDE,<br>nome da festa', '#e4579c')
   const chips = [chipEl('👆', 'Mensagem pronta<br>em 1 toque', '#8e5bb5'), chipEl('🔗', 'Link pessoal<br>de cada família', '#2e9f7a')]
-  el.append(tag, h, wa, ring, lab); chips.forEach((c) => el.appendChild(c))
+  el.append(h, wa, ring, lab); chips.forEach((c) => el.appendChild(c))
   return { tag, ws, wa, ring, lab, chips }
 }, (c, t, s) => {
   const lt = t - s.a
@@ -168,14 +183,14 @@ add(1, (el) => {
 /* ---- C. PAINEL ---- */
 add(2, (el) => {
   const tag = $('<div class="mono abs" style="left:80px;top:236px;color:var(--g)">// no seu painel</div>')
-  const h = $('<div class="h2 abs" style="left:80px;top:290px;width:920px"></div>'); const ws = words(h, 'Tudo contado, {{ao vivo.}}')
+  const h = $('<div class="h2 abs" style="left:80px;top:250px;width:920px"></div>'); const ws = words(h, 'Tudo contado, {{ao vivo.}}')
   const sub = $('<div class="abs" style="left:80px;top:396px;width:920px;font-size:34px;font-weight:700;color:var(--mut)">Chega de planilha e de grupo bagunçado.</div>')
   const ph = mkPhone(['stills_j/a-1-visao.png', 'stills_j/a-2-visao2.png', 'stills_j/a-4b-lembrar.png'], 'rgba(111,191,155,.3)'); ph.style.left = '40px'; ph.style.top = '520px'; brackets(ph, '#8e5bb5')
   const k1 = $('<div class="abs" style="left:610px;top:530px;width:430px"><div class="big" style="font-size:180px"><span class="n1">0</span><span style="font-size:60px;color:var(--mut)">/100</span></div><div class="mono" style="font-size:28px;color:var(--m)">confirmados</div></div>')
   const k2 = $('<div class="abs" style="left:610px;top:800px;width:430px"><div class="big grad" style="font-size:140px"><span class="n2">0</span>%</div><div class="mono" style="font-size:28px;color:var(--p)">já responderam</div></div>')
   const k3 = $('<div class="abs" style="left:610px;top:1040px;width:430px;font-weight:800;font-size:36px;line-height:1.2"><div class="mono" style="margin-bottom:12px;color:var(--mut);font-size:26px">vagas por anfitrião</div><div>Marina <b class="n3">0</b>/50</div><div style="height:16px;border-radius:9px;background:rgba(29,27,38,.10);margin:8px 0 16px"><i class="f3" style="display:block;height:100%;width:0;border-radius:9px;background:var(--o)"></i></div><div>Bruno <b class="n4">0</b>/50</div><div style="height:16px;border-radius:9px;background:rgba(29,27,38,.10);margin:8px 0 0"><i class="f4" style="display:block;height:100%;width:0;border-radius:9px;background:var(--p)"></i></div></div>')
   const chips = [chipEl('🎟️', 'Controle de gratuidades<br>por idade', '#8e5bb5'), chipEl('⏰', 'Lembretes e lista pra<br>imprimir, em 1 toque', '#e4579c')]
-  el.append(tag, h, sub, ph, k1, k2, k3); chips.forEach((c) => el.appendChild(c))
+  el.append(h, sub, ph, k1, k2, k3); chips.forEach((c) => el.appendChild(c))
   return { tag, ws, sub, ph, k1, k2, k3, chips }
 }, (c, t, s) => {
   const lt = t - s.a
