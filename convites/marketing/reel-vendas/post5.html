@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@500;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root { --c1:#2f6b3a; --c2:#e08a2b; --c3:#8e5bb5; --glow:rgba(47,107,58,.28) }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html,body { width:1080px; height:1350px; overflow:hidden; background:#f4f4f6; font-family:'Plus Jakarta Sans',sans-serif; color:#1d1b26 }
+  #bg { position:absolute; inset:0 }
+  .h { position:absolute; left:0; top:96px; width:1080px; text-align:center; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:84px; line-height:1.03; letter-spacing:-.025em }
+  .grad { background:linear-gradient(95deg,var(--c1),var(--c2) 55%,var(--c3)); -webkit-background-clip:text; background-clip:text; color:transparent }
+  .panel { position:absolute; left:220px; top:340px; width:640px; height:1010px; filter:drop-shadow(0 30px 60px var(--glow)) }
+  .panel .s { position:absolute; inset:0; border-radius:46px; overflow:hidden; background:#fff; opacity:.96;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 76%,transparent); -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 76%,transparent); mask-composite:intersect }
+  .panel img { position:absolute; left:0; width:640px; height:1385px; object-fit:cover }
+  .gc { position:absolute; display:flex; align-items:center; gap:16px; padding:20px 24px; border-radius:28px; font-weight:800; font-size:29px; line-height:1.15; z-index:3; max-width:330px;
+    background:linear-gradient(140deg,rgba(255,255,255,.74),rgba(255,255,255,.3)); backdrop-filter:blur(18px) saturate(1.5); border:1.5px solid rgba(255,255,255,.9);
+    box-shadow:0 20px 54px rgba(40,40,70,.12), 0 0 0 1px color-mix(in srgb,var(--ac) 40%,transparent), 0 0 38px color-mix(in srgb,var(--ac) 28%,transparent), inset 0 1px 0 #fff }
+  .gc i { font-style:normal; font-size:42px }
+  .hint { position:absolute; right:60px; bottom:48px; font:700 24px 'JetBrains Mono',monospace; letter-spacing:.14em; text-transform:uppercase; color:rgba(29,27,38,.5); z-index:4 }
+  .btn { position:absolute; left:140px; top:760px; width:800px; height:150px; border-radius:90px; display:flex; align-items:center; justify-content:center; gap:22px; font-weight:800; font-size:52px; color:#fff; background:linear-gradient(95deg,#22c55e,#10b981); box-shadow:0 24px 60px rgba(16,185,129,.4) }
+  .row { position:absolute; left:90px; width:900px; display:flex; align-items:center; gap:26px; padding:30px 36px; border-radius:32px; background:rgba(255,255,255,.7); backdrop-filter:blur(14px); border:1.5px solid rgba(255,255,255,.9); box-shadow:0 16px 44px rgba(40,40,70,.10); font-weight:800; font-size:44px; line-height:1.15 }
+  .row i { font-style:normal; font-size:60px }
+  .row em { margin-left:auto; font-style:normal; width:64px; height:64px; border-radius:50%; display:grid; place-items:center; background:rgba(47,107,58,.14); color:#2f6b3a; font-size:38px; flex:none }
+  .wa { position:absolute; z-index:1; border-radius:46px; overflow:hidden; background:#efeae2; border:3px solid #d5d1c7; box-shadow:0 34px 80px rgba(40,40,70,.24) }
+  .wa .hd { height:112px; background:#008069; color:#fff; display:flex; align-items:center; gap:20px; padding:0 30px; font-weight:800; font-size:36px }
+  .wa .av { width:66px; height:66px; border-radius:50%; background:linear-gradient(135deg,#fcd34d,#f59e0b); display:grid; place-items:center; font-size:36px }
+  .wa .bd { padding:26px 22px 30px; background:#efeae2; display:flex; flex-direction:column; gap:18px }
+  .msg { color:#111; background:#d9fdd3; border-radius:30px 30px 30px 8px; padding:12px; box-shadow:0 8px 24px rgba(0,0,0,.14); width:590px }
+  .msg .pv { border-radius:22px; overflow:hidden; background:#c5ecc0 } .msg .pv img { width:100%; display:block }
+  .msg .pv .tx { padding:14px 18px 16px } .msg .tt { font-weight:800; font-size:30px } .msg .ds { font-size:25px; color:rgba(17,17,17,.65); margin-top:4px; line-height:1.25 }
+  .msg .tx2 { padding:16px 10px 6px; font-size:31px; line-height:1.28; white-space:pre-line } .msg .tm { text-align:right; font-size:22px; color:rgba(17,17,17,.45); padding:0 8px 4px }
+  .lab { position:absolute; left:0; width:1080px; text-align:center; font:700 26px 'JetBrains Mono',monospace; letter-spacing:.14em; text-transform:uppercase }
+</style></head><body>
+<canvas id="bg" width="1080" height="1350"></canvas>
+<div class="h" id="h"></div>
+<div id="ct"></div>
+<div class="hint" id="hint">deslize →</div>
+<script>
+const S = [
+ { kind:'wa1', h:'Chega <span class="grad">lindo</span><br>no WhatsApp.' },
+ { kind:'cmp', h:'Link comum ou<br><span class="grad">convite de verdade?</span>' },
+ { h:'Mensagem pronta<br><span class="grad">em 1 toque</span>', img:'a-3b-enviar.png', y:-10, cards:[['👆','Já vem com o texto e o link',-1,700,'#2f6b3a'],['💬','Reenvio no WhatsApp',1,1010,'#e08a2b']] },
+ { kind:'links', h:'Um link pessoal<br><span class="grad">pra cada família</span>' },
+ { kind:'rem', h:'Quem não respondeu?<br><span class="grad">Lembrete em 1 toque</span>' },
+ { cta:true }
+]
+const n = +(new URLSearchParams(location.search).get('s') || 1) - 1, sl = S[n]
+const cx = document.getElementById('bg').getContext('2d'), rnd = (s) => { const x = Math.sin(s*127.1+311.7)*43758.5453; return x-Math.floor(x) }
+const pal = ['47,107,58','224,138,43','122,154,58','142,91,181','228,87,156','46,159,122']
+const g = cx.createLinearGradient(0,0,0,1350); g.addColorStop(0,'#fff'); g.addColorStop(.55,'#f3f3f6'); g.addColorStop(1,'#e6e7ec'); cx.fillStyle = g; cx.fillRect(0,0,1080,1350)
+const orb = (x,y,rad,c,a) => { const rg = cx.createRadialGradient(x,y,0,x,y,rad); rg.addColorStop(0,`rgba(${c},${a})`); rg.addColorStop(1,`rgba(${c},0)`); cx.fillStyle = rg; cx.fillRect(x-rad,y-rad,rad*2,rad*2) }
+const o = n * 120; orb(180,300+o%200,600,pal[1],.12); orb(920,420,560,pal[3],.10); orb(240,1180,640,pal[0],.10); orb(900,1150,600,pal[4],.10)
+cx.strokeStyle = 'rgba(90,90,110,.5)'; cx.lineWidth = 2
+for (let i=0;i<10;i++){ const k=i/10, y=1030+Math.pow(k,2.1)*320; cx.globalAlpha=.05+k*.2; cx.beginPath(); cx.moveTo(0,y); cx.lineTo(1080,y); cx.stroke() }
+cx.globalAlpha=.14; for (let i=-9;i<=9;i++){ cx.beginPath(); cx.moveTo(540+i*36,1030); cx.lineTo(540+i*170,1350); cx.stroke() }
+cx.globalAlpha=1
+for (let i=0;i<46;i++){ cx.fillStyle=`rgba(${pal[i%6]},${.12+.2*rnd(i+3+n)})`; cx.beginPath(); cx.arc(rnd(i+n)*1080,rnd(i+99+n)*1350,3+rnd(i+5)*7,0,6.3); cx.fill() }
+const ct = document.getElementById('ct'), h = document.getElementById('h')
+if (sl.kind === 'wa1') {
+  h.innerHTML = sl.h
+  ct.innerHTML = `<div class="wa" style="left:220px;top:380px;width:640px"><div class="hd"><div class="av">🦁</div><div>Tia Marcela<div style="font-size:24px;font-weight:500;color:rgba(255,255,255,.8)">online</div></div></div><div class="bd"><div class="msg"><div class="pv"><img src="stills/og-safari.jpg"><div class="tx"><div class="tt">Convite do Théo 🦁🐘🦒</div><div class="ds">Você é nosso convidado especial! Toque para ver o convite e confirmar sua presença.</div></div></div><div class="tx2">Oi, Marcela! 🦁 A expedição está aberta! Venha celebrar o aniversário do Théo.\n\nConfirme por aqui, leva 1 minuto:</div><div class="tm">14:02 ✓✓</div></div></div></div>
+   <div class="gc" style="--ac:#e08a2b;left:36px;top:620px;z-index:3"><i>⬆️</i><span>Imagem GRANDE do convite</span></div>
+   <div class="gc" style="--ac:#2f6b3a;right:36px;top:1000px;z-index:3"><i>🦁</i><span>Nome e tema da festa</span></div>`
+  window.ready = Promise.all([document.fonts.ready, new Promise(r => { const i = ct.querySelector('img'); i.complete ? r() : i.onload = r })])
+} else if (sl.kind === 'cmp') {
+  h.innerHTML = sl.h
+  ct.innerHTML = `<div class="lab" style="top:360px;color:#e5484d">✕ link comum</div>
+   <div class="wa" style="left:220px;top:410px;width:640px;border-radius:36px"><div class="bd" style="padding:22px"><div class="msg" style="padding:16px 22px"><div class="tx2" style="padding:6px 0;font-size:30px">Oi! Confirma aqui:\n<span style="color:#1a73e8;text-decoration:underline;font-size:28px">https://exemplo.com/abc123</span></div><div class="tm">14:02 ✓✓</div></div></div></div>
+   <div class="lab" style="top:660px;color:#2f6b3a">✓ com o nosso</div>
+   <div class="wa" style="left:220px;top:710px;width:640px;border-radius:36px"><div class="bd" style="padding:22px"><div class="msg"><div class="pv"><img src="stills/og-safari.jpg"><div class="tx"><div class="tt">Convite do Théo 🦁🐘🦒</div><div class="ds">Toque para ver o convite e confirmar sua presença.</div></div></div><div class="tm" style="padding-top:8px">14:02 ✓✓</div></div></div></div>`
+  window.ready = Promise.all([document.fonts.ready, new Promise(r => { const i = ct.querySelector('img'); i.complete ? r() : i.onload = r })])
+} else if (sl.kind === 'links') {
+  h.innerHTML = sl.h
+  const R = [['M','Família Almeida'],['R','Família Duarte'],['T','Tia Lu e Tio Zé'],['C','Família Costa']]
+  ct.innerHTML = R.map(([l,t],i) => `<div class="row" style="top:${390 + i*170}px;padding:24px 34px"><span style="width:76px;height:76px;border-radius:50%;background:rgba(47,107,58,.14);display:grid;place-items:center;font-weight:800;font-size:38px;color:#2f6b3a">${l}</span><span style="font-size:40px">${t}</span><span style="margin-left:auto;font-size:28px;color:rgba(29,27,38,.6);display:flex;align-items:center;gap:10px">🔗 <span>link próprio</span></span></div>`).join('') +
+   `<div style="position:absolute;left:0;top:1110px;width:1080px;text-align:center;font-weight:700;font-size:34px;color:rgba(29,27,38,.6)">Você sabe exatamente quem respondeu o quê.</div>`
+  window.ready = document.fonts.ready
+} else if (sl.kind === 'rem') {
+  h.innerHTML = sl.h; h.style.fontSize = '76px'
+  ct.innerHTML = `<div class="wa" style="left:220px;top:400px;width:640px"><div class="hd"><div class="av">🦁</div><div>Tia Marcela<div style="font-size:24px;font-weight:500;color:rgba(255,255,255,.8)">online</div></div></div><div class="bd" style="height:640px"><div class="msg" style="opacity:.6"><div class="tx2" style="padding-top:8px">Oi, Marcela! 🦁 Venha celebrar o aniversário do Théo. Confirme por aqui, leva 1 minuto.</div><div class="tm">14:02 ✓✓</div></div><div class="msg"><div class="tx2" style="padding-top:8px">🤖 <b>Lembrete · Aniversário do Théo</b>\n\nOi, Marcela! Ainda não consta a sua confirmação. Leva 1 minuto 💗</div><div class="tm">14:05 ✓✓</div></div></div></div>
+   <div class="gc" style="--ac:#e08a2b;left:36px;top:1070px;z-index:3"><i>⏰</i><span>Só pra quem ainda não respondeu</span></div>
+   <div class="gc" style="--ac:#2f6b3a;right:36px;top:1150px;z-index:3"><i>👆</i><span>Mensagem pronta, 1 toque</span></div>`
+  window.ready = document.fonts.ready
+} else if (sl.cta) {
+  document.getElementById('hint').style.display = 'none'
+  h.style.top = '300px'; h.style.fontSize = '100px'; h.innerHTML = 'Quer um desses<br>na <span class="grad">sua festa?</span>'
+  ct.innerHTML = `<div class="btn" style="top:700px"><svg width="76" height="76" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg><span>Chama no WhatsApp</span></div>
+   <div style="position:absolute;left:0;top:900px;width:1080px;text-align:center;font-weight:800;font-size:44px"><span style="font-size:60px;display:inline-block">☝️</span><br>Link na bio</div>
+   <img src="stills/logo.png" style="position:absolute;left:330px;top:1020px;width:420px;mix-blend-mode:multiply">`
+  window.ready = Promise.all([document.fonts.ready, new Promise(r => { const i = ct.querySelector('img'); i.complete ? r() : i.onload = r })])
+} else {
+  h.innerHTML = sl.h
+  ct.innerHTML = `<div class="panel"><div class="s"><img id="shot" src="stills/${sl.img}" style="top:${sl.y}px"></div></div>` +
+    sl.cards.map(([ic,tx,side,y,ac]) => `<div class="gc" style="--ac:${ac};top:${y - 340 + 340}px;${side<0 ? 'left:36px' : 'right:36px'}"><i>${ic}</i><span>${tx}</span></div>`).join('')
+  if (n === 5) document.getElementById('hint').style.display = 'none'
+  window.ready = Promise.all([document.fonts.ready, new Promise(r => { const i = document.getElementById('shot'); i.complete ? r() : i.onload = r })])
+}
+</script></body></html>
