@@ -31,6 +31,7 @@
     "itens": []
   },
   "limitePorAnfitriao": 50,
+  "gratuidadeCriancaAte": 5,
   "dicaDia": "Chegando no horário, aproveitamos a festa juntos. O espaço tem estacionamento próprio. 🚗",
   "convidados": [
     { "anfitriao": 1, "telefone": "21 99999-0001", "pessoas": [ { "nome": "Maria Silva" }, { "nome": "João Silva" } ] },

@@ -41,17 +41,21 @@ export default function Kids({ stats, settings }: AdminCtx) {
       <div className="ad-head">
         <div>
           <h1>Crianças</h1>
-          <p>Base das lembrancinhas e de quem não paga (até {settings.childFreeMaxAge} anos).</p>
+          <p>{settings.childFreeMaxAge >= 0 ? `Base das lembrancinhas e das gratuidades (até ${settings.childFreeMaxAge} anos).` : 'Base das lembrancinhas.'}</p>
         </div>
       </div>
       <div className="ad-grid" style={{ marginBottom: 14 }}>
         <div className="ad-card ad-kpi"><div className="n">{stats.kidsGoing.length}</div><div className="l">Lembrancinhas (confirmadas)</div><div className="s">{stats.kidsExpected.length} se todos vierem</div></div>
-        <div className="ad-card ad-kpi"><div className="n">{stats.kidsFree.length}</div><div className="l">Até {settings.childFreeMaxAge} anos (não pagam)</div></div>
-        <div className="ad-card ad-kpi"><div className="n">{stats.kidsExpected.length - stats.kidsFree.length - stats.kidsNoAge.length}</div><div className="l">Acima de {settings.childFreeMaxAge} anos (pagam)</div></div>
+        {settings.childFreeMaxAge >= 0 && (
+          <>
+            <div className="ad-card ad-kpi"><div className="n">{stats.kidsFree.length}</div><div className="l">Gratuidade (até {settings.childFreeMaxAge} anos)</div></div>
+            <div className="ad-card ad-kpi"><div className="n">{stats.kidsExpected.length - stats.kidsFree.length - stats.kidsNoAge.length}</div><div className="l">Acima de {settings.childFreeMaxAge} anos (pagam)</div></div>
+          </>
+        )}
         <div className="ad-card ad-kpi"><div className="n">{stats.kidsNoAge.length}</div><div className="l">Sem idade</div><div className="s">o convidado é perguntado ao confirmar</div></div>
       </div>
       <div className="ad-filters">
-        {([['all', 'Todas'], ['free', `Até ${settings.childFreeMaxAge} anos`], ['paying', 'Pagantes'], ['noage', 'Sem idade']] as const).map(([id, l]) => (
+        {([['all', 'Todas'], ['free', `Até ${settings.childFreeMaxAge} anos`], ['paying', 'Pagantes'], ['noage', 'Sem idade']] as const).filter(([id]) => settings.childFreeMaxAge >= 0 || (id !== 'free' && id !== 'paying')).map(([id, l]) => (
           <button key={id} className={`ad-chip ${only === id ? 'on' : ''}`} onClick={() => setOnly(id)}>{l}</button>
         ))}
       </div>

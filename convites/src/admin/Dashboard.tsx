@@ -119,7 +119,7 @@ export default function Dashboard({ stats, settings, go, logs, user }: AdminCtx)
           <div className="ad-card">
             <div className="ad-card-head">
               <h3>Divisão de convidados</h3>
-              <span style={{ color: 'var(--muted)', fontSize: 12 }}>crianças até {settings.childFreeMaxAge} anos não contam</span>
+              {settings.childFreeMaxAge >= 0 && <span style={{ color: 'var(--muted)', fontSize: 12 }}>gratuidade: crianças até {settings.childFreeMaxAge} anos não contam</span>}
             </div>
             {stats.hosts.map((h) => <HostRow key={h.host} h={h} />)}
           </div>
@@ -133,7 +133,7 @@ export default function Dashboard({ stats, settings, go, logs, user }: AdminCtx)
             </div>
             <div className="ad-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
               <div className="ad-kpi"><span className="l">Lembrancinhas</span><span className="n">{stats.kidsGoing.length}</span><span className="s">{stats.kidsExpected.length} previstas</span></div>
-              <div className="ad-kpi"><span className="l">Não pagam</span><span className="n">{stats.kidsFree.length}</span><span className="s">até {settings.childFreeMaxAge} anos</span></div>
+              <div className="ad-kpi"><span className="l">Gratuidades</span><span className="n">{stats.kidsFree.length}</span><span className="s">{settings.childFreeMaxAge >= 0 ? `crianças até ${settings.childFreeMaxAge} anos` : 'controle desligado'}</span></div>
             </div>
           </div>
 

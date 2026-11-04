@@ -6,6 +6,7 @@ Oi, {nome}! Para montar o seu convite, me responda (pode ser por áudio):
 2. **Tema:** temos Safari, Jardim Encantado, Casamento Ouro e Casamento Prata. Ou conte como imagina o seu (cores, bichinhos ou símbolos, estilo).
 3. **Data, horário e local** da festa (com endereço completo e, se tiver, o link do mapa).
 4. **Traje ou dica** para os convidados (ex.: "venha de explorador").
+   **Gratuidade:** o seu salão tem gratuidade para criança? Até que idade? (cada salão tem a sua regra; o sistema só controla se você disser).
 5. **Anfitriões:** quem são e o WhatsApp de cada um (a lista de convidados é dividida entre eles).
 6. **Fotos:** de 6 a 10 para a história (nascimento, primeiros dias, primeiros sorrisos, descobertas, família, foto de capa) e o arquivo do convite, se já tiver.
 7. **Lista de convidados** (pode colar do bloco de notas): uma linha por convite. Ex.: `Maria e João Silva ; 21 99999-0000`. Indique crianças e a idade.

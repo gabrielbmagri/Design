@@ -25,6 +25,8 @@ export interface ClienteForm {
   presentes?: { ativar: boolean; pix?: string; nomePix?: string; cidade?: string; titulo?: string; nota?: string; itens?: GiftItem[]; aceitouTermos?: boolean }
   convidados?: ConviteForm[]
   limitePorAnfitriao?: number
+  /** gratuidade para crianças no salão: até que idade (anos). Vazio ou null = o salão não tem gratuidade */
+  gratuidadeCriancaAte?: number | null
   dicaDia?: string
   pacote?: string
   preco?: number
@@ -137,6 +139,7 @@ export function composeSettings(f: ClienteForm, assetBase: string): EventSetting
     pixCity: gifts?.cidade ?? '',
     giftsTermsISO: gifts?.ativar && gifts.aceitouTermos ? new Date().toISOString().slice(0, 10) : '',
     capPerHost: f.limitePorAnfitriao ?? (wedding ? 80 : 50),
+    childFreeMaxAge: f.gratuidadeCriancaAte ?? -1,
     inviteImage: ph(f.conviteImagem),
     heroPhoto: ph(f.fotoCapa ?? f.historia?.[5]?.foto ?? f.historia?.[0]?.foto),
     gabrielPhone: f.anfitrioesWhatsapp?.[0] ?? '',

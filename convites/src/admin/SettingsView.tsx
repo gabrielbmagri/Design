@@ -111,9 +111,18 @@ export default function SettingsView({ settings }: AdminCtx) {
           <h3>Regras</h3>
           <div className="ad-grid">
             <Field label="Limite por anfitrião">{text('capPerHost', 'number')}</Field>
-            <Field label="Criança não paga até (anos)">{text('childFreeMaxAge', 'number')}</Field>
             <Field label="Lembrar após (dias)">{text('reminderDays', 'number')}</Field>
           </div>
+          <label className="ad-row" style={{ gap: 8, fontWeight: 700 }}>
+            <input type="checkbox" checked={s.childFreeMaxAge >= 0} onChange={(e) => set('childFreeMaxAge', e.target.checked ? 5 : -1)} />
+            O salão tem gratuidade para crianças (não entram na conta de pagantes)
+          </label>
+          {s.childFreeMaxAge >= 0 && (
+            <div className="ad-grid">
+              <Field label="Gratuidade até (anos completos)">{text('childFreeMaxAge', 'number')}</Field>
+            </div>
+          )}
+          <small style={{ color: 'var(--muted)' }}>Cada salão tem a sua regra. Desligado, todas as crianças contam como convidados normais.</small>
         </div>
         )}
 

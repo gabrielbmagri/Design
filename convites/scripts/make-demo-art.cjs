@@ -79,5 +79,11 @@ ${photo ? `<div style="position:absolute;left:100px;right:100px;top:100px;height
     await p.setViewportSize({ width: 1080, height: 1920 }); await p.setContent(LUX[id] ? luxInvite(id) : invite(t, id)); await p.waitForTimeout(1200); await p.screenshot({ path: `${dir}/invite.jpg`, type: 'jpeg', quality: 86 })
     console.log('ok', id)
   }
+  // versões sem idade no convite (usadas nos vídeos de venda)
+  for (const id of ['safari', 'jardim']) {
+    const t = { ...T[id], sub: 'está de aniversário' }
+    const p2 = await b.newPage({ viewport: { width: 1080, height: 1920 } }); await p2.setContent(invite(t, id)); await p2.waitForTimeout(1200)
+    await p2.screenshot({ path: `public/demo/${id}/invite-sem-idade.jpg`, type: 'jpeg', quality: 86 })
+  }
   await b.close()
 })()

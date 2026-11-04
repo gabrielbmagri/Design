@@ -3,7 +3,7 @@ import { db } from '../lib/firebase'
 import { adminsCol, accountsCol, guestsCol, invitesCol, logCol, settingsRef } from '../lib/data'
 import { PRESETS } from '../lib/presets'
 import { saveInvite, type MemberDraft } from '../admin/ops'
-import type { Host, Status } from '../lib/types'
+import type { EventSettings, Host, Status } from '../lib/types'
 import { Timestamp, __isEmpty } from './firestore'
 
 const DAY = 864e5
@@ -50,6 +50,19 @@ function reelSample(): typeof SAMPLE {
 }
 const isReel = () => { try { return localStorage.getItem('convite-demo-reel') === '1' } catch { return false } }
 
+/** Versão do convite sem idade nos textos (para o vídeo de vendas: serve para qualquer aniversário). */
+function ageless(s: EventSettings): EventSettings {
+  const de = s.childName === 'Lara' ? 'da' : 'do'
+  return {
+    ...s,
+    title: `${s.childName} está de aniversário`,
+    introText: 'Essa é a história que mudou as nossas vidas.',
+    inviteImage: s.inviteImage.replace('invite.jpg', 'invite-sem-idade.jpg'),
+    entryEyebrow: `A festa ${de} ${s.childName}`,
+    story: s.story.map((m, i) => (i === s.story.length - 1 ? { ...m, label: 'Hora de celebrar', text: `Chegou a hora de celebrar ${de} ${s.childName}. E a festa só fica completa com você.` } : m)),
+  }
+}
+
 export const PRESET_KEY = 'convite-demo-preset'
 export function currentPreset() {
   let id = ''
@@ -63,7 +76,7 @@ export async function seedDemo() {
   // conta de exemplo com senha provisória (entra com cliente@exemplo.com / Convite123 e escolhe a própria senha)
   await setDoc(doc(adminsCol, 'cliente@exemplo.com'), { host: 'gabriel' })
   await setDoc(doc(accountsCol, 'cliente@exemplo.com'), { mustChange: true })
-  await setDoc(settingsRef, currentPreset().settings as never)
+  await setDoc(settingsRef, (isReel() ? ageless(currentPreset().settings) : currentPreset().settings) as never)
   await setDoc(doc(db, 'owners', 'demo@convite'), { ok: true })
   // o resto (convidados e clientes de exemplo) entra em segundo plano, sem travar a abertura
   void seedRest()
