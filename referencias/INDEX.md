@@ -90,6 +90,26 @@ O que elas têm em comum, e o que vale levar para a marca:
 | ref-31-amarelo-titulo-repetido-em-camadas-objetos-soltos | Capas de carrossel | Título repetido em camadas coloridas com sombra, objetos soltos, texto vertical nas bordas | Marca |
 | ref-32-pinterest-moodboard-candy-adesivos-sunburst-fontes-bolhudas | **Moodboard de paleta e sistema** | Rosa, amarelo e azul juntos; sunburst; adesivos; contornos de mãos; fontes bolhudas; grid de série para o feed | Textos e marcas |
 
+
+## DECISÕES DA MARCA (registro)
+
+- **Proposta escolhida: 1 "bombom" (chiclete pop).** Linha visual: rosa chiclete #FF5FA2, manteiga #FFD84D, céu #5BC8F5, menta #7EE0B5, creme #FFF8EC, tinta #2A1B3D; Bagel Fat One (títulos/logo), Fraunces itálico (palavra-chave), Outfit (textos/botões), Caveat (notas à mão). Lâmina: `convites/marketing/marca/` (`marca.html?p=1`).
+- **O NOME PODE MUDAR.** O dono quer manter a linha visual do bombom e talvez só trocar o nome. Até ele definir, **não escrever "bombom" nem @ em peças finais** (usar espaço reservado). Antes de adotar qualquer nome: checar INPI, @ no Instagram e domínio.
+- **Não impacta os convites já existentes** (temas Safari e Jardim ficam como estão). A marca vale para posts, stories, reels, capas e anúncios.
+
+## REFERÊNCIAS DE EDIÇÃO DE REELS (pasta `reels/`)
+
+Duas capturas de anúncios de edição/IA no Instagram (talking head). O que levar para os reels:
+
+1. **Hook em tela cheia, no alto (terço superior).** Duas linhas: primeira em **sans bold geométrica** (estilo Plus Jakarta/Outfit ExtraBold, tracking apertado, branca) e a palavra-chave em **serifa itálica grande** (estilo Fraunces/DM Serif Itálico), ligeiramente maior e sobreposta à linha de cima. Ex.: "Editar pode / *ser fácil*". O hook fica **por trás ou encostando na cabeça** (texto atrás da pessoa), com sombra suave para ler sobre o fundo.
+2. **Legenda no terço inferior central, 2 linhas curtas.** Sans bold branca, caixa-baixa normal (sem tudo maiúsculo), peso 800, **sem caixa e sem contorno grosso**, com leve sombra. Máximo ~5 palavras por linha; texto da frase inteira aparece e a **palavra falada é destacada** (alternativa: palavra a palavra, com leve "pulinho" de escala e blur na entrada).
+3. **Tipografia apertada (tracking negativo)** e altura de linha baixa nas legendas grandes (ref 2); palavras podem variar de tamanho/posição na mesma frase (ex.: "já" grande, "se" pequeno e deslocado) para dar ritmo.
+4. **Enquadramento:** retrato vertical 9:16, **cabeça e ombros**, rosto ocupando o terço do meio, olhos na linha de cerca de 1/3 do topo; **close-up agressivo** (ref 2: o rosto preenche a tela) e plano médio (ref 1: com mãos aparecendo). Câmera ligeiramente acima da linha dos olhos, fundo com profundidade e luzes quentes ao fundo (bokeh), sem objetos que roubem a atenção.
+5. **Cor e luz:** fundo escuro e quente (laranja/âmbar atrás) contra roupa azul-marinho (ref 1); tons frios azulados (ref 2). Vinheta escura nas bordas, pele natural e contraste médio-alto; texto branco puro sempre sobre as áreas escuras.
+6. **Interface do Instagram:** deixar livre o topo (~14%) e a base (~20%) para não ser coberto por perfil, botão "Saiba mais"/CTA e menus. A legenda fica acima da faixa do CTA.
+7. Para o NOSSO conteúdo (sem pessoa falando): aplicar a mesma lógica: hook em 2 linhas (sans bold + serifa itálica na palavra-chave) na parte de cima, legenda curta embaixo, painel/bebê no centro grande, cortes rápidos. Cores da marca (bombom), não as das capturas.
+- Não copiar rostos, perfis ou textos dessas capturas.
+
 ## Como adicionar mais
 1. Envie a imagem na conversa e diga **o que gostou** nela.
 2. O Claude salva em `referencias/<posts|reels|stories|carrosseis|capas|outros>/`, reduz o peso (até ~2 MB), registra a linha na tabela, faz commit e push.
