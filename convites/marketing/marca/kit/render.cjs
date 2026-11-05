@@ -1,6 +1,6 @@
 const { chromium } = require('playwright'); const D = __dirname + '/'; const fs = require('fs')
 const BOARDS = ['capa','logo','uso','paleta','tipo','elementos','posts','stories','reels','voz']
-const PIECES = { post1:[1080,1350], post2:[1080,1350], post3:[1080,1350], story1:[1080,1920], story2:[1080,1920], reel1:[1080,1920], reel2:[1080,1920] }
+const PIECES = { post1:[1080,1350], post2:[1080,1350], post3:[1080,1350], story1:[1080,1920], story2:[1080,1920], story3:[1080,1920], reel1:[1080,1920], reel2:[1080,1920] }
 ;(async () => { const b = await chromium.launch({ args: ['--allow-file-access-from-files'] })
   fs.mkdirSync(D + 'out/manual', { recursive: true }); fs.mkdirSync(D + 'out/pecas', { recursive: true })
   const only = process.argv[2]

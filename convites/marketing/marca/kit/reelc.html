@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Caveat:wght@600&family=Fraunces:ital,opsz,wght@1,9..144,700&family=JetBrains+Mono:wght@700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --pink:#FF5FA2; --butter:#FFD84D; --sky:#5BC8F5; --mint:#7EE0B5; --cream:#FFF8EC; --ink:#2A1B3D }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html,body { width:1080px; height:1920px; overflow:hidden; background:#FFD84D; font-family:'Outfit',sans-serif; color:var(--ink) }
+  #stage { position:absolute; inset:0; overflow:hidden }
+  .sc { position:absolute; inset:0; display:none }
+  .abs { position:absolute }
+  .disp { font-family:'Bagel Fat One',sans-serif }
+  .acc { font-family:'Fraunces',serif; font-style:italic; font-weight:700 }
+  .hand { font-family:'Caveat',cursive; font-weight:600 }
+  .t-hook { font-family:'Outfit'; font-weight:800; letter-spacing:-.035em; line-height:1.02 }
+  .w { display:inline-block; will-change:transform,opacity }
+  .mark { position:relative; display:inline-block; padding:0 .22em; margin:0 -.05em; color:var(--mkc,#fff); z-index:1 }
+  .mark::before { content:''; position:absolute; inset:.06em 0 .02em; background:var(--mk,var(--pink)); border-radius:.22em; transform:rotate(-1.6deg); z-index:-1 }
+  .frame { position:absolute; overflow:hidden; border-radius:60px 60px 0 0; border:12px solid #FFF8EC; border-bottom:0; background:#fff; box-shadow:0 22px 44px rgba(42,27,61,.22) }
+  .frame img { position:absolute; left:0; top:0; width:100%; object-fit:cover; object-position:top; display:block }
+  .gc { position:absolute; display:flex; align-items:center; gap:16px; padding:20px 28px; border-radius:30px; font:800 30px/1.15 'Outfit'; color:var(--ink);
+    background:linear-gradient(140deg,rgba(255,255,255,.86),rgba(255,255,255,.4)); backdrop-filter:blur(16px) saturate(1.4); border:1.5px solid rgba(255,255,255,.95);
+    box-shadow:0 18px 44px rgba(42,27,61,.16), 0 0 0 1px color-mix(in srgb,var(--ac,#FF5FA2) 38%,transparent), 0 0 34px color-mix(in srgb,var(--ac,#FF5FA2) 26%,transparent), inset 0 1px 0 #fff }
+  .gc i { font-style:normal; font-size:42px }
+  .btn { position:absolute; display:flex; align-items:center; justify-content:center; gap:22px; height:150px; padding:0 64px; border-radius:90px; font:800 52px 'Outfit'; color:#fff; background:#22C55E; box-shadow:0 22px 50px rgba(34,197,94,.4); white-space:nowrap }
+  .conf { position:absolute }
+  .pillstep { position:absolute; left:50px; width:980px; top:200px; display:flex; justify-content:center }
+</style></head><body>
+<div id="stage"></div>
+<script>
+const BPM = 120.3, BEAT = 60 / BPM
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x)), lerp = (a, b, k) => a + (b - a) * k
+const E = { out: k => 1 - Math.pow(1 - k, 3), in: k => k * k * k, io: k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2, back: k => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2) } }
+const P = (t, t0, d) => clamp((t - t0) / d)
+const $ = h => { const d = document.createElement('div'); d.innerHTML = h.trim(); return d.firstElementChild }
+const stage = document.getElementById('stage')
+const EVENTS = new Map(), ev = (t, type) => EVENTS.set(type + '@' + t.toFixed(3), { t: +t.toFixed(3), type })
+const B = [6, 5, 4, 3, 12]          // batidas por cena (30 batidas ~ 15 s)
+const T0 = []; { let a = 0; for (const n of B) { T0.push(a * BEAT); a += n } }
+const TOTAL = B.reduce((a, b) => a + b, 0) * BEAT
+const S = i => ({ a: T0[i], b: T0[i] + B[i] * BEAT, d: B[i] * BEAT })
+const COL = ['#FFD84D', '#5BC8F5', '#FF5FA2', '#FFD84D', '#FF5FA2']
+const WA = '<svg width="76" height="76" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>'
+const cols = { pink:'#FF5FA2', butter:'#FFD84D', sky:'#5BC8F5', mint:'#7EE0B5', cream:'#FFF8EC', ink:'#2A1B3D' }
+function words(el, text) { const toks = []; text.replace(/\{\{(.*?)\}\}|(\S+)/g, (m, g, w) => { if (g) toks.push([g, true]); else toks.push([w, false]) })
+  el.innerHTML = toks.map(([w, k]) => k ? `<span class="w mark acc">${w}</span>` : `<span class="w">${w}</span>`).join(' '); return [...el.querySelectorAll('.w')] }
+function rev(ws, t, t0, step = .12, dur = .4) { ws.forEach((w, i) => { const k = E.out(P(t, t0 + i * step, dur)); w.style.opacity = k; w.style.transform = `translateY(${(1 - k) * 60}px) scale(${.92 + .08 * E.back(k)})`; w.style.filter = `blur(${(1 - k) * 12}px)` }) }
+function gcAnim(el, t, t0, side, y) { const k = E.back(P(t, t0, .45)); el.style.opacity = clamp(P(t, t0, .12)); el.style.top = (y + Math.sin(t * 2 + y) * 6) + 'px'
+  el.style[side < 0 ? 'left' : 'right'] = '30px'; el.style.transform = `translateX(${(1 - k) * 140 * side}px) scale(${.6 + .4 * k})`; el.style.transformOrigin = side < 0 ? 'left center' : 'right center' }
+const confetiHTML = (list) => list.map(([x, y, kind, c, r]) => kind === 'r' ? `<div class="conf" data-x="${x}" data-y="${y}" data-r="${r}" style="left:${x}px;top:${y}px;width:62px;height:25px;border-radius:12px;background:${cols[c]};transform:rotate(${r}deg)"></div>` : `<div class="conf" data-x="${x}" data-y="${y}" data-r="${r}" style="left:${x}px;top:${y}px;width:66px;height:66px;background:${cols[c]};clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);transform:rotate(${r}deg)"></div>`).join('')
+const scenes = []
+const add = (i, build, update) => { const el = $('<div class="sc"></div>'); el.style.background = COL[i]; if (COL[i] === '#FF5FA2') { el.style.setProperty('--mk', '#FFD84D'); el.style.setProperty('--mkc', '#2A1B3D') }; stage.appendChild(el); const ctx = build(el, S(i)); scenes.push({ i, el, ctx, update, ...S(i) }) }
+const panel = (img, top, h, w = 820) => `<div class="frame" style="left:${(1080 - w) / 2}px;top:${top}px;width:${w}px;height:${h}px"><img src="img/${img}" style="height:1700px"></div>`
+const drift = (el, t) => el.querySelectorAll('.conf').forEach((c, i) => { c.style.transform = `translate(${Math.sin(t * 1.3 + i) * 14}px,${Math.cos(t * 1.1 + i * 2) * 18}px) rotate(${+c.dataset.r + Math.sin(t * 2 + i) * 14}deg)` })
+
+/* S1 hook */
+add(0, el => { el.innerHTML = confetiHTML([[900, 300, 's', 'pink', 8], [70, 1500, 'r', 'sky', -20]])
+  const h = $('<div class="t-hook abs" style="left:50px;top:290px;width:980px;text-align:center;font-size:104px"></div>'); const ws = words(h, 'Imagina um convite assim pra {{sua festa}}')
+  const p = $(panel('j-5-hero.jpg', 760, 1160)); const c1 = $('<div class="gc" style="--ac:#FF5FA2"><i>📸</i><span>Fotos do<br>bebê</span></div>'), c2 = $('<div class="gc" style="--ac:#5BC8F5"><i>🦋</i><span>Emojis do<br>tema</span></div>')
+  el.append(h, p, c1, c2); return { h, ws, p, c1, c2 } }, (c, t, s) => { const lt = t - s.a
+  rev(c.ws, lt, .15, .16); const k = E.back(P(lt, .35, .7)); c.p.style.transform = `translateY(${(1 - k) * 1100 + Math.sin(lt * 2) * 6}px)`
+  gcAnim(c.c1, lt, 1.5, -1, 980); gcAnim(c.c2, lt, 2.0, 1, 1300); drift(c.p.parentNode, lt)
+  ev(s.a + .05, 'whoosh'); ev(s.a + .35, 'swipe'); ev(s.a + 1.5, 'pop'); ev(s.a + 2.0, 'pop') })
+/* S2 digita o nome */
+add(1, el => { el.innerHTML = confetiHTML([[900, 300, 'r', 'butter', 24], [70, 1500, 's', 'pink', -6]])
+  const h = $('<div class="t-hook abs" style="left:50px;top:290px;width:980px;text-align:center;font-size:100px"></div>'); const ws = words(h, 'Seus convidados {{só digitam o nome}}')
+  const p = $(`<div class="frame" style="left:130px;top:760px;width:820px;height:1160px"><img src="img/j-2-digitando.jpg" style="height:1700px"><img class="b" src="img/j-4-rsvp.jpg" style="height:1700px;opacity:0"></div>`)
+  const c1 = $('<div class="gc" style="--ac:#FF5FA2"><i>⌨️</i><span>Só o<br>nome</span></div>'), c2 = $('<div class="gc" style="--ac:#7EE0B5"><i>👨‍👩‍👧</i><span>Família<br>toda</span></div>')
+  el.append(h, p, c1, c2); return { h, ws, p, c1, c2 } }, (c, t, s) => { const lt = t - s.a
+  rev(c.ws, lt, .05, .1); c.p.style.transform = `translateY(${(1 - E.out(P(lt, .1, .5))) * 900}px)`; c.p.querySelector('.b').style.opacity = E.io(P(lt, 1.55, .3))
+  gcAnim(c.c1, lt, .7, -1, 980); gcAnim(c.c2, lt, 1.8, 1, 1300); drift(c.p.parentNode, lt)
+  ev(s.a + .05, 'whoosh'); ev(s.a + .7, 'pop'); for (let i = 0; i < 6; i++) ev(s.a + .8 + i * .12, 'key'); ev(s.a + 1.55, 'swipe'); ev(s.a + 1.8, 'pop') })
+/* S3 painel */
+add(2, el => { el.innerHTML = confetiHTML([[900, 300, 's', 'butter', 8], [70, 1500, 'r', 'butter', -20]])
+  const h = $('<div class="t-hook abs" style="left:50px;top:300px;width:980px;text-align:center;font-size:116px"></div>'); const ws = words(h, 'Tudo contado, {{ao vivo}}')
+  const p = $(panel('a-1-visao.jpg', 760, 1160)); const c1 = $('<div class="gc" style="--ac:#7EE0B5"><i>✅</i><span><b class="n1">0</b>/100<br>confirmados</span></div>'), c2 = $('<div class="gc" style="--ac:#FF5FA2"><i>📊</i><span><b class="n2">0</b>%<br>já responderam</span></div>')
+  el.append(h, p, c1, c2); return { h, ws, p, c1, c2 } }, (c, t, s) => { const lt = t - s.a
+  rev(c.ws, lt, .05, .12); c.p.style.transform = `translateY(${(1 - E.out(P(lt, .1, .5))) * 900}px)`
+  gcAnim(c.c1, lt, .5, -1, 980); gcAnim(c.c2, lt, .9, 1, 1300); drift(c.p.parentNode, lt)
+  c.c1.querySelector('.n1').textContent = Math.round(48 * E.out(P(lt, .6, .9))); c.c2.querySelector('.n2').textContent = Math.round(76 * E.out(P(lt, 1.0, .9)))
+  ev(s.a + .05, 'whoosh'); ev(s.a + .5, 'pop'); ev(s.a + .9, 'pop'); for (let i = 0; i < 9; i++) ev(s.a + .6 + i * .1, 'tick') })
+/* S4 lembrete */
+add(3, el => { el.innerHTML = confetiHTML([[900, 300, 'r', 'pink', 24], [70, 1500, 's', 'sky', -6]])
+  const h = $('<div class="t-hook abs" style="left:50px;top:290px;width:980px;text-align:center;font-size:100px"></div>'); const ws = words(h, 'Quem não respondeu? {{1 toque e pronto}}')
+  const p = $(panel('a-4b-lembrar.jpg', 760, 1160)); const c1 = $('<div class="gc" style="--ac:#FF5FA2"><i>⏰</i><span>Lembrete<br>em 1 toque</span></div>'), c2 = $('<div class="gc" style="--ac:#7EE0B5"><i>💬</i><span>Mensagem pronta<br>no WhatsApp</span></div>')
+  el.append(h, p, c1, c2); return { h, ws, p, c1, c2 } }, (c, t, s) => { const lt = t - s.a
+  rev(c.ws, lt, .05, .09); c.p.style.transform = `translateY(${(1 - E.out(P(lt, .1, .5))) * 900}px)`
+  gcAnim(c.c1, lt, .6, -1, 980); gcAnim(c.c2, lt, 1.1, 1, 1300); drift(c.p.parentNode, lt)
+  ev(s.a + .05, 'whoosh'); ev(s.a + .6, 'pop'); ev(s.a + 1.1, 'pop') })
+/* S5 chamada */
+add(4, el => { el.innerHTML = confetiHTML([[100, 300, 's', 'butter', -6], [920, 360, 'r', 'butter', 24], [80, 1500, 'r', 'sky', -20], [900, 1560, 's', 'sky', 0]])
+  const h = $('<div class="t-hook abs" style="left:50px;top:400px;width:980px;text-align:center;font-size:118px;color:#FFF8EC"></div>'); const ws = words(h, 'Quer um desses na sua festa?')
+  const btn = $(`<div class="btn" style="left:150px;top:900px;width:780px">${WA}Chama no WhatsApp</div>`)
+  const bio = $('<div class="abs" style="left:0;width:1080px;text-align:center;top:1100px;font:800 46px Outfit;color:#2A1B3D"><span style="font-size:64px;display:inline-block">☝️</span><br>Link na bio</div>')
+  const plate = $('<div class="abs" style="left:150px;top:1290px;width:780px;height:230px;background:#FFF8EC;border-radius:60px"></div>'); const logo = $('<img class="abs" src="logos/confete-principal.svg" style="left:230px;top:1305px;width:620px">')
+  const burst = Array.from({ length: 26 }, (_, i) => { const e = $(`<div class="conf" style="width:${24 + (i % 3) * 12}px;height:${14 + (i % 2) * 8}px;border-radius:8px;background:${['#FFD84D', '#5BC8F5', '#7EE0B5', '#FFF8EC'][i % 4]}"></div>`); el.appendChild(e); return e })
+  el.append(h, btn, bio, plate, logo); return { h, ws, btn, bio, plate, logo, burst } }, (c, t, s) => { const lt = t - s.a
+  c.ws.forEach(w => w.style.color = '#FFF8EC'); rev(c.ws, lt, .1, .14)
+  const bk = E.back(P(lt, 1.3, .5)); c.btn.style.opacity = clamp(P(lt, 1.3, .15)); c.btn.style.transform = `scale(${(.7 + .3 * bk) * (1 + .025 * Math.sin(lt * 9))})`
+  c.bio.style.opacity = E.out(P(lt, 1.9, .3)); c.bio.style.transform = `translateY(${Math.sin(lt * 7) * 8}px)`
+  const lk = E.back(P(lt, 2.4, .5)); c.plate.style.opacity = c.logo.style.opacity = clamp(P(lt, 2.4, .2)); c.plate.style.transform = c.logo.style.transform = `scale(${.85 + .15 * lk})`
+  c.burst.forEach((e, i) => { const a = (i / c.burst.length) * 6.283 + i, v = 380 + (i % 5) * 120, tt = lt - 1.3, k = Math.max(0, tt); e.style.opacity = tt > 0 && tt < 1.4 ? 1 - P(tt, .6, .8) : 0
+    e.style.left = 540 + Math.cos(a) * v * (1 - Math.exp(-k * 3)) / 3 + 'px'; e.style.top = 975 + Math.sin(a) * v * (1 - Math.exp(-k * 3)) / 3 + 700 * k * k * .5 + 'px'; e.style.transform = `rotate(${k * 360 + i * 30}deg)` })
+  drift(c.btn.parentNode, lt)
+  ev(s.a + .05, 'whoosh'); ev(s.a + 1.3, 'chime'); ev(s.a + 1.3, 'pop'); ev(s.a + 2.4, 'pop') })
+
+function render(t) {
+  t = Math.max(0, Math.min(TOTAL - .001, t))
+  scenes.forEach((sc, idx) => { const next = scenes[idx + 1], end = next ? next.a + .4 : TOTAL + 1
+    const on = t >= sc.a - .0001 && t < end; sc.el.style.display = on ? 'block' : 'none'
+    if (on) { const k = idx === 0 ? 1 : E.out(P(t, sc.a, .38)); sc.el.style.clipPath = idx === 0 ? 'none' : `inset(${(1 - k) * 100}% 0 0 0)`; sc.el.style.zIndex = idx
+      // cena anterior segue animando atrás
+      sc.update(sc.ctx, Math.min(t, sc.b + 1), sc) } })
+}
+async function collectEvents() { EVENTS.clear(); for (let t = 0; t <= TOTAL; t += 1 / 10) render(t); return [...EVENTS.values()].filter(e => e.t >= 0 && e.t <= TOTAL).sort((a, b) => a.t - b.t) }
+window.render = render; window.TOTAL = TOTAL; window.T0 = T0; window.collectEvents = collectEvents
+window.ready = document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.complete ? 1 : new Promise(r => { i.onload = i.onerror = r }))))
+</script></body></html>
