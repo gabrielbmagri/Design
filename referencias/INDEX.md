@@ -126,6 +126,47 @@ Cinco capturas de dois criadores (edição com IA / Claude Code). Valem para **e
 9. **Cor:** verde-lima forte (#B6F23C aproximado) como cor de destaque única sobre tons quentes/neutros. Para a marca bombom, trocar o verde-lima pelo rosa chiclete (e usar manteiga/menta como secundárias), mantendo a mesma função.
 - Sem copiar rostos, perfis, textos ou a identidade desses criadores.
 
+
+## REFERÊNCIAS DE VÍDEO (pasta `videos/`): efeitos, transições, movimento e som
+
+Três gravações de tela de **vídeos de marca/produto feitos com motion design** (apps de delivery e de banco). Guardei cópias leves (480 px) com áudio e uma folha de quadros a 2 fps de cada. Análise feita por mim a partir dos quadros e de medições do áudio (picos de energia). **Limite honesto:** não "ouço" o som como uma pessoa; o que está abaixo sobre áudio vem de números (ritmo, tipo de pico, faixa de frequência). Ao montar os reels, confirmar com o dono o clima sonoro.
+
+**Ritmo geral (medido no áudio):** cortes e batidas fortes a cada ~0,6 a 0,7 s (quase 90 BPM, ou meia-batida de ~180); picos de SFX em cada troca de cena; cena nova a cada ~1 a 1,5 s. Nada fica parado mais de ~2 s.
+
+### vref-01 · app de delivery, fundo vermelho (14,9 s)
+- **Abertura em "ícone que nasce":** retângulo/ícone pulsa no centro e vira o logo, com explosão tipo sunburst atrás (estrela de pontas) e partículas.
+- **Troca de fundo por varredura:** vermelho saturado → tela branca de app com lista de ícones que **entra em cascata** (stagger), depois volta ao vermelho.
+- **Ilustração vetorial + 3D:** mãos roxas segurando um celular com UI, cartão de carrinho e selo de % girando em volta; anéis radiais.
+- **Palavra-produto grande + foto:** "Pizza", "Sushi", "Hambúrguer", "Salada": a palavra gigante, cortada pela borda, e a foto do produto **entrando e saindo com blur de movimento**, etiqueta de preço branca com ícone de carrinho que "pop".
+- **Mapa minimalista com entregador:** moto/ícone percorre um mapa de ruas claro, pino aparece com "pop", bolinha verde vira check com **explosão de linhas** e estrelas de avaliação preenchendo.
+- **Som:** picos fortes (0,6 s, 1,5 s, 1,8 s) com mais agudos (~20 a 30 % acima de 3 kHz) nas trocas e sons graves curtos nas "caídas" (ex.: 1,26 s e 2,0 s). Sensação de "whoosh + pop + clique".
+
+### vref-02 · fintech roxa/branca (13,4 s)
+- **Tipografia que se escreve por etapas, uma ideia por tela:** "Pagou conta." → "Bateu meta." → "Juntou cada real." → "Agora é a vez do seu dinheiro correr!". Cada frase **troca com desfoque e deslocamento**; a palavra final em roxo mais forte.
+- **Celular pequeno à esquerda + cards de notificação surgindo à direita** em pilha (cada um com ícone, texto curto e selo "agora"), empilhando como feed. Mão segurando o celular na abertura, com ícones flutuando em volta ($, símbolos).
+- **Objeto 3D "moeda" roxa rolando e um cofre 3D que abre**; campo de texto digitando ("Minha caixinha") com cursor e **check de confirmação**.
+- **Texto grande + palavra-chave em roxo**; "Abre o [logo]" com logotipo no lugar da palavra.
+- Fundo **branco-lavanda com glow suave**, cantos arredondados em tudo, sombras macias.
+
+### vref-03 · fintech laranja/creme (11,4 s)
+- **Abre em fundo laranja saturado com texto creme gigante** ("Sexta à noite"), em duas linhas deslocadas, depois **varre para o fundo claro** com a mão segurando o celular ("rolê marcado").
+- **Cartão 3D girando**, borrado de movimento, atravessa a tela; **cards de notificação inclinados em perspectiva** ("Compra aprovada R$ 89,90 · Bar da Esquina") e um bloco/gema verde-água que passa.
+- **Mascote 3D (porquinho)** em close, que pisca/olha, depois **vira amarelo-laranja** e flutua com anel de brilho; texto pergunta-resposta ("E na segunda?" → "Zero ressaca financeira.").
+- **Card de UI com slider** ("Limite R$ 2.750,00 → R$ 1.350,00") com a barra se movendo e **check verde** confirmando.
+
+### Vocabulário de motion para reutilizar nos reels (resumo)
+1. **Uma ideia por tela, 1 a 1,5 s.** Frase curta, palavra-chave em outra cor/peso, entrada com blur + deslocamento curto, saída com blur.
+2. **Cards de UI em cascata (stagger)**, 60 a 120 ms entre eles, com "pop" de escala leve (overshoot) e sombra macia; selo "agora" ou etiqueta de status.
+3. **Objeto central 3D/ilustrado** que gira, cai ou flutua (moeda, cartão, caixa, mascote). Para nós: **convite 3D girando, bebê/mascote, balão, estrela, caixinha de presente**.
+4. **Transição por varredura de cor**: um bloco de cor saturada cobre a tela e revela a próxima cena (vermelho→branco, laranja→creme). Com marca bombom: rosa chiclete → creme.
+5. **Sunburst + partículas + linhas de explosão** nos momentos de "acerto" (confirmado, check, preço).
+6. **Palavra-produto gigante cortada pela borda**, objeto na frente, blur de movimento ao entrar.
+7. **Campo de texto digitando + cursor + check**: perfeito para o "o convidado só digita o nome".
+8. **Slider/contador animando** (números subindo) para o painel (confirmados 48/100).
+9. **Mapa/linha de percurso** (ex.: link pessoal da família chegando no WhatsApp).
+10. **Som:** cada troca com whoosh curto; "pop" nos cards; clique/teclado ao digitar; tom grave curto nas quedas; música de base rítmica ~90 BPM. Sem silêncios longos. Já usamos SFX sintetizados; mirar esse nível de densidade.
+- Fundo claro dominante com **uma cor de marca saturada em blocos**: combina com a nossa regra de fundo claro. Nada de copiar logos, mascotes, textos ou identidade dessas marcas.
+
 ## Como adicionar mais
 1. Envie a imagem na conversa e diga **o que gostou** nela.
 2. O Claude salva em `referencias/<posts|reels|stories|carrosseis|capas|outros>/`, reduz o peso (até ~2 MB), registra a linha na tabela, faz commit e push.
