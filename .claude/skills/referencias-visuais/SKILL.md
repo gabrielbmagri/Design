@@ -16,8 +16,9 @@ As referências do dono ficam em `referencias/` (índice em `referencias/INDEX.m
    - fundo claro (cinza/branco com degradê), painel do app sem moldura de celular, cards de vidro translúcidos;
    - nunca prometer preço, prazo ou números que não sejam reais; "controle de gratuidades" (sem dizer que criança até 5 anos é separada);
    - sem "um ano" em reels e anúncios; fotos de bebê são de IA (avisar para marcar "conteúdo gerado por IA").
-5. Se a referência conflitar com uma regra da marca, siga a regra e avise o dono.
-6. Diga ao dono, em uma linha, qual referência usou e o que tirou dela.
+5. Existe um **rebranding em andamento** (direção "candy", seção própria no INDEX). Para peças de marca (posts, capas, anúncios, reels), siga essa direção e avise que a paleta/identidade final ainda não foi aprovada; não invente nome da marca.
+6. Se a referência conflitar com uma regra da marca, siga a regra e avise o dono.
+7. Diga ao dono, em uma linha, qual referência usou e o que tirou dela.
 
 ## Quando o dono enviar novas referências
 1. Salve o arquivo em `referencias/<reels|posts|stories|carrosseis|capas|outros>/` com nome descritivo (ex.: `carrossel-minimalista-tipografia-grande.png`). A imagem anexada na conversa fica numa pasta temporária da sessão: copie de lá para o repositório.
