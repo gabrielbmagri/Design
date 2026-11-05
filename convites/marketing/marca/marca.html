@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bagel+Fat+One&family=Caveat:wght@600&family=DM+Serif+Display:ital@1&family=Fraunces:ital,opsz,wght@1,9..144,700&family=JetBrains+Mono:wght@700&family=Modak&family=Nunito:wght@700;900&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html,body { width:1800px; height:1200px; overflow:hidden; font-family:'Outfit',sans-serif; color:var(--ink) }
+  body { background:var(--paper) }
+  .abs { position:absolute }
+  .lab { font:700 22px 'JetBrains Mono',monospace; letter-spacing:.14em; text-transform:uppercase; opacity:.7 }
+  .chip { position:absolute; width:150px; height:150px; border-radius:34px; display:flex; flex-direction:column; justify-content:flex-end; padding:14px; font-weight:800; font-size:19px; line-height:1.1; box-shadow:0 12px 28px rgba(0,0,0,.14) }
+  .chip small { font:700 15px 'JetBrains Mono',monospace; opacity:.8; letter-spacing:.04em }
+  .post { position:absolute; left:870px; top:56px; width:520px; height:650px; overflow:hidden; border-radius:30px; box-shadow:0 26px 60px rgba(0,0,0,.22) }
+  .pimg { position:absolute; overflow:hidden; box-shadow:0 22px 44px rgba(0,0,0,.28) }
+  .pimg img { width:100%; height:100%; object-fit:cover; object-position:top; display:block }
+  .btn { white-space:nowrap; position:absolute; display:flex; align-items:center; gap:12px; padding:0 28px; height:68px; border-radius:40px; font-weight:800; font-size:26px; color:#fff; background:#22c55e; box-shadow:0 12px 28px rgba(34,197,94,.4) }
+  .avatar { position:absolute; left:1430px; top:56px; width:200px; height:200px; border-radius:50%; display:grid; place-items:center; box-shadow:0 14px 34px rgba(0,0,0,.2) }
+  .cov { position:absolute; width:120px; height:120px; border-radius:50%; display:grid; place-items:center; font-size:58px; box-shadow:0 10px 24px rgba(0,0,0,.18) }
+  .cl { position:absolute; width:120px; text-align:center; font-weight:700; font-size:17px }
+  .why { position:absolute; left:60px; width:760px; font-size:21px; line-height:1.35; font-weight:500 }
+  .pal { position:absolute; left:60px; top:545px; display:flex; gap:12px }
+  .sw { width:118px; height:132px; border-radius:22px; padding:10px; display:flex; flex-direction:column; justify-content:flex-end; font-size:15px; font-weight:800; line-height:1.15; box-shadow:0 8px 20px rgba(0,0,0,.12) }
+  .sw small { font:700 14px 'JetBrains Mono',monospace; opacity:.85 }
+  .kit { position:absolute; left:870px; top:760px }
+  .selo { position:absolute; width:150px; height:150px }
+  /* ===== B1 Bombom ===== */
+  .b1 { --paper:#FFF8EC; --ink:#2A1B3D; --c1:#FF5FA2; --c2:#FFD84D; --c3:#5BC8F5; --c4:#7EE0B5}
+  .b1 .wm { font-family:'Bagel Fat One'; font-size:190px; line-height:1; color:#FF5FA2; -webkit-text-stroke:0; text-shadow:6px 6px 0 #FFD84D, 12px 12px 0 #5BC8F5; letter-spacing:-.01em }
+  .b1 .disp { font-family:'Bagel Fat One' } .b1 .acc { font-family:'Fraunces',serif; font-style:italic; font-weight:700 } .b1 .hand { font-family:'Caveat' }
+  /* ===== B2 Tá Convidado ===== */
+  .b2 { --paper:#FFF6E5; --ink:#1B1B1F; --c1:#F2352B; --c2:#FFD400; --c3:#2547E8; --c4:#FF9BB0 }
+  .b2 .wm { font-family:'Anton'; font-size:112px; line-height:.95; color:#F2352B; text-shadow:6px 6px 0 #2547E8; transform:rotate(-4deg); transform-origin:left center; text-transform:uppercase; letter-spacing:.01em }
+  .b2 .disp { font-family:'Anton'; text-transform:uppercase } .b2 .acc { font-family:'DM Serif Display',serif; font-style:italic } .b2 .hand { font-family:'Caveat' }
+  /* ===== B3 Gominha ===== */
+  .b3 { --paper:#FFF7FB; --ink:#2B1850; --c1:#7B4DFF; --c2:#FF4D8D; --c3:#B6F23C; --c4:#FF9F1C }
+  .b3 .wm { font-family:'Modak'; font-size:150px; line-height:.9; color:transparent; background:linear-gradient(180deg,#FF7AB0,#FF4D8D 55%,#B8338E); -webkit-background-clip:text; background-clip:text; filter:drop-shadow(0 5px 0 #8A2A78) drop-shadow(0 12px 14px rgba(123,77,255,.35)) }
+  .b3 .disp { font-family:'Modak' } .b3 .acc { font-family:'Fraunces',serif; font-style:italic; font-weight:700 } .b3 .hand { font-family:'Caveat' }
+</style></head><body>
+<div id="root"></div>
+<script>
+const P = {
+ 1:{ cls:'b1', name:'bombom', tag:'convite doce, resposta rápida.', title:'PROPOSTA 1 · CHICLETE POP', handle:'@bombom.convites',
+   why:'Nome curto, fofo e fácil de dizer (e de lembrar no WhatsApp). Linha visual de chiclete: rosa, manteiga, azul-céu e menta, letras bolhudas retrô com sombra em degraus, serifa itálica para a palavra-chave e notas à mão. Mais próxima das refs 24 e 32.',
+   pal:[['Chiclete','#FF5FA2','#fff'],['Manteiga','#FFD84D','#2A1B3D'],['Céu','#5BC8F5','#2A1B3D'],['Menta','#7EE0B5','#2A1B3D'],['Creme','#FFF8EC','#2A1B3D'],['Tinta','#2A1B3D','#fff']],
+   type:[['Bagel Fat One','títulos e logo','disp'],['Fraunces Itálico','palavra-chave','acc'],['Outfit','textos e botões',''],['Caveat','notas à mão','hand']],
+   avatarBg:'#FF5FA2', avatarFont:"font-family:'Bagel Fat One';font-size:74px;color:#fff;text-shadow:3px 3px 0 #FFD84D", avatarTxt:'bom<br>bom', cov:['#FFD84D','#5BC8F5','#7EE0B5','#FF5FA2'], covTx:['#2A1B3D','#2A1B3D','#2A1B3D','#fff'],
+   star:'#FFD84D', ring:'#FF5FA2' },
+ 2:{ cls:'b2', name:'tá convidado!', tag:'chama que a festa já vai começar.', title:'PROPOSTA 2 · PIRULITO POP', handle:'@taconvidado',
+   why:'O nome já é o convite: é a frase que a pessoa lê e a que o produto entrega ("você está convidado"). Linha visual de pirulito e cartaz: vermelho tomate, amarelo sol e azul cobalto, letras condensadas gigantes cortadas pela borda, sunburst, círculos e etiquetas. Mais próxima das refs 26, 27 e 31.',
+   pal:[['Tomate','#F2352B','#fff'],['Sol','#FFD400','#1B1B1F'],['Cobalto','#2547E8','#fff'],['Salmão','#FF9BB0','#1B1B1F'],['Creme','#FFF6E5','#1B1B1F'],['Tinta','#1B1B1F','#fff']],
+   type:[['Anton','títulos e logo','disp'],['DM Serif Itálico','palavra-chave','acc'],['Outfit','textos e botões',''],['Caveat','notas à mão','hand']],
+   avatarBg:'#FFD400', avatarFont:"font-family:'Anton';font-size:96px;color:#F2352B;text-shadow:3px 3px 0 #2547E8;line-height:.95;text-transform:uppercase;transform:rotate(-6deg)", avatarTxt:'TÁ!', cov:['#F2352B','#FFD400','#2547E8','#FF9BB0'], covTx:['#fff','#1B1B1F','#fff','#1B1B1F'],
+   star:'#FFD400', ring:'#F2352B' },
+ 3:{ cls:'b3', name:'gominha', tag:'convite que dá vontade de pegar.', title:'PROPOSTA 3 · GUMMY 3D', handle:'@gominha.convites',
+   why:'Nome diminutivo e brincalhão, com cara de bala de goma. Linha visual de gummy: letras 3D infladas e brilhantes (como as espirais das refs 29 e 30), cores de goma saturadas (uva, morango, limão, laranja) sobre fundo claro. É a mais "tecnológica" e a mais fácil de virar animação nos reels.',
+   pal:[['Uva','#7B4DFF','#fff'],['Morango','#FF4D8D','#fff'],['Limão','#B6F23C','#2B1850'],['Laranja','#FF9F1C','#2B1850'],['Nuvem','#FFF7FB','#2B1850'],['Ameixa','#2B1850','#fff']],
+   type:[['Modak','títulos e logo','disp'],['Fraunces Itálico','palavra-chave','acc'],['Outfit','textos e botões',''],['Caveat','notas à mão','hand']],
+   avatarBg:'#7B4DFF', avatarFont:"font-family:'Modak';font-size:68px;color:#FF7AB0;text-shadow:0 4px 0 #8A2A78;line-height:.85", avatarTxt:'gom', cov:['#B6F23C','#FF9F1C','#FF4D8D','#7B4DFF'], covTx:['#2B1850','#2B1850','#fff','#fff'],
+   star:'#B6F23C', ring:'#7B4DFF' }
+}
+const n = +(new URLSearchParams(location.search).get('p') || 1), p = P[n]
+document.body.className = p.cls
+const WA = '<svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>'
+const IMG = 'stills/j-5-hero.png'
+// ---- mock do post (4:5)
+const post = {
+ 1:`<div class="post" style="background:#FF5FA2">
+     <div class="abs disp" style="left:-14px;top:70px;font-size:250px;line-height:.82;color:#FFF8EC;letter-spacing:-.02em;text-shadow:5px 5px 0 #FFD84D">sua<br>festa</div>
+     <div class="abs lab" style="left:28px;top:26px;color:#FFF8EC;opacity:1;font-size:16px">convite digital · ${p.handle}</div>
+     <div class="pimg" style="left:230px;top:140px;width:250px;height:360px;border-radius:36px;border:8px solid #fff;transform:rotate(5deg)"><img src="${IMG}"></div>
+     <div class="abs" style="left:34px;top:430px;width:210px;height:210px;background:#FFD84D;border-radius:50%;display:grid;place-items:center;transform:rotate(-10deg);font-family:'Bagel Fat One';font-size:44px;line-height:.95;text-align:center;color:#2A1B3D">novo<br>jeito!</div>
+     <div class="abs hand" style="left:48px;top:340px;font-size:34px;color:#fff;transform:rotate(-8deg)">olha que fofo ↘</div>
+     <div class="btn" style="left:150px;top:560px;height:62px;font-size:23px">${WA}Chama no WhatsApp</div></div>`,
+ 2:`<div class="post" style="background:#F2352B">
+     <div class="abs" style="left:-40px;top:300px;width:620px;height:360px;background:#FFD400;transform:rotate(-12deg)"></div>
+     <div class="abs disp" style="left:18px;top:40px;font-size:128px;line-height:.92;color:#FFF6E5;text-shadow:5px 5px 0 #2547E8">CHAMA<br>A FESTA</div>
+     <div class="pimg" style="left:196px;top:196px;width:270px;height:390px;border-radius:26px;border:7px solid #1B1B1F;transform:rotate(-4deg)"><img src="${IMG}"></div>
+     <div class="abs" style="left:26px;top:430px;width:150px;height:150px;border-radius:50%;background:#2547E8"></div>
+     <div class="abs acc" style="left:34px;top:470px;font-size:40px;line-height:1;color:#FFF6E5;transform:rotate(-8deg)">tá<br>convidado!</div>
+     <div class="abs" style="left:392px;top:150px;width:104px;height:104px;border-radius:50%;background:#FFD400;display:grid;place-items:center;font-family:'Anton';font-size:26px;color:#1B1B1F;transform:rotate(12deg)">NOVO!</div>
+     <div class="btn" style="left:218px;top:586px;height:56px;font-size:21px;background:#1B1B1F;box-shadow:none">${WA}Chama no WhatsApp</div></div>`,
+ 3:`<div class="post" style="background:linear-gradient(160deg,#FFD6EA,#E6DBFF 55%,#D3F5B0)">
+     <div class="abs disp" style="left:0;width:100%;text-align:center;top:30px;font-size:190px;line-height:.84;color:transparent;background:linear-gradient(180deg,#FF7AB0,#FF4D8D 55%,#B8338E);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 5px 0 #8A2A78) drop-shadow(0 14px 14px rgba(123,77,255,.35))">festa<br>doce</div>
+     <div class="pimg" style="left:150px;top:190px;width:230px;height:350px;border-radius:44px;border:6px solid rgba(255,255,255,.9);transform:rotate(-5deg);box-shadow:0 30px 50px rgba(123,77,255,.35)"><img src="${IMG}"></div>
+     <div class="abs" style="left:40px;top:330px;width:92px;height:92px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0 12%,#B6F23C 14%);box-shadow:0 12px 20px rgba(0,0,0,.18)"></div>
+     <div class="abs" style="left:400px;top:410px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0 12%,#FF9F1C 14%);box-shadow:0 12px 20px rgba(0,0,0,.18)"></div>
+     <div class="abs acc" style="left:0;width:100%;text-align:center;top:548px;font-size:30px;color:#2B1850">convite macio, festa pronta</div>
+     <div class="btn" style="left:130px;top:592px;height:48px;font-size:19px;border-radius:30px">${WA}Chama no WhatsApp</div></div>`
+}[n]
+const sw = p.pal.map(([nm,hex,fg]) => `<div class="sw" style="background:${hex};color:${fg};${hex.toLowerCase()=='#fff8ec'||hex.toLowerCase()=='#fff6e5'||hex.toLowerCase()=='#fff7fb'?'border:2px solid rgba(0,0,0,.12)':''}">${nm}<small>${hex}</small></div>`).join('')
+const ty = p.type.map(([f,u,c],i) => `<div class="abs" style="left:${60 + (i%2)*390}px;top:${735 + Math.floor(i/2)*190}px;width:370px"><div class="lab" style="font-size:16px">${f} · ${u}</div><div class="${c}" style="font-size:${c==='disp'?58:c==='acc'?46:c==='hand'?44:34}px;line-height:1.05;margin-top:8px;${c===''?'font-weight:800':''}">${c==='disp'?(n==2?'CHAMA A FESTA':n==3?'gominha':'sua festa'):c==='acc'?'palavra-chave':c==='hand'?'olha que fofo!':'Confirme em 1 minuto, sem app.'}</div></div>`).join('')
+const covLabels = ['Como funciona','Temas','Painel','Dúvidas'], emo=['✨','🎨','📊','💬']
+const covers = p.cov.map((bg,i) => { const x = 1430 + (i%2)*150, y = 300 + Math.floor(i/2)*190; return `<div class="cov" style="left:${x}px;top:${y}px;background:${bg};color:${p.covTx[i]};outline:5px solid ${p.ring};outline-offset:4px">${emo[i]}</div><div class="cl" style="left:${x}px;top:${y+134}px">${covLabels[i]}</div>` }).join('')
+document.getElementById('root').innerHTML = `
+ <div class="lab abs" style="left:60px;top:40px">${p.title}</div>
+ <div class="abs wm" style="left:60px;top:${n==3?60:n==2?120:100}px">${p.name}</div>
+ <div class="abs acc" style="left:62px;top:${n==3?300:n==2?300:300}px;font-size:40px;color:var(--c1)">${p.tag}</div>
+ <div class="why" style="top:372px">${p.why}</div>
+ <div class="pal">${sw}</div>
+ ${ty}
+ ${post}
+ <div class="avatar" style="background:${p.avatarBg}"><div style="${p.avatarFont};text-align:center">${p.avatarTxt}</div></div>
+ <div class="abs" style="left:1430px;top:272px;font-weight:800;font-size:22px">${p.handle}</div>
+ ${covers}
+ <div class="lab abs" style="left:870px;top:722px">botão · selo · etiquetas</div>
+ <div class="btn" style="left:870px;top:770px">${WA}Chama no WhatsApp</div>
+ <div class="abs" style="left:1225px;top:748px;width:110px;height:110px;background:${p.star};clip-path:polygon(50% 0,61% 20%,82% 10%,80% 32%,100% 38%,86% 55%,98% 75%,76% 76%,70% 98%,52% 84%,32% 100%,28% 78%,6% 80%,18% 60%,0 44%,22% 36%,20% 14%,40% 24%);display:grid;place-items:center;font:800 24px Outfit;color:${n==3?'#2B1850':'#2A1B3D'}"><span style="transform:rotate(-8deg)">NOVO!</span></div>
+ <svg class="selo" style="left:1355px;top:742px" viewBox="0 0 150 150"><circle cx="75" cy="75" r="72" fill="${p.ring}"/><defs><path id="c" d="M75,75 m-52,0 a52,52 0 1,1 104,0 a52,52 0 1,1 -104,0"/></defs><text font-family="JetBrains Mono" font-weight="700" font-size="13" letter-spacing="1.6" fill="#fff"><textPath href="#c">CONVITE DIGITAL • SEM APP •  </textPath></text><text x="75" y="88" text-anchor="middle" font-size="42">🎉</text></svg>
+ <div class="abs hand" style="left:1520px;top:800px;font-size:30px;transform:rotate(-6deg);color:var(--c1)">sem app,<br>sem cadastro →</div>
+ <div class="lab abs" style="left:870px;top:880px">grid do feed (3 posts)</div>
+ <div class="abs" style="left:870px;top:920px;display:flex;gap:16px">${[0,1,2].map(i=>`<div style="width:150px;height:187px;border-radius:18px;background:${[p.cov[0],p.cov[1],p.cov[3]][i]};box-shadow:0 8px 18px rgba(0,0,0,.16);display:grid;place-items:center;font-size:56px">${['🎈','💌','🦋'][i]}</div>`).join('')}</div>
+`
+window.ready = Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = r))])
+</script></body></html>
