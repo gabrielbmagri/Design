@@ -36,6 +36,16 @@
   /* peças em formato de post/story (body.piece) */
   body.piece { position:relative }
   .t-hook { font-family:'Outfit'; font-weight:800; letter-spacing:-.035em; line-height:1 }
+  .markb::before { background:#FFD84D !important }
+  .bub { position:absolute; padding:24px 34px; border-radius:40px 40px 40px 10px; background:#FFF8EC; font:800 44px/1.1 'Outfit'; color:#2A1B3D; box-shadow:0 16px 36px rgba(42,27,61,.16); white-space:nowrap }
+  .row2 { position:absolute; left:70px; width:940px; display:flex; align-items:center; gap:26px; padding:28px 34px; border-radius:34px; background:#FFF8EC; box-shadow:0 14px 34px rgba(42,27,61,.12); font:800 40px/1.15 'Outfit'; color:#2A1B3D }
+  .row2 i { font-style:normal; font-size:56px } .row2 em { margin-left:auto; font-style:normal; width:62px; height:62px; border-radius:50%; display:grid; place-items:center; font-size:34px; flex:none }
+  .quote { font-family:'Fraunces',serif; font-style:italic; font-weight:700; letter-spacing:-.01em; color:#2A1B3D }
+  .wam { position:absolute; border-radius:44px 44px 0 0; overflow:hidden; background:#efeae2; border:11px solid #FFF8EC; border-bottom:0 }
+  .wam .hd { height:104px; background:#008069; color:#fff; display:flex; align-items:center; gap:18px; padding:0 26px; font:800 32px Outfit }
+  .wam .av { width:62px; height:62px; border-radius:50%; background:linear-gradient(135deg,#f9a8d4,#fcd34d); display:grid; place-items:center; font-size:34px }
+  .wam .ms { margin:20px; background:#d9fdd3; border-radius:28px 28px 28px 8px; padding:12px; box-shadow:0 8px 22px rgba(0,0,0,.12); color:#111 }
+  .wam .ms img { width:100%; display:block; border-radius:20px } .wam .ms .t { padding:12px 10px 4px; font:500 27px/1.3 Outfit }
 </style></head><body>
 <div id="root"></div>
 <script>
@@ -245,9 +255,89 @@ pages.ad2 = () => `${SOLID('#5BC8F5')}
   <div class="gc" style="--ac:#7EE0B5;left:40px;top:500px;font-size:29px"><i>✅</i><span>48 vão</span></div>
   <div class="gc" style="--ac:#FF5FA2;right:40px;top:650px;font-size:29px"><i>🙅‍♀️</i><span>9 não vão</span></div>
   <div class="gc" style="--ac:#FFD84D;left:40px;top:830px;font-size:27px"><i>⏰</i><span>Lembrete em<br>1 toque</span></div>`
+/* ===== CARROSSÉIS (1080x1350) ===== */
+const BGS = { m:'#FFD84D', c:'#5BC8F5', r:'#FF5FA2' }
+const H2 = (l1, kw, size, pink) => `<div class="t-hook" style="font-size:${size}px;color:#2A1B3D">${l1}${l1 ? '<br>' : ''}<span class="mark ${pink ? 'markb' : ''} acc" style="color:${pink ? '#2A1B3D' : '#fff'};font-weight:700;letter-spacing:-.01em;z-index:1;font-size:${size * 1.1}px">${kw}</span></div>`
+const TOP = (pg, n) => `<div class="abs mono" style="left:70px;top:56px;font-size:21px;opacity:.65">${pg}</div><div class="abs mono" style="right:70px;top:56px;font-size:21px;opacity:.65">${n}</div>`
+const SWIPE = `<div class="abs hand" style="right:70px;bottom:46px;font-size:52px;color:#2A1B3D;transform:rotate(-4deg);z-index:6">arrasta →</div>`
+const BIGP = (img, top = 520, w = 780, imgH = 1690) => `<div class="frame" style="left:${(1080 - w) / 2}px;top:${top}px;width:${w}px;height:${1350 - top + 20}px;border-radius:56px 56px 0 0;border:12px solid #FFF8EC;border-bottom:0;background:#fff"><img src="img/${img}" style="height:${imgH}px"></div>`
+const GC = (ac, ic, tx, side, y, fs = 30) => `<div class="gc" style="--ac:${ac};${side < 0 ? 'left' : 'right'}:34px;top:${y}px;font-size:${fs}px;z-index:4"><i>${ic}</i><span>${tx}</span></div>`
+const CF = (a, b) => confetti([[968, 250, 's', a, 8], [40, 1260, 'r', b, -18]], 1.4)
+const BTN = (top) => `<div class="abs" style="left:0;width:1080px;text-align:center;top:${top}px"><span class="btn" style="height:140px;font-size:54px;padding:0 64px;gap:22px">${WA.replace('34', '72').replace('34', '72')}Chama no WhatsApp</span></div>`
+const CAR = {
+ // ---------- 1 · MANTEIGA · organização ----------
+ c1s1: () => `${SOLID(BGS.m)}${CF('pink', 'sky')}${TOP('convites infantis · @meuconfetedigital', '01')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('Você sabe quantas pessoas vão', 'mesmo na festa?', 96)}</div>
+   ${[['Vou sim! 🥳', 80, 560, -4], ['Confirmo depois…', 470, 680, 3], ['Posso levar meu primo?', 120, 820, 2], ['Qual o horário mesmo?', 380, 960, -3], ['Vou, acho que vou 🤔', 140, 1100, 4]].map(([t, x, y, r]) => `<div class="bub" style="left:${x}px;top:${y}px;transform:rotate(${r}deg)">${t}</div>`).join('')}
+   <div class="sel" style="left:820px;top:470px;width:170px;height:170px;background:#25D366;transform:rotate(8deg);box-shadow:0 16px 36px rgba(37,211,102,.35)"><svg width="90" height="90" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg><b style="position:absolute;right:-16px;top:-10px;min-width:92px;height:64px;padding:0 16px;border-radius:34px;background:#E5484D;color:#fff;font:800 38px Outfit;display:grid;place-items:center">99+</b></div>${SWIPE}`,
+ c1s2: () => `${SOLID(BGS.c)}${CF('butter', 'pink')}${TOP('o jeito de sempre', '02')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('Organizar festa', 'não devia ser assim', 92)}</div>
+   ${[['💬', 'Grupo de WhatsApp bagunçado'], ['📋', 'Planilha que ninguém atualiza'], ['📞', 'Ligar um por um'], ['🧮', 'Contar criança no dedo']].map(([i, t], k) => `<div class="row2" style="top:${470 + k * 180}px"><i>${i}</i><span>${t}</span><em style="background:rgba(229,72,77,.14);color:#E5484D">✕</em></div>`).join('')}
+   <div class="abs hand" style="left:0;width:1080px;text-align:center;top:1210px;font-size:56px;color:#2A1B3D">e a festa ainda nem começou…</div>`,
+ c1s3: () => `${SOLID(BGS.r)}${CF('butter', 'sky')}${TOP('agora', '03')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('E se o convite', 'respondesse por você?', 90, true)}</div>
+   ${BIGP('a-1-visao.jpg', 460)}${GC('#7EE0B5', '✅', '48 vão', -1, 700)}${GC('#FFD84D', '🙅‍♀️', '9 não vão', 1, 880)}${GC('#5BC8F5', '⏳', '21 ainda vão<br>responder', -1, 1080, 28)}`,
+ c1s4: () => `${SOLID(BGS.m)}${CF('pink', 'sky')}${TOP('pros convidados', '04')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('Cada família confirma', 'em 1 minuto', 96)}</div>
+   ${BIGP('j-2-digitando.jpg', 460)}${GC('#FF5FA2', '⌨️', 'Só digita<br>o nome', -1, 760)}${GC('#5BC8F5', '📵', 'Sem app,<br>sem cadastro', 1, 1010)}`,
+ c1s5: () => `${SOLID(BGS.c)}${CF('butter', 'pink')}${TOP('e quem esqueceu?', '05')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('Aquela tia que não respondeu?', '1 toque e pronto', 86)}</div>
+   ${BIGP('a-4b-lembrar.jpg', 460)}${GC('#FF5FA2', '⏰', 'Lembrete<br>pronto', -1, 760)}${GC('#7EE0B5', '💬', 'Direto no<br>WhatsApp dela', 1, 1010)}`,
+ c1s6: () => `${SOLID(BGS.r)}${confetti([[90, 110, 'r', 'butter', -22], [930, 90, 's', 'butter', 8], [980, 900, 'd', 'sky', 0], [60, 900, 'r', 'sky', 20]], 1.6)}
+   <div class="abs" style="left:0;width:1080px;text-align:center;top:250px">${H2('Quer sua festa', 'sem dor de cabeça?', 110, true)}</div>${BTN(650)}
+   <div class="abs" style="left:0;width:1080px;text-align:center;top:860px;font:800 46px Outfit;color:#2A1B3D">👆 link na bio</div>
+   <div class="abs hand" style="left:0;width:1080px;text-align:center;top:1080px;font-size:58px;color:#2A1B3D">salva pra mostrar pro papai 💛</div>`,
+ // ---------- 2 · CÉU · encanto ----------
+ c2s1: () => `${SOLID(BGS.c)}${CF('butter', 'pink')}${TOP('convites infantis · @meuconfetedigital', '01')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('O convite que emociona a família', 'antes mesmo da festa', 88)}</div>
+   ${TILT('j-5-hero.jpg', 215, 520, 650, 900, -3)}
+   <div class="sel" style="left:790px;top:540px;width:190px;height:190px;background:#FFD84D;transform:rotate(10deg);font-size:96px;box-shadow:0 14px 30px rgba(42,27,61,.2)">🥹</div>${SWIPE}`,
+ c2s2: () => `${SOLID(BGS.r)}${CF('butter', 'sky')}${TOP('a abertura', '02')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('Começa com', 'as fotinhas dele', 100, true)}</div>
+   ${BIGP('j-1-entrada.jpg', 470)}${GC('#FFD84D', '📸', 'As fotos<br>que você escolher', -1, 820, 28)}`,
+ c2s3: () => `${SOLID(BGS.m)}${CF('pink', 'sky')}${TOP('a história', '03')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('Cada fase vira', 'uma lembrança', 100)}</div>
+   ${BIGP('j-7-hist.jpg', 470, 780, 1690).replace('style="height:1690px"', 'style="height:1690px;margin-top:-560px"')}${GC('#FF5FA2', '✍️', 'Com as suas<br>palavras', 1, 760, 28)}${GC('#5BC8F5', '🦋', 'Bichinhos do tema<br>caindo na tela', -1, 1040, 27)}`,
+ c2s4: () => `${SOLID(BGS.c)}${CF('butter', 'pink')}${TOP('o detalhe que emociona', '04')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('Até os dias', 'de vida dele', 104)}</div>
+   ${BIGP('j-6-hist.jpg', 470)}${GC('#FF5FA2', '⏳', 'Dias, horas<br>e minutos', 1, 640, 28)}`,
+ c2s5: () => `${SOLID(BGS.r)}${CF('butter', 'sky')}${TOP('do seu jeitinho', '05')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('No tema', 'da sua festa', 104, true)}</div>
+   ${TILT('j-5-hero.jpg', 70, 520, 460, 760, -6)}${TILT('g-5-hero.jpg', 550, 490, 460, 760, 6)}
+   <div class="abs" style="left:110px;top:1240px;display:flex;gap:14px;z-index:4">${PILLS('🦋 Jardim encantado', '#FFF8EC')}${PILLS('🦁 Safari', '#FFF8EC')}${PILLS('✨ e outros', '#FFD84D')}</div>`,
+ c2s6: () => `${SOLID(BGS.m)}${confetti([[90, 110, 'r', 'pink', -22], [930, 90, 's', 'pink', 8], [980, 900, 'd', 'sky', 0], [60, 900, 'r', 'sky', 20]], 1.6)}
+   <div class="abs" style="left:0;width:1080px;text-align:center;top:250px">${H2('Quer um desses na festa', 'do seu pequeno?', 96)}</div>${BTN(650)}
+   <div class="abs" style="left:0;width:1080px;text-align:center;top:860px;font:800 46px Outfit;color:#2A1B3D">👆 link na bio</div>
+   <div class="abs hand" style="left:0;width:1080px;text-align:center;top:1080px;font-size:58px;color:#2A1B3D">manda pra madrinha ver 💛</div>`,
+ // ---------- 3 · CHICLETE · mitos ----------
+ c3s1: () => `${SOLID(BGS.r)}${CF('butter', 'sky')}${TOP('convites infantis · @meuconfetedigital', '01')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('3 mitos que fazem mãe desistir', 'do convite digital', 84, true)}</div>
+   ${[['Mito 1', '“Os mais velhos não vão saber usar”', 90, 560, -3], ['Mito 2', '“É frio, sem carinho”', 250, 790, 2], ['Mito 3', '“Vai dar trabalho pra mim”', 110, 1010, -2]].map(([m, q, x, y, r]) => `<div class="abs" style="left:${x}px;top:${y}px;transform:rotate(${r}deg);background:#FFF8EC;border-radius:34px;padding:24px 34px;box-shadow:0 16px 36px rgba(42,27,61,.18)"><div class="mono" style="font-size:20px;color:#FF5FA2">${m}</div><div class="quote" style="font-size:46px;margin-top:6px">${q}</div></div>`).join('')}${SWIPE}`,
+ c3s2: () => `${SOLID(BGS.m)}${CF('pink', 'sky')}${TOP('mito 1', '02')}
+   <div class="abs quote" style="left:70px;top:130px;width:940px;font-size:62px;line-height:1.1;opacity:.55;text-decoration:line-through;text-decoration-thickness:5px">“Os mais velhos não vão saber usar”</div>
+   <div class="abs" style="left:70px;top:330px;width:940px">${H2('', 'Só digitam o nome.', 104)}</div>
+   ${BIGP('j-2-digitando.jpg', 560)}${GC('#FF5FA2', '👵', 'Até a vovó<br>consegue', 1, 800)}`,
+ c3s3: () => `${SOLID(BGS.c)}${CF('butter', 'pink')}${TOP('mito 2', '03')}
+   <div class="abs quote" style="left:70px;top:130px;width:940px;font-size:62px;line-height:1.1;opacity:.55;text-decoration:line-through;text-decoration-thickness:5px">“Convite digital é frio, sem carinho”</div>
+   <div class="abs" style="left:70px;top:300px;width:940px">${H2('Chega com', 'o nome de cada um', 88)}</div>
+   <div class="wam" style="left:120px;top:600px;width:840px;height:780px"><div class="hd"><div class="av">🦋</div>Tia Marcela</div><div class="ms"><img src="img/og-jardim.jpg"><div class="t"><b>Oi, Marcela! 🦋</b><br>O jardim está em flor! A Lara vai comemorar o aniversário e queremos muito você com a gente nesse dia encantado.</div></div></div>
+   ${GC('#FFD84D', '💌', 'Uma mensagem<br>pra cada família', 1, 470, 28)}`,
+ c3s4: () => `${SOLID(BGS.r)}${CF('butter', 'sky')}${TOP('mito 3', '04')}
+   <div class="abs quote" style="left:70px;top:130px;width:940px;font-size:62px;line-height:1.1;opacity:.55;text-decoration:line-through;text-decoration-thickness:5px">“Vai dar trabalho pra mim”</div>
+   <div class="abs" style="left:70px;top:270px;width:940px">${H2('', 'A gente monta tudo.', 90, true)}</div>
+   ${[['📸', 'Você manda as fotos e a data'], ['🎨', 'A gente cria o convite e a história'], ['📊', 'Você recebe o painel pronto'], ['💬', 'Envia no WhatsApp em 1 toque']].map(([i, t], k) => `<div class="row2" style="top:${500 + k * 175}px;font-size:36px"><i>${i}</i><span>${t}</span><em style="background:rgba(46,159,122,.16);color:#14804A">✓</em></div>`).join('')}`,
+ c3s5: () => `${SOLID(BGS.m)}${CF('pink', 'sky')}${TOP('e de bônus', '05')}
+   <div class="abs" style="left:70px;top:130px;width:940px">${H2('Você descobre antes', 'quem vai e quem não vai', 76)}</div>
+   ${BIGP('a-1-visao.jpg', 460)}${GC('#7EE0B5', '✅', '48 vão', -1, 720)}${GC('#FF5FA2', '🙅‍♀️', '9 não vão', 1, 920)}`,
+ c3s6: () => `${SOLID(BGS.c)}${confetti([[90, 110, 'r', 'butter', -22], [930, 90, 's', 'pink', 8], [980, 900, 'd', 'butter', 0], [60, 900, 'r', 'pink', 20]], 1.6)}
+   <div class="abs" style="left:0;width:1080px;text-align:center;top:250px">${H2('Ficou com', 'outra dúvida?', 112)}</div>${BTN(650)}
+   <div class="abs" style="left:0;width:1080px;text-align:center;top:860px;font:800 46px Outfit;color:#2A1B3D">👆 link na bio</div>
+   <div class="abs hand" style="left:0;width:1080px;text-align:center;top:1080px;font-size:58px;color:#2A1B3D">a gente responde rapidinho 💛</div>`,
+}
+Object.assign(pages, CAR)
 document.body.className = qs.get('frame') ? 'piece' : 'board'
 if (['ad1', 'ad2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1080px;position:relative;overflow:hidden'
-if (['post1', 'post2', 'post3'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1350px;position:relative'
+if (/^c\ds\d$/.test(PAGE) || ['post1', 'post2', 'post3'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1350px;position:relative'
 if (['story1', 'story2', 'story3', 'reel1', 'reel2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1920px;position:relative'
 if (!pages[PAGE]) throw new Error('pagina?')
 document.getElementById('root').innerHTML = pages[PAGE]()
