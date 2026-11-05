@@ -8,7 +8,7 @@ description: Consulte SEMPRE antes de qualquer trabalho de design ou edição do
 As referências do dono ficam em `referencias/` (índice em `referencias/INDEX.md`).
 
 ## Antes de criar qualquer arte ou vídeo
-1. Leia `referencias/INDEX.md` e escolha as referências que combinam com o formato pedido (reel, post, story, carrossel, capa).
+1. Leia `referencias/INDEX.md` (começa pela seção "Linguagem visual que o dono quer") e escolha as referências que combinam com o formato pedido (reel, post, story, carrossel, capa).
 2. Abra as imagens relevantes com a ferramenta de leitura de arquivos (ela mostra imagens) e descreva para si: layout, hierarquia, tipografia, paleta, uso de espaço, ritmo e movimento.
 3. Aplique o **estilo** (composição, tipografia, clima, ritmo) às artes novas. Não copie o conteúdo, textos, fotos, logos ou personagens de terceiros.
 4. Preserve as regras da marca do projeto:
