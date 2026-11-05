@@ -56,15 +56,21 @@ def svg_icon(variant='principal'):
     S = 1024
     if variant == 'principal': bg, fill, s1 = PINK, CREAM, BUTTER
     elif variant == 'butter': bg, fill, s1 = BUTTER, PINK, SKY
+    elif variant == 'tri': bg, fill, s1 = CREAM, PINK, BUTTER
     else: bg, fill, s1 = INK, PINK, BUTTER
     ox = (S - w) / 2 - 12; oy = S * 0.5 + 800 * 0.30
     conf = ''.join(
         f'<rect x="{x-18}" y="{y-8}" width="36" height="16" rx="7" fill="{c}" transform="rotate({r} {x} {y})"/>' if k == 'r' else f'<circle cx="{x}" cy="{y}" r="13" fill="{c}"/>'
         for x, y, r, k, c in [(200, 180, -25, 'r', BUTTER if variant != 'butter' else PINK), (820, 160, 30, 'r', SKY), (880, 800, -20, 'r', MINT), (150, 780, 0, 'd', BUTTER if variant != 'butter' else SKY), (770, 880, 0, 'd', CREAM), (300, 90, 0, 'd', MINT)])
+    tri = variant == 'tri'
+    shadows = ''
+    if tri: shadows += f'<path d="{path}" transform="translate({ox+34},{oy+34})" fill="{SKY}"/>'
+    d = 17 if tri else 16
+    shadows += f'<path d="{path}" transform="translate({ox+d},{oy+d})" fill="{s1}"/>'
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {S} {S}" width="{S}" height="{S}"><rect width="{S}" height="{S}" fill="{bg}"/>'
-            f'<path d="{path}" transform="translate({ox+16},{oy+16})" fill="{s1}"/><path d="{path}" transform="translate({ox},{oy})" fill="{fill}"/>{conf}</svg>')
+            + shadows + f'<path d="{path}" transform="translate({ox},{oy})" fill="{fill}"/>{conf}</svg>')
 for v in ['principal', 'mono-tinta', 'mono-branco', 'creme']:
     open(f'logos/confete-{v}.svg', 'w').write(svg_wordmark(v))
-for v in ['principal', 'butter', 'tinta']:
+for v in ['principal', 'butter', 'tinta', 'tri']:
     open(f'logos/confete-icone-{v}.svg', 'w').write(svg_icon(v))
 print('ok')
