@@ -354,10 +354,21 @@ pages.st_quem = () => `${SOLID('#5BC8F5')}${confetti([[930, 300, 'r', 'butter', 
   <div class="abs" style="left:70px;top:560px;width:940px;text-align:center">${H2('Prazer,', 'somos a Confete', 104)}</div>
   <div class="abs" style="left:90px;top:860px;width:900px;background:#FFF8EC;border-radius:44px;padding:44px 48px;box-shadow:0 18px 40px rgba(42,27,61,.16);font:500 38px/1.4 Outfit;color:#2A1B3D">A Confete nasceu numa <b>festa de verdade</b>. Criamos o convite da nossa filha com a história dela, e a família amou tanto que decidimos fazer o mesmo pra outras mães. 💛</div>
   <div class="abs" style="left:90px;top:1270px;width:900px;display:flex;flex-wrap:wrap;gap:14px;justify-content:center">${PILLS('🧸 feito com carinho, um por um', '#FFF8EC')}${PILLS('🎨 no tema da sua festa', '#FFD84D')}${PILLS('💬 atendimento no WhatsApp', '#FFF8EC')}</div>`
+/* ===== ANÚNCIO STORY 9:16 · fundo em 3 cortes diagonais (1/3 de área cada, sem dividir as cores) ===== */
+// linhas: topo/meio de (0,820)->(1080,460); meio/baixo de (0,1110)->(1080,1450). Médias 640 e 1280 => 33,3% cada.
+const DIAG = `<svg class="abs" style="inset:0" width="1080" height="1920" viewBox="0 0 1080 1920"><polygon points="0,0 1080,0 1080,460 0,820" fill="#FFD84D"/><polygon points="0,820 1080,460 1080,1450 0,1110" fill="#5BC8F5"/><polygon points="0,1110 1080,1450 1080,1920 0,1920" fill="#FF5FA2"/></svg>`
+pages.ad_story = () => `${DIAG}${confetti([[930, 270, 's', 'pink', 8], [70, 1240, 'r', 'butter', -18], [950, 1580, 'd', 'butter', 0]], 1.5)}
+  <div class="abs" style="left:70px;top:280px;width:940px">${H2('O convite que conta a história do seu bebê', 'e ainda te conta quem vai', 76)}</div>
+  ${TILT('j-5-hero.jpg', 90, 650, 520, 820, -5)}
+  ${TILT('a-1-visao.jpg', 520, 760, 470, 760, 6)}
+  ${GC('#FF5FA2', '📸', 'Com as fotinhas<br>dele', -1, 1040, 28)}
+  ${GC('#7EE0B5', '✅', '48 vão<br>9 não vão', 1, 690, 28)}
+  ${GC('#FFD84D', '💌', 'Direto no WhatsApp,<br>com o nome de cada um', -1, 1330, 27)}
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:1460px;z-index:5"><span style="display:inline-flex;align-items:center;gap:14px;height:92px;padding:0 40px;border-radius:50px;background:#FFF8EC;font:800 38px Outfit;color:#2A1B3D;box-shadow:0 14px 30px rgba(42,27,61,.2)">👇 Fala com a gente no WhatsApp</span></div>`
 document.body.className = qs.get('frame') ? 'piece' : 'board'
 if (['ad1', 'ad2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1080px;position:relative;overflow:hidden'
 if (/^c\ds\d$/.test(PAGE) || ['post1', 'post2', 'post3'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1350px;position:relative'
-if (['st_dep', 'st_como', 'st_quem', 'story1', 'story2', 'story3', 'reel1', 'reel2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1920px;position:relative'
+if (['ad_story', 'st_dep', 'st_como', 'st_quem', 'story1', 'story2', 'story3', 'reel1', 'reel2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1920px;position:relative'
 if (!pages[PAGE]) throw new Error('pagina?')
 document.getElementById('root').innerHTML = pages[PAGE]()
 window.ready = Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = r)), ...[...document.querySelectorAll('iframe')].map(f => new Promise(r => { f.onload = () => setTimeout(r, 1200) }))])
