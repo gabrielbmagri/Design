@@ -1,0 +1,87 @@
+{
+ "lines": [
+  {
+   "id": "l1",
+   "text": "Imagina um convite que conta a história do seu bebê.",
+   "dur": 3.083,
+   "offs": {
+    "kw1": 2.05
+   },
+   "start": 0.3
+  },
+  {
+   "id": "l2",
+   "text": "Com as fotos dele, emojis caindo na tela, e um: você está convidado.",
+   "dur": 4.028,
+   "offs": {
+    "kw1": 1.278,
+    "kw2": 2.779
+   },
+   "start": 3.533
+  },
+  {
+   "id": "l3",
+   "text": "E ele chega lindinho no WhatsApp, com imagem grande e mensagem pronta.",
+   "dur": 4.274,
+   "offs": {
+    "pre": 0.575,
+    "kw1": 1.479,
+    "kw2": 2.222
+   },
+   "start": 7.711
+  },
+  {
+   "id": "l4",
+   "text": "Os convidados só digitam o nome, e respondem pela família toda.",
+   "dur": 4.158,
+   "offs": {
+    "kw1": 1.087,
+    "kw2": 3.112
+   },
+   "start": 12.135
+  },
+  {
+   "id": "l5",
+   "text": "Sem app. Sem cadastro.",
+   "dur": 1.598,
+   "offs": {
+    "kw2": 0.764
+   },
+   "start": 16.443
+  },
+  {
+   "id": "l6",
+   "text": "Você vê tudo ao vivo. Quem confirmou, as vagas do pai e da mãe, e o controle de gratuidades.",
+   "dur": 5.853,
+   "offs": {
+    "kw1": 1.162,
+    "c1": 1.782,
+    "c2": 2.63,
+    "c3": 4.745
+   },
+   "start": 18.191
+  },
+  {
+   "id": "l7",
+   "text": "Quem não respondeu? Um toque, e o lembrete vai.",
+   "dur": 2.811,
+   "offs": {
+    "kw1": 1.218
+   },
+   "start": 24.194
+  },
+  {
+   "id": "l8",
+   "text": "Quer um desses na sua festa? Chama no WhatsApp. Link na bio.",
+   "dur": 3.545,
+   "offs": {
+    "kw1": 1.881,
+    "bio": 2.669
+   },
+   "start": 27.155
+  }
+ ],
+ "total": 31.5,
+ "voice": "pf_dora",
+ "speed": "0.88"
+}

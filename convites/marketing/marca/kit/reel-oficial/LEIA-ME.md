@@ -1,5 +1,4 @@
-# Reel oficial v1 (30 s, narrado)
-Narração: voz feminina gerada por IA, Kokoro (local, `hyperframes tts`, voz `pf_dora`, pt-BR, velocidade 0,95). Requer `pip install kokoro-onnx soundfile`.
-Palavras-chave aparecem sincronizadas com a fala (sem legenda); o tempo de cada palavra foi estimado sintetizando o trecho anterior (`kw_off` em `reel_timeline.json`), então pode ter ~0,1 a 0,2 s de diferença.
-Roteiro: `narracao-linhas.json`. Linha do tempo: `reel_timeline.json`. Vídeo: `reelo.html` + `frameso.cjs` (quadros) + `audio_o.py` (mixagem: música abaixa 55% quando a voz fala; -14 LUFS).
-Música: "Digital Lemonade" (Kevin MacLeod, incompetech.com), CC BY 4.0. Colocar o crédito na legenda do post.
+# Reel oficial v2 (31,5 s, narrado)
+- `gen_narr2.py`: gera a narração (Kokoro local, voz pf_dora pt-BR, velocidade 0,88, com filtro de suavização: graves +, agudos/sibilância -, leve reverb) e a linha do tempo `reel_timeline2.json` (onde cada palavra-chave é dita; estimada sintetizando o trecho anterior).
+- `reelo2.html` + `frameso2.cjs` (quadros) + `audio_o2.py` (mixagem, -14 LUFS). Usa a gravação real do convidado (`rec_j`, gerada por `reel-vendas/rec_j.cjs`) e telas em `kit/img`.
+- Música: "Digital Lemonade" (Kevin MacLeod, incompetech.com), CC BY 4.0.
