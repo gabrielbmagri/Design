@@ -4,7 +4,7 @@ import { connectFirestoreEmulator, initializeFirestore, persistentLocalCache, pe
 
 const env = import.meta.env
 
-export const firebaseConfigured = Boolean((env.VITE_FB_API_KEY && env.VITE_FB_PROJECT_ID) || env.VITE_USE_EMULATOR === '1' || env.MODE === 'demo')
+export const firebaseConfigured = Boolean((env.VITE_FB_API_KEY && env.VITE_FB_PROJECT_ID) || env.VITE_USE_EMULATOR === '1' || env.MODE === 'demo' || env.MODE === 'vitrine')
 
 export const app = initializeApp({
   apiKey: env.VITE_FB_API_KEY || 'missing',
@@ -29,7 +29,7 @@ if (env.VITE_USE_EMULATOR === '1') {
 }
 
 export const SITE_URL =
-  env.MODE === 'demo'
+  env.MODE === 'demo' || env.MODE === 'vitrine'
     ? window.location.href.split('#')[0] + '#'
     : (env.VITE_SITE_URL || window.location.origin).replace(/\/$/, '')
 

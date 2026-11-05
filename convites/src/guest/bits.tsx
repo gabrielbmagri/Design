@@ -165,6 +165,8 @@ export function mapEmbedUrl(s: EventSettings) {
 }
 
 export function MapEmbed({ settings }: { settings: EventSettings }) {
+  // na vitrine (página de demonstração) o mapa embutido é bloqueado; ficam só os botões do Maps e do Waze
+  if (import.meta.env.MODE === 'vitrine') return null
   if (import.meta.env.MODE === 'demo')
     return (
       <div className="im-map" style={{ display: 'grid', placeItems: 'center', padding: 16, textAlign: 'center', color: 'var(--ink-3)', fontWeight: 600, fontSize: 15 }}>

@@ -7,7 +7,8 @@ const SuperApp = React.lazy(() => import('./super/SuperApp'))
 const LegalPage = React.lazy(() => import('./legal/LegalPage'))
 import './styles/base.css'
 
-const DEMO = import.meta.env.MODE === 'demo'
+const VITRINE = import.meta.env.MODE === 'vitrine'
+const DEMO = import.meta.env.MODE === 'demo' || VITRINE
 // Na demonstração (página do claude.ai) o endereço não muda: #admin abre o painel.
 const Router = DEMO
   ? ({ children }: { children: React.ReactNode }) => (
@@ -15,17 +16,25 @@ const Router = DEMO
     )
   : BrowserRouter
 const DemoBar = React.lazy(() => import('./demo/DemoBar'))
+const Vitrine = React.lazy(() => import('./demo/Vitrine'))
 
 async function start() {
   if (DEMO) {
     // a página de demonstração não mostra janelas de confirmação
     window.confirm = () => true
+    if (VITRINE) { try { localStorage.removeItem('convite.me') } catch { /* ignore */ } }
     await (await import('./demo/seed')).seedDemo()
   }
   ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Router>
-      {DEMO && <React.Suspense fallback={null}><DemoBar /></React.Suspense>}
+      {DEMO && <React.Suspense fallback={null}>{VITRINE ? <Vitrine /> : <DemoBar />}</React.Suspense>}
+      {VITRINE ? (
+        <Routes>
+          <Route path="/privacidade" element={<React.Suspense fallback={null}><LegalPage doc="privacidade" /></React.Suspense>} />
+          <Route path="*" element={<GuestApp />} />
+        </Routes>
+      ) : (
       <Routes>
         <Route path="/admin/*" element={<React.Suspense fallback={null}><AdminApp /></React.Suspense>} />
         <Route path="/super/*" element={<React.Suspense fallback={null}><SuperApp /></React.Suspense>} />
@@ -34,6 +43,7 @@ async function start() {
         <Route path="/c/:inviteId" element={<GuestApp />} />
         <Route path="*" element={<GuestApp />} />
       </Routes>
+      )}
     </Router>
   </React.StrictMode>,
   )

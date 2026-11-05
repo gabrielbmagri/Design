@@ -13,3 +13,4 @@ firebase.*.json
 # dados reais de clientes ficam fora do repositório
 clients/*
 !clients/_modelo
+dist-vitrine

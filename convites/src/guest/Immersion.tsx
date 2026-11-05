@@ -7,6 +7,7 @@ import { themeById } from '../themes'
 import { eventDate, firstName, forGroup, joinNames, waLink } from '../lib/text'
 import Icon, { type IconName } from '../lib/Icon'
 import type { Outcome } from './GuestApp'
+import Confetti from './Confetti'
 import {
   Countdown, FloatingAnimals, GiftList, LifeCounter, MapEmbed, Sparkles, WordReveal, downloadIcs, googleCalendarUrl,
   hostContacts, isIOS, mapsUrl, timeLabel, wazeUrl,
@@ -282,6 +283,7 @@ export default function Immersion({ settings, outcome, me, invite, onFinish }: P
       <div className="im-glow" />
       <Sparkles />
       <FloatingAnimals emojis={themeById(settings.themeId).emojis} />
+      {outcome === 'yes' && <Confetti colors={[...themeById(settings.themeId).swatch.slice(0, 2), '#FFD84D', '#7EE0B5', '#FF5FA2', '#5BC8F5']} />}
 
       {settings.heroPhoto && <HeroPhoto src={settings.heroPhoto} alt={`${settings.childName} no cavalinho`} />}
 

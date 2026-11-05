@@ -48,7 +48,7 @@ function reelSample(): typeof SAMPLE {
   }
   return out
 }
-const isReel = () => { try { return localStorage.getItem('convite-demo-reel') === '1' } catch { return false } }
+const isReel = () => { if (import.meta.env.MODE === 'vitrine') return true; try { return localStorage.getItem('convite-demo-reel') === '1' } catch { return false } }
 
 /** Versão do convite sem idade nos textos (para o vídeo de vendas: serve para qualquer aniversário). */
 function ageless(s: EventSettings): EventSettings {
@@ -84,7 +84,7 @@ export async function seedDemo() {
 }
 
 async function seedRest() {
-  for (const s of isReel() ? reelSample() : SAMPLE) {
+  for (const s of isReel() && import.meta.env.MODE !== 'vitrine' ? reelSample() : SAMPLE) {
     const id = await saveInvite(
       { label: '', host: s.host, phone: s.phone, notes: '', tags: s.tags ?? [], reserve: !!s.reserve, members: s.members, plusOne: s.plusOne },
       [],
