@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Caveat:wght@600&family=Fraunces:ital,opsz,wght@1,9..144,700&family=JetBrains+Mono:wght@700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="rec_j/meta.js"></script>
+<style>
+  :root { --pink:#FF5FA2; --butter:#FFD84D; --sky:#5BC8F5; --mint:#7EE0B5; --cream:#FFF8EC; --ink:#2A1B3D }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html,body { width:1080px; height:1920px; overflow:hidden; background:#FFD84D; font-family:'Outfit',sans-serif; color:var(--ink) }
+  #stage { position:absolute; inset:0; overflow:hidden }
+  .sc { position:absolute; inset:0; display:none }
+  .abs { position:absolute }
+  .disp { font-family:'Bagel Fat One',sans-serif }
+  .acc { font-family:'Fraunces',serif; font-style:italic; font-weight:700 }
+  .hand { font-family:'Caveat',cursive; font-weight:600 }
+  .t-hook { font-family:'Outfit'; font-weight:800; letter-spacing:-.035em; line-height:1.02 }
+  .w { display:inline-block; will-change:transform,opacity }
+  .mark { position:relative; display:inline-block; padding:0 .22em; margin:0 -.05em; color:var(--mkc,#fff); z-index:1 }
+  .mark::before { content:''; position:absolute; inset:.06em 0 .02em; background:var(--mk,var(--pink)); border-radius:.22em; transform:rotate(-1.6deg); z-index:-1 }
+  .frame { position:absolute; overflow:hidden; border-radius:60px 60px 0 0; border:12px solid #FFF8EC; border-bottom:0; background:#fff; box-shadow:0 22px 44px rgba(42,27,61,.22) }
+  .frame img { position:absolute; left:0; top:0; width:100%; object-fit:cover; object-position:top; display:block }
+  .gc { position:absolute; display:flex; align-items:center; gap:16px; padding:20px 28px; border-radius:30px; font:800 30px/1.15 'Outfit'; color:var(--ink);
+    background:linear-gradient(140deg,rgba(255,255,255,.86),rgba(255,255,255,.4)); backdrop-filter:blur(16px) saturate(1.4); border:1.5px solid rgba(255,255,255,.95);
+    box-shadow:0 18px 44px rgba(42,27,61,.16), 0 0 0 1px color-mix(in srgb,var(--ac,#FF5FA2) 38%,transparent), 0 0 34px color-mix(in srgb,var(--ac,#FF5FA2) 26%,transparent), inset 0 1px 0 #fff }
+  .gc i { font-style:normal; font-size:42px }
+  .btn { position:absolute; display:flex; align-items:center; justify-content:center; gap:22px; height:150px; padding:0 64px; border-radius:90px; font:800 52px 'Outfit'; color:#fff; background:#22C55E; box-shadow:0 22px 50px rgba(34,197,94,.4); white-space:nowrap }
+  .conf { position:absolute }
+  .pillstep { position:absolute; left:50px; width:980px; top:200px; display:flex; justify-content:center }
+  .wa { position:absolute; border-radius:46px; overflow:hidden; background:#efeae2; border:3px solid #d5d1c7; box-shadow:0 34px 80px rgba(42,27,61,.28) }
+  .wa .hd { height:120px; background:#008069; color:#fff; display:flex; align-items:center; gap:22px; padding:0 30px; font-weight:800; font-size:38px }
+  .wa .av { width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#f9a8d4,#fcd34d); display:grid; place-items:center; font-size:38px }
+  .wa .bd { padding:26px 22px 40px; background:#efeae2; position:relative; height:1100px }
+  .msg { position:absolute; left:18px; width:688px; color:#111; background:#d9fdd3; border-radius:30px 30px 30px 8px; padding:12px; box-shadow:0 8px 24px rgba(0,0,0,.16) }
+  .msg .pv { border-radius:22px; overflow:hidden; background:#c5ecc0 } .msg .pv img { width:100%; display:block }
+  .msg .pv .tx { padding:14px 18px 16px } .msg .tt { font-weight:800; font-size:32px } .msg .ds { font-size:26px; color:rgba(17,17,17,.65); margin-top:4px; line-height:1.25 }
+  .msg .tx2 { padding:16px 10px 6px; font-size:33px; line-height:1.28; white-space:pre-line } .msg .tm { text-align:right; font-size:23px; color:rgba(17,17,17,.45); padding:0 8px 4px }
+  .fall { position:absolute; font-size:70px; will-change:transform }
+</style></head><body>
+<div id="stage"></div>
+<script>
+const TLD = {"lines": [{"id": "l1", "text": "Imagina um convite que conta a história do seu bebê.", "dur": 3.083, "offs": {"kw1": 2.05}, "start": 0.3}, {"id": "l2", "text": "Com as fotos dele, emojis caindo na tela, e um: você está convidado.", "dur": 4.028, "offs": {"kw1": 1.278, "kw2": 2.779}, "start": 3.533}, {"id": "l3", "text": "E ele chega lindinho no WhatsApp, com imagem grande e mensagem pronta.", "dur": 4.274, "offs": {"pre": 0.575, "kw1": 1.479, "kw2": 2.222}, "start": 7.711}, {"id": "l4", "text": "Os convidados só digitam o nome, e respondem pela família toda.", "dur": 4.158, "offs": {"kw1": 1.087, "kw2": 3.112}, "start": 14.535}, {"id": "l5", "text": "Sem app. Sem cadastro.", "dur": 1.598, "offs": {"kw2": 0.764}, "start": 18.843}, {"id": "l6", "text": "Você vê tudo ao vivo. Quem confirmou, as vagas do pai e da mãe, e o controle de gratuidades.", "dur": 5.853, "offs": {"kw1": 1.162, "c1": 1.782, "c2": 2.63, "c3": 4.745}, "start": 20.591}, {"id": "l7", "text": "Quem não respondeu? Um toque, e o lembrete vai.", "dur": 2.811, "offs": {"kw1": 1.218}, "start": 26.594}, {"id": "l8", "text": "Quer um desses na sua festa? Chama no WhatsApp. Link na bio.", "dur": 3.545, "offs": {"kw1": 1.881, "bio": 2.669}, "start": 29.555}], "total": 33.9, "voice": "pf_dora", "speed": "0.88"}
+const L = Object.fromEntries(TLD.lines.map(l => [l.id, l])); const TOTAL = TLD.total
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x))
+const E = { out: k => 1 - Math.pow(1 - k, 3), io: k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2, back: k => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2) } }
+const P = (t, t0, d) => clamp((t - t0) / d)
+const $ = h => { const d = document.createElement('div'); d.innerHTML = h.trim(); return d.firstElementChild }
+const stage = document.getElementById('stage')
+const EVENTS = new Map(), ev = (t, type) => EVENTS.set(type + '@' + t.toFixed(3), { t: +t.toFixed(3), type })
+const cols = { pink:'#FF5FA2', butter:'#FFD84D', sky:'#5BC8F5', mint:'#7EE0B5', cream:'#FFF8EC', ink:'#2A1B3D' }
+const WA = '<svg width="76" height="76" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>'
+const confetiHTML = list => list.map(([x, y, kind, c, r]) => kind === 'r' ? `<div class="conf" data-r="${r}" style="left:${x}px;top:${y}px;width:62px;height:25px;border-radius:12px;background:${cols[c]};transform:rotate(${r}deg)"></div>` : `<div class="conf" data-r="${r}" style="left:${x}px;top:${y}px;width:66px;height:66px;background:${cols[c]};clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);transform:rotate(${r}deg)"></div>`).join('')
+const drift = (el, t) => el.querySelectorAll('.conf').forEach((c, i) => { c.style.transform = `translate(${Math.sin(t * 1.3 + i) * 14}px,${Math.cos(t * 1.1 + i * 2) * 18}px) rotate(${+c.dataset.r + Math.sin(t * 2 + i) * 14}deg)` })
+// textos: começa SEMPRE nas primeiras palavras falas; palavras-chave em marcador entram quando são ditas
+function kwStack(top, pre, kws, mk) { const el = $(`<div class="abs" style="left:40px;top:${top}px;width:1000px;text-align:center;height:340px"><div class="t-hook pre" style="font-size:96px;opacity:0;min-height:100px">${pre || ''}</div>${kws.map(k => `<div class="kw abs" style="left:0;width:1000px;top:112px;opacity:0"><span class="t-hook acc mark" style="font-size:${k.size || 130}px;font-weight:700;letter-spacing:-.01em;--mk:${mk ? '#FFD84D' : '#FF5FA2'};--mkc:${mk ? '#2A1B3D' : '#fff'}">${k.t}</span></div>`).join('')}</div>`); el._k = kws; return el }
+function kwAnim(el, t, tPre) { const a = el.querySelector('.pre'); const ka = E.out(P(t, tPre, .35)); a.style.opacity = ka; a.style.transform = `translateY(${(1 - ka) * 40}px)`; a.style.filter = `blur(${(1 - ka) * 10}px)`
+  const ks = el.querySelectorAll('.kw'); ks.forEach((b, i) => { const t0 = el._k[i].at, t1 = i + 1 < el._k.length ? el._k[i + 1].at : 1e9
+    const kin = E.back(P(t, t0, .5)), kout = P(t, t1 - .05, .2); b.style.opacity = clamp(P(t, t0, .15)) * (1 - kout); b.style.transform = `scale(${(.6 + .4 * kin) * (1 - .08 * kout)})`; b.style.filter = `blur(${(1 - clamp(P(t, t0, .3))) * 12 + kout * 8}px)` }) }
+function gcAnim(el, t, t0, side, y) { const k = E.back(P(t, t0, .45)); el.style.opacity = clamp(P(t, t0, .12)); el.style.top = (y + Math.sin(t * 2 + y) * 6) + 'px'
+  el.style[side < 0 ? 'left' : 'right'] = '30px'; el.style.transform = `translateX(${(1 - k) * 140 * side}px) scale(${.6 + .4 * k})`; el.style.transformOrigin = side < 0 ? 'left center' : 'right center' }
+const rise = (el, t, d = .55) => { el.style.transform = `translateY(${(1 - E.back(P(t, .12, d))) * 1100}px)` }
+const REC_F = REC.frames, VIDS = []
+function vid(h, top = 700, hh = 1220) { const p = $(`<div class="frame" style="left:130px;top:${top}px;width:820px;height:${hh}px"><img class="v" style="height:1774px"></div>`); const im = p.querySelector('.v'); im.src = 'rec_j/' + REC_F[0]; VIDS.push(im); return p }
+const vset = (p, tr) => { const i = clamp(Math.round(tr * 30), 0, REC_F.length - 1); const im = p.querySelector('.v'); const s = 'rec_j/' + REC_F[i]; if (im.getAttribute('src') !== s) im.src = s }
+const scenes = []
+const BGc = { A:'#FFD84D', B:'#5BC8F5', C:'#FF5FA2', D:'#FFD84D', E:'#5BC8F5', F:'#FFD84D', G:'#FF5FA2' }
+const add = (key, startId, endId, build, update) => { const el = $('<div class="sc"></div>'); el.style.background = BGc[key]; if (BGc[key] === '#FF5FA2') { el.style.setProperty('--mk', '#FFD84D'); el.style.setProperty('--mkc', '#2A1B3D') }; stage.appendChild(el)
+  const a = key === 'A' ? 0 : L[startId].start - .15, b = (L[endId].start + L[endId].dur) + .15; const ctx = build(el); scenes.push({ key, el, ctx, update, a, b, d: b - a, sid: startId, eid: endId }) }
+const G = (id, k) => L[id].start + L[id].offs[k]      // tempo global de uma palavra
+const loc = (s, g) => Math.max(0, g - s.a - .05)    // tempo local
+
+/* A: história + fotos + emojis + você está convidado: gravação real do convite */
+add('A', 'l1', 'l2', el => { el.innerHTML = confetiHTML([[900, 300, 's', 'pink', 8], [70, 1560, 'r', 'sky', -20]])
+  const k = kwStack(300, 'Imagina um convite', [{ t: 'a história', at: 0, size: 150 }, { t: 'emojis caindo', at: 0, size: 130 }, { t: 'você está convidado', at: 0, size: 96 }]); const p = vid(); const c1 = $('<div class="gc" style="--ac:#FF5FA2"><i>📸</i><span>Fotos do<br>bebê</span></div>'), c2 = $('<div class="gc" style="--ac:#5BC8F5"><i>🦋</i><span>Emojis<br>do tema</span></div>'), c3 = $('<div class="gc" style="--ac:#7EE0B5"><i>💌</i><span>Você está<br>convidado</span></div>'); el.append(k, p, c1, c2, c3); return { k, p, c1, c2, c3 } },
+  (c, t, s) => { c.k._k[0].at = loc(s, G('l1', 'kw1')); c.k._k[1].at = loc(s, G('l2', 'kw1')); c.k._k[2].at = loc(s, G('l2', 'kw2'))
+    kwAnim(c.k, t, .15); rise(c.p, t); vset(c.p, 6.9 + (t - .6) * (7.2 / (s.d - .6)))
+    gcAnim(c.c1, t, c.k._k[0].at + .5, -1, 1080); gcAnim(c.c2, t, c.k._k[1].at + .35, 1, 1320); gcAnim(c.c3, t, c.k._k[2].at + .3, -1, 1560); drift(c.p.parentNode, t)
+    ev(.05, 'whoosh'); ev(.35, 'swipe'); ev(c.k._k[0].at, 'pop'); ev(c.k._k[1].at, 'pop'); ev(c.k._k[2].at, 'chime') })
+/* B: WhatsApp (mensagem completa que o convidado recebe) */
+add('B', 'l3', 'l3', el => { el.innerHTML = confetiHTML([[900, 300, 's', 'butter', 8], [70, 1560, 'r', 'butter', -20]])
+  const k = kwStack(280, 'chega lindinho no', [{ t: 'WhatsApp', at: 0, size: 140 }, { t: 'imagem grande', at: 0, size: 130 }], true)
+  const LN = ['Oi, Marcela! 🦋', '', 'O jardim está em flor! A Lara vai comemorar o aniversário e queremos muito você com a gente nesse dia encantado.', '', '📅 sábado, 17 de abril', '⏰ 10h', '📍 Espaço Jardim das Borboletas, Alphaville', '🎩 Cores leves, flores e muita alegria!', '', 'Confirme a presença por aqui, leva menos de um minuto:', '<span style="color:#1a73e8;text-decoration:underline">festa-da-lara.web.app/c/marcela</span>', '', 'Com carinho, Marina e Bruno 💗']
+  const wa = $(`<div class="wa" style="left:100px;top:740px;width:880px;height:1200px"><div class="hd"><div class="av">🦋</div><div>Tia Marcela<div style="font-size:24px;font-weight:500;color:rgba(255,255,255,.8)">online</div></div></div><div class="bd" style="height:1100px"><div class="msg" style="top:24px;left:22px;width:836px;padding:12px"><div class="pv"><img src="img/og-jardim.jpg"><div class="tx"><div class="tt" style="font-size:30px">Convite da Lara 🦋🌸🐝</div><div class="ds" style="font-size:24px">Toque para ver o convite e confirmar sua presença.</div></div></div><div class="tx2" style="font-size:28px;padding:12px 12px 4px;line-height:1.28;white-space:normal">${LN.map(l => l ? `<div class="ln" style="opacity:0">${l}</div>` : '<div class="ln" style="height:14px"></div>').join('')}<div class="tm" style="margin-top:4px">14:02 ✓✓</div></div></div></div></div>`)
+  const c1 = $('<div class="gc" style="--ac:#FFD84D"><i>⬆️</i><span>Imagem<br>grande</span></div>'), c2 = $('<div class="gc" style="--ac:#7EE0B5"><i>👆</i><span>Mensagem pronta<br>em 1 toque</span></div>'); el.append(k, wa, c1, c2); return { k, wa, c1, c2, lns: [...wa.querySelectorAll('.ln')].filter(e => e.textContent.trim()) } },
+  (c, t, s) => { c.k._k[0].at = loc(s, G('l3', 'kw1')); c.k._k[1].at = loc(s, G('l3', 'kw2')); kwAnim(c.k, t, .1)
+    c.wa.style.transform = `translateY(${(1 - E.back(P(t, .12, .6))) * 1300}px)`
+    gcAnim(c.c1, t, c.k._k[1].at + .2, -1, 600); gcAnim(c.c2, t, c.k._k[1].at + 1.3, 1, 600)
+    c.lns.forEach((e, i) => { const t0 = 1.1 + i * .27, k = E.out(P(t, t0, .35)); e.style.opacity = k; e.style.transform = `translateY(${(1 - k) * 14}px)` })
+    drift(c.wa.parentNode, t); ev(.05, 'whoosh'); ev(.4, 'swipe'); ev(.7, 'chime'); ev(c.k._k[0].at, 'pop'); ev(c.k._k[1].at + .2, 'pop'); ev(c.k._k[1].at + 1.3, 'pop'); c.lns.forEach((e, i) => ev(1.1 + i * .27, 'tick')) })
+/* C: digitam o nome: gravação real */
+add('C', 'l4', 'l4', el => { el.innerHTML = confetiHTML([[900, 300, 'r', 'butter', 24], [70, 1560, 's', 'sky', -6]])
+  const k = kwStack(300, 'Os convidados', [{ t: 'só digitam o nome', at: 0, size: 104 }, { t: 'família toda', at: 0, size: 140 }], true); const p = vid(); const c1 = $('<div class="gc" style="--ac:#FF5FA2"><i>⌨️</i><span>Só o<br>nome</span></div>'), c2 = $('<div class="gc" style="--ac:#7EE0B5"><i>👨‍👩‍👧</i><span>Família<br>toda</span></div>'); el.append(k, p, c1, c2); return { k, p, c1, c2 } },
+  (c, t, s) => { c.k._k[0].at = loc(s, G('l4', 'kw1')); c.k._k[1].at = loc(s, G('l4', 'kw2')); kwAnim(c.k, t, .15); rise(c.p, t); vset(c.p, 0.9 + (t - .6) * (4.9 / (s.d - .6)))
+    gcAnim(c.c1, t, c.k._k[0].at + .4, -1, 1080); gcAnim(c.c2, t, c.k._k[1].at + .2, 1, 1400); drift(c.p.parentNode, t); ev(.05, 'whoosh'); ev(.35, 'swipe'); for (let i = 0; i < 6; i++) ev(c.k._k[0].at + .5 + i * .13, 'key'); ev(c.k._k[0].at + .4, 'pop'); ev(c.k._k[1].at + .2, 'pop') })
+/* D: sem app / sem cadastro */
+add('D', 'l5', 'l5', el => { el.innerHTML = confetiHTML([[100, 300, 's', 'pink', -6], [920, 360, 'r', 'pink', 24], [80, 1500, 'r', 'sky', -20], [900, 1560, 's', 'sky', 0]]); const a = $(`<div class="abs t-hook acc" style="left:0;width:1080px;text-align:center;top:520px;font-size:250px;color:#2A1B3D;text-shadow:7px 7px 0 #FF5FA2;opacity:0">sem app</div>`), b = $(`<div class="abs t-hook acc" style="left:0;width:1080px;text-align:center;top:880px;font-size:250px;color:#2A1B3D;text-shadow:7px 7px 0 #5BC8F5;opacity:0">sem cadastro</div>`); el.append(a, b); return { a, b } },
+  (c, t, s) => { const t2 = loc(s, G('l5', 'kw2')); for (const [e, t0] of [[c.a, .05], [c.b, t2]]) { const k = E.back(P(t, t0, .45)); e.style.opacity = clamp(P(t, t0, .1)); e.style.transform = `scale(${.6 + .4 * k}) rotate(${(1 - k) * -6}deg)` } drift(c.a.parentNode, t); ev(.05, 'pop'); ev(t2, 'pop'); ev(.05, 'whoosh') })
+/* E: painel ao vivo */
+add('E', 'l6', 'l6', el => { el.innerHTML = confetiHTML([[900, 300, 's', 'butter', 8], [70, 1560, 'r', 'butter', -20]]); const k = kwStack(300, 'Você vê tudo', [{ t: 'ao vivo', at: 0, size: 150 }]); const p = $(`<div class="frame" style="left:130px;top:700px;width:820px;height:1220px"><img src="img/a-1-visao.jpg" style="height:1700px"></div>`)
+  const c1 = $('<div class="gc" style="--ac:#7EE0B5"><i>✅</i><span><b class="n1">0</b>/100<br>confirmados</span></div>'), c2 = $('<div class="gc" style="--ac:#FFD84D"><i>👩‍🍼</i><span>Vagas do pai<br>e da mãe</span></div>'), c3 = $('<div class="gc" style="--ac:#FF5FA2"><i>🎟️</i><span>Controle de<br>gratuidades</span></div>'); el.append(k, p, c1, c2, c3); return { k, p, c1, c2, c3 } },
+  (c, t, s) => { c.k._k[0].at = loc(s, G('l6', 'kw1')); kwAnim(c.k, t, .15); rise(c.p, t); const t1 = loc(s, G('l6', 'c1')), t2 = loc(s, G('l6', 'c2')), t3 = loc(s, G('l6', 'c3'))
+    gcAnim(c.c1, t, t1, -1, 960); gcAnim(c.c2, t, t2, 1, 1200); gcAnim(c.c3, t, t3, -1, 1440); c.c1.querySelector('.n1').textContent = Math.round(48 * E.out(P(t, t1 + .1, .9))); drift(c.p.parentNode, t); ev(.05, 'whoosh'); ev(.35, 'swipe'); ev(c.k._k[0].at, 'pop'); ev(t1, 'pop'); ev(t2, 'pop'); ev(t3, 'pop'); for (let i = 0; i < 8; i++) ev(t1 + .1 + i * .11, 'tick') })
+/* F: lembrete */
+add('F', 'l7', 'l7', el => { el.innerHTML = confetiHTML([[900, 300, 'r', 'pink', 24], [70, 1560, 's', 'sky', -6]]); const k = kwStack(300, 'Quem não respondeu?', [{ t: 'um toque', at: 0, size: 160 }]); const p = $(`<div class="frame" style="left:130px;top:700px;width:820px;height:1220px"><img src="img/a-4b-lembrar.jpg" style="height:1700px"></div>`)
+  const c1 = $('<div class="gc" style="--ac:#FF5FA2"><i>⏰</i><span>Lembrete<br>em 1 toque</span></div>'), c2 = $('<div class="gc" style="--ac:#7EE0B5"><i>💬</i><span>Mensagem pronta<br>no WhatsApp</span></div>'); el.append(k, p, c1, c2); return { k, p, c1, c2 } },
+  (c, t, s) => { c.k._k[0].at = loc(s, G('l7', 'kw1')); kwAnim(c.k, t, .15); rise(c.p, t); gcAnim(c.c1, t, c.k._k[0].at + .3, -1, 1000); gcAnim(c.c2, t, c.k._k[0].at + 1.0, 1, 1300); drift(c.p.parentNode, t); ev(.05, 'whoosh'); ev(.35, 'swipe'); ev(c.k._k[0].at, 'pop'); ev(c.k._k[0].at + .3, 'pop'); ev(c.k._k[0].at + 1.0, 'pop') })
+/* G: chamada (sem logo) */
+add('G', 'l8', 'l8', el => { el.innerHTML = confetiHTML([[100, 300, 's', 'butter', -6], [920, 360, 'r', 'butter', 24], [80, 1500, 'r', 'sky', -20], [900, 1560, 's', 'sky', 0]]); const h = $('<div class="t-hook abs" style="left:50px;top:420px;width:980px;text-align:center;font-size:122px;color:#FFF8EC;opacity:0">Quer um desses<br>na sua festa?</div>'),
+    btn = $(`<div class="btn" style="left:150px;top:960px;width:780px;opacity:0">${WA}Chama no WhatsApp</div>`), bio = $('<div class="abs" style="left:0;width:1080px;text-align:center;top:1200px;font:800 52px Outfit;color:#2A1B3D;opacity:0"><span style="font-size:72px;display:inline-block">☝️</span><br>Link na bio</div>')
+    const burst = Array.from({ length: 26 }, (_, i) => { const e = $(`<div class="conf" style="width:${24 + (i % 3) * 12}px;height:${14 + (i % 2) * 8}px;border-radius:8px;background:${['#FFD84D', '#5BC8F5', '#7EE0B5', '#FFF8EC'][i % 4]};opacity:0"></div>`); el.appendChild(e); return e }); el.append(h, btn, bio); return { h, btn, bio, burst } },
+  (c, t, s) => { const hk = E.out(P(t, .15, .5)); c.h.style.opacity = hk; c.h.style.transform = `translateY(${(1 - hk) * 50}px)`; const tb = loc(s, G('l8', 'kw1')) + .05
+    const bk = E.back(P(t, tb, .5)); c.btn.style.opacity = clamp(P(t, tb, .15)); c.btn.style.transform = `scale(${(.7 + .3 * bk) * (1 + .025 * Math.sin(t * 9))})`
+    const tbio = loc(s, G('l8', 'bio')); c.bio.style.opacity = E.out(P(t, tbio, .3)); c.bio.style.transform = `translateY(${Math.sin(t * 7) * 8}px)`
+    c.burst.forEach((e, i) => { const a = (i / c.burst.length) * 6.283 + i, v = 380 + (i % 5) * 120, tt = t - tb, k = Math.max(0, tt); e.style.opacity = tt > 0 && tt < 1.4 ? 1 - P(tt, .6, .8) : 0; e.style.left = 540 + Math.cos(a) * v * (1 - Math.exp(-k * 3)) / 3 + 'px'; e.style.top = 1035 + Math.sin(a) * v * (1 - Math.exp(-k * 3)) / 3 + 700 * k * k * .5 + 'px'; e.style.transform = `rotate(${k * 360 + i * 30}deg)` })
+    drift(c.btn.parentNode, t); ev(.05, 'whoosh'); ev(tb, 'chime'); ev(tb, 'pop'); ev(tbio, 'pop') })
+const T0 = scenes.map(s => s.a)
+function render(t) { t = Math.max(0, Math.min(TOTAL - .001, t))
+  scenes.forEach((sc, idx) => { const next = scenes[idx + 1], end = next ? next.a + .4 : TOTAL + 1; const on = t >= sc.a - .0001 && t < end; sc.el.style.display = on ? 'block' : 'none'
+    if (on) { const k = idx === 0 ? 1 : E.out(P(t, sc.a, .38)); sc.el.style.clipPath = idx === 0 ? 'none' : `inset(${(1 - k) * 100}% 0 0 0)`; sc.el.style.zIndex = idx; sc.update(sc.ctx, Math.max(0, t - sc.a), sc) } }) }
+async function collectEvents() { const out = []
+  for (const sc of scenes) { EVENTS.clear(); for (let t = 0; t <= sc.d + .5; t += 1 / 10) sc.update(sc.ctx, t, sc); for (const e of EVENTS.values()) { const g = e.t + sc.a; if (e.t >= 0 && g < TOTAL) out.push({ t: +g.toFixed(3), type: e.type }) } }
+  const seen = new Set(); return out.filter(e => { const k = e.type + e.t; if (seen.has(k)) return false; seen.add(k); return true }).sort((a, b) => a.t - b.t) }
+window.render = render; window.TOTAL = TOTAL; window.T0 = T0; window.collectEvents = collectEvents
+window.decodeVideo = () => Promise.all(VIDS.map(i => i.decode ? i.decode().catch(() => 0) : 0))
+window.ready = document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.complete ? 1 : new Promise(r => { i.onload = i.onerror = r }))))
+</script></body></html>
