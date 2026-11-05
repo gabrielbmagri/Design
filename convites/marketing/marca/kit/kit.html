@@ -175,29 +175,28 @@ const GRAIN = `<div class="abs" style="inset:0;opacity:.22;mix-blend-mode:multip
 const BIG = (txt, size, col = '#FF5FA2', sh1 = '#FFD84D', sh2 = '#5BC8F5', extra = '') => `<div class="disp" style="font-size:${size}px;line-height:.86;color:${col};text-shadow:${size*.016}px ${size*.016}px 0 ${sh1},${size*.032}px ${size*.032}px 0 ${sh2};letter-spacing:-.02em;white-space:nowrap;${extra}">${txt}</div>`
 const TAPE = (x, y, r) => `<div class="abs" style="left:${x}px;top:${y}px;width:190px;height:58px;background:rgba(255,216,77,.82);transform:rotate(${r}deg);box-shadow:0 4px 10px rgba(42,27,61,.15);clip-path:polygon(0 8%,4% 0,8% 8%,12% 0,16% 8%,20% 0,24% 8%,28% 0,32% 8%,36% 0,40% 8%,44% 0,48% 8%,52% 0,56% 8%,60% 0,64% 8%,68% 0,72% 8%,76% 0,80% 8%,84% 0,88% 8%,92% 0,96% 8%,100% 0,100% 92%,96% 100%,92% 92%,88% 100%,84% 92%,80% 100%,76% 92%,72% 100%,68% 92%,64% 100%,60% 92%,56% 100%,52% 92%,48% 100%,44% 92%,40% 100%,36% 92%,32% 100%,28% 92%,24% 100%,20% 92%,16% 100%,12% 92%,8% 100%,4% 92%,0 100%)"></div>`
 const STAMP = (x, y, txt, bg = '#FFD84D', fg = '#2A1B3D', r = -10, w = 210) => `<div class="sel" style="left:${x}px;top:${y}px;width:${w}px;height:${w}px;background:${bg};color:${fg};transform:rotate(${r}deg);font:800 ${w*.2}px/1 'Bagel Fat One';text-align:center;box-shadow:0 12px 26px rgba(42,27,61,.2)">${txt}</div>`
-const FLAT = '<div class="abs" style="inset:0;background:#FFF8EC"></div>'
-pages.post1 = () => `${FLAT}
-  ${confetti([[930,110,'s','sky',8],[70,1180,'r','butter',-20],[960,1170,'d','pink',0]], 1.5)}
-  <div class="abs mono" style="left:70px;top:58px;font-size:22px;opacity:.55">convites infantis · @meuconfetedigital</div>
-  <div class="abs t-hook" style="left:70px;top:130px;font-size:96px;width:940px">Imagina um convite<br>assim pra</div>
-  <div class="abs" style="left:96px;top:360px">${BIG('festa', 330, '#FF5FA2', '#FFD84D', '#5BC8F5')}</div>
-  <div class="frame" style="left:290px;top:560px;width:520px;height:660px;border-radius:44px;border:10px solid #fff;transform:rotate(3deg)"><img src="img/j-5-hero.jpg"></div>
-  <div class="gc" style="--ac:#FF5FA2;left:50px;top:760px"><i>📸</i><span>Fotos do seu bebê<br>na história</span></div>
-  ${STAMP(790, 1000, 'sem<br>app!', '#FFD84D', '#2A1B3D', 12, 200)}
-  <div class="abs hand" style="left:70px;top:1262px;font-size:50px;color:#FF5FA2;transform:rotate(-3deg)">arrasta pro lado →</div>`
-pages.post2 = () => `${FLAT}
-  ${confetti([[960,40,'r','pink',20],[70,1190,'s','mint',-6],[960,1180,'d','butter',0]], 1.5)}
-  <div class="abs mono" style="left:70px;top:58px;font-size:22px;opacity:.55">02 · o painel da festa</div>
-  <div class="abs t-hook" style="left:70px;top:130px;font-size:96px;width:940px">Quem foi, quem ainda<br>não respondeu</div>
-  <div class="abs" style="left:92px;top:390px">${BIG('ao vivo', 262, '#FF5FA2', '#FFD84D', '#5BC8F5')}</div>
-  <div class="frame" style="left:250px;top:590px;width:580px;height:640px;border-radius:44px;background:#fff;border:8px solid #fff;transform:rotate(-2deg)"><img src="img/a-1-visao.jpg" style="height:1300px"></div>
-  <div class="gc" style="--ac:#7EE0B5;left:44px;top:700px"><i>✅</i><span>Confirmados</span></div>
-  <div class="gc" style="--ac:#FF5FA2;right:40px;top:960px"><i>⏰</i><span>Lembrete em 1 toque</span></div>`
-pages.post3 = () => `<div class="abs" style="inset:0;background:#FF5FA2"></div>
+const SOLID = (c) => `<div class="abs" style="inset:0;background:${c}"></div>`
+const PANEL = (img, top, h, extra = '') => `<div class="frame" style="left:170px;top:${top}px;width:740px;height:${h}px;border-radius:56px 56px 0 0;border:12px solid #FFF8EC;border-bottom:0;background:#fff;${extra}"><img src="img/${img}" style="height:1560px"></div>`
+pages.post1 = () => `${SOLID('#FFD84D')}
+  ${confetti([[930,70,'s','pink',8],[60,1250,'r','sky',-20]], 1.5)}
+  <div class="abs mono" style="left:70px;top:58px;font-size:22px;opacity:.7">convites infantis · @meuconfetedigital</div>
+  <div class="abs" style="left:70px;top:130px;width:940px">${HOOK('Imagina um convite<br>assim pra', 'sua festa', 104)}</div>
+  ${PANEL('j-5-hero.jpg', 470, 900)}
+  <div class="gc" style="--ac:#FF5FA2;left:36px;top:640px"><i>📸</i><span>Fotos do seu bebê<br>na história</span></div>
+  <div class="gc" style="--ac:#5BC8F5;right:36px;top:900px"><i>💌</i><span>“Você está<br>convidado”</span></div>
+  <div class="abs hand" style="left:30px;top:1190px;font-size:42px;color:#2A1B3D;transform:rotate(-8deg);z-index:3;width:150px;line-height:1">arrasta<br>pro lado →</div>`
+pages.post2 = () => `${SOLID('#5BC8F5')}
+  ${confetti([[950,60,'r','butter',20],[70,1240,'s','pink',-6]], 1.5)}
+  <div class="abs mono" style="left:70px;top:58px;font-size:22px;opacity:.7">02 · o painel da festa</div>
+  <div class="abs" style="left:70px;top:130px;width:940px">${HOOK('Quem foi, quem ainda', 'não respondeu', 98)}</div>
+  ${PANEL('a-1-visao.jpg', 450, 900)}
+  <div class="gc" style="--ac:#7EE0B5;left:30px;top:800px"><i>✅</i><span>Confirmados</span></div>
+  <div class="gc" style="--ac:#FF5FA2;right:30px;top:1150px"><i>⏰</i><span>Lembrete em 1 toque</span></div>`
+pages.post3 = () => `${SOLID('#FF5FA2')}
   ${confetti([[90,110,'r','butter',-22],[930,90,'s','butter',8],[980,880,'d','sky',0],[60,880,'r','sky',20]], 1.6)}
   <div class="abs" style="left:0;width:1080px;text-align:center;top:170px"><div class="t-hook" style="font-size:112px;color:#FFF8EC">Quer um desses</div><div style="margin-top:18px;display:inline-block">${BIG('na sua festa?', 138, '#FFF8EC', '#FFD84D', '#5BC8F5')}</div></div>
   <div class="abs" style="left:0;width:1080px;text-align:center;top:600px"><span class="btn" style="height:140px;font-size:54px;padding:0 64px;gap:22px">${WA.replace('34', '72').replace('34', '72')}Chama no WhatsApp</span></div>
-  <div class="abs" style="left:0;width:1080px;text-align:center;top:800px;font:800 44px Outfit;color:#FFF8EC">👆 Link na bio</div>
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:800px;font:800 44px Outfit;color:#2A1B3D">👆 Link na bio</div>
   <div class="abs" style="left:150px;top:960px;width:780px;height:230px;background:#FFF8EC;border-radius:60px"></div><div class="abs" style="left:0;width:1080px;text-align:center;top:980px">${LOGO('principal', 620, 'margin:0 auto')}</div>
   <div class="abs hand" style="left:0;width:1080px;text-align:center;top:1240px;font-size:44px;color:#FFF8EC">confetedigital.com.br</div>`
 pages.story1 = () => `${bgOrbs()}${confetti([[80,260,'r','butter',-22],[900,300,'s','sky',8],[950,820,'r','mint',32],[70,1180,'d','pink',0],[870,1500,'z','butter',-14]], 1.6)}

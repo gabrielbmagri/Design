@@ -98,6 +98,7 @@ O que elas têm em comum, e o que vale levar para a marca:
 - **Pendências do nome (do dono):** consulta no INPI (classes 35, 41 e 42), @ no Instagram (ex.: `@confete.convites`, `@confetedigital`) e domínio em registro.br. Até confirmar, o nome pode aparecer em rascunhos e testes, mas **não publicar nada de forma definitiva** sem essas checagens, e não escrever @ que ainda não existe.
 - **Domínio pretendido: `confetedigital.com.br`** (ideia do dono; disponibilidade ainda NÃO verificada; registro em registro.br com CPF ou CNPJ). Handle sugerido para o Instagram: `@confetedigital`, igual ao domínio.
 - **Kit de marca v1 pronto (rascunho para aprovação):** `convites/marketing/marca/kit/` (manual em PDF, logos SVG, modelos de post/story/reel). Instagram atual: `@meuconfetedigital`; nome do perfil sugerido: "Confete | Convites Infantis".
+- **Decisão (dono, 2026-11-05): nos POSTS, abrir mão do fundo claro.** Fundo **liso** alternando manteiga #FFD84D, chiclete #FF5FA2 e céu #5BC8F5, com cuidado; sem palavra gigante atrás, sem degradê, grão ou blobs. Painel do app grande, saindo pela borda de baixo, com poucos cards de vidro. (A regra de fundo claro continua valendo para os reels até o dono decidir diferente.)
 - A linha visual continua a **bombom/candy** com o confete como elemento de assinatura (confete flutuando, estrelinhas, papel picado nas cores da paleta).
 - **Não impacta os convites já existentes** (temas Safari e Jardim ficam como estão). A marca vale para posts, stories, reels, capas e anúncios.
 
