@@ -226,7 +226,27 @@ pages.reel2 = () => `${SOLID('#5BC8F5')}${confetti([[900,300,'r','butter',24],[7
   ${PANELS('a-1-visao.jpg', 760, 1160)}
   <div class="gc" style="--ac:#7EE0B5;left:30px;top:1000px"><i>✅</i><span>48/100<br>confirmados</span></div>
   <div class="gc" style="--ac:#FF5FA2;right:30px;top:1300px"><i>⏰</i><span>Lembrete<br>em 1 toque</span></div>`
+/* ===== ANÚNCIOS 1:1 (1080x1080) ===== */
+const TILT = (img, left, top, w, h, rot, extra = '') => `<div class="frame" style="left:${left}px;top:${top}px;width:${w}px;height:${h}px;border-radius:48px;border:11px solid #FFF8EC;background:#fff;transform:rotate(${rot}deg);box-shadow:0 26px 50px rgba(42,27,61,.22);${extra}"><img src="img/${img}" style="height:${Math.round(w * 2.16)}px"></div>`
+const PILLS = (txt, bg) => `<span style="display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 24px;border-radius:30px;background:${bg};font:800 25px Outfit;color:#2A1B3D;box-shadow:0 8px 20px rgba(42,27,61,.12)">${txt}</span>`
+// A: história do bebê + personalizado no tema (dois temas lado a lado)
+pages.ad1 = () => `${SOLID('#FFD84D')}
+  ${confetti([[960,60,'s','pink',8],[40,1000,'r','sky',-18]], 1.4)}
+  <div class="abs" style="left:64px;top:62px;width:960px">${HOOK('O convite que conta', 'a história do seu bebê', 82)}</div>
+  ${TILT('j-5-hero.jpg', 90, 430, 430, 720, -6)}
+  ${TILT('g-5-hero.jpg', 560, 400, 430, 720, 6)}
+  <div class="gc" style="--ac:#FF5FA2;left:400px;top:610px;font-size:27px;transform:rotate(-2deg)"><i>🎨</i><span>No tema<br>da sua festa</span></div>
+  <div class="abs" style="left:64px;top:316px;display:flex;gap:12px">${PILLS('📸 com as fotinhas dele', '#FFF8EC')}${PILLS('💌 direto no WhatsApp', '#FFF8EC')}</div>`
+// B: benefício do painel (quem vai e quem não vai)
+pages.ad2 = () => `${SOLID('#5BC8F5')}
+  ${confetti([[970,60,'r','butter',18],[40,980,'s','pink',-8]], 1.4)}
+  <div class="abs" style="left:64px;top:62px;width:960px">${HOOK('Imagina saber antes da festa', 'quem vai e quem não vai', 72)}</div>
+  <div class="frame" style="left:250px;top:290px;width:580px;height:820px;border-radius:48px 48px 0 0;border:11px solid #FFF8EC;border-bottom:0;background:#fff"><img src="img/a-1-visao.jpg" style="height:1253px"></div>
+  <div class="gc" style="--ac:#7EE0B5;left:40px;top:500px;font-size:29px"><i>✅</i><span>48 vão</span></div>
+  <div class="gc" style="--ac:#FF5FA2;right:40px;top:650px;font-size:29px"><i>🙅‍♀️</i><span>9 não vão</span></div>
+  <div class="gc" style="--ac:#FFD84D;left:40px;top:830px;font-size:27px"><i>⏰</i><span>Lembrete em<br>1 toque</span></div>`
 document.body.className = qs.get('frame') ? 'piece' : 'board'
+if (['ad1', 'ad2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1080px;position:relative;overflow:hidden'
 if (['post1', 'post2', 'post3'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1350px;position:relative'
 if (['story1', 'story2', 'story3', 'reel1', 'reel2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1920px;position:relative'
 if (!pages[PAGE]) throw new Error('pagina?')
