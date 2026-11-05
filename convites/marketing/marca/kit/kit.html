@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Caveat:wght@600&family=Fraunces:ital,opsz,wght@1,9..144,700&family=JetBrains+Mono:wght@700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --pink:#FF5FA2; --butter:#FFD84D; --sky:#5BC8F5; --mint:#7EE0B5; --cream:#FFF8EC; --ink:#2A1B3D; }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html,body { background:var(--cream); color:var(--ink); font-family:'Outfit',sans-serif; overflow:hidden }
+  body.board { width:1600px; height:1000px; position:relative }
+  .abs { position:absolute }
+  .disp { font-family:'Bagel Fat One',sans-serif }
+  .acc { font-family:'Fraunces',serif; font-style:italic; font-weight:700 }
+  .hand { font-family:'Caveat',cursive; font-weight:600 }
+  .mono { font-family:'JetBrains Mono',monospace; font-weight:700; letter-spacing:.12em; text-transform:uppercase }
+  .h1 { font-family:'Bagel Fat One'; font-size:74px; line-height:1; color:var(--pink); text-shadow:4px 4px 0 var(--butter), 8px 8px 0 var(--sky) }
+  .pg { position:absolute; left:60px; top:44px } .pg .mono { font-size:16px; opacity:.6 }
+  .foot { position:absolute; left:60px; right:60px; bottom:30px; display:flex; justify-content:space-between; font:700 15px 'JetBrains Mono'; letter-spacing:.12em; text-transform:uppercase; opacity:.5 }
+  .card { position:absolute; background:#fff; border-radius:28px; box-shadow:0 10px 30px rgba(42,27,61,.10); padding:26px }
+  .note { font-size:21px; line-height:1.35; font-weight:500 }
+  .note b { font-weight:800 }
+  .sw { position:absolute; width:236px; height:300px; border-radius:28px; padding:20px; display:flex; flex-direction:column; justify-content:flex-end; box-shadow:0 10px 26px rgba(42,27,61,.14) }
+  .sw .n { font:800 30px 'Outfit' } .sw .m { font:700 15px 'JetBrains Mono'; letter-spacing:.06em; opacity:.9; line-height:1.5 }
+  .btn { display:inline-flex; align-items:center; gap:12px; height:68px; padding:0 30px; border-radius:40px; font:800 26px 'Outfit'; color:#fff; background:#22C55E; box-shadow:0 12px 26px rgba(34,197,94,.38); white-space:nowrap }
+  .pill { display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 22px; border-radius:30px; font:800 22px 'Outfit'; white-space:nowrap }
+  .gc { position:absolute; display:flex; align-items:center; gap:14px; padding:16px 22px; border-radius:26px; font:800 22px/1.15 'Outfit'; color:var(--ink);
+    background:linear-gradient(140deg,rgba(255,255,255,.82),rgba(255,255,255,.34)); backdrop-filter:blur(16px) saturate(1.4); border:1.5px solid rgba(255,255,255,.95);
+    box-shadow:0 16px 40px rgba(42,27,61,.14), 0 0 0 1px color-mix(in srgb,var(--ac,#FF5FA2) 38%,transparent), 0 0 30px color-mix(in srgb,var(--ac,#FF5FA2) 26%,transparent), inset 0 1px 0 #fff }
+  .gc i { font-style:normal; font-size:30px }
+  .mark { position:relative; display:inline-block; padding:0 .22em; margin:0 -.05em }
+  .mark::before { content:''; position:absolute; inset:.06em 0 .02em; background:var(--pink); border-radius:.22em; transform:rotate(-1.6deg); z-index:-1 }
+  .conf { position:absolute; pointer-events:none }
+  .frame { position:absolute; overflow:hidden; box-shadow:0 22px 44px rgba(42,27,61,.22) }
+  .frame img { width:100%; height:100%; object-fit:cover; object-position:top; display:block }
+  .sel { position:absolute; border-radius:50%; display:grid; place-items:center }
+  .tag { font:700 14px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; opacity:.65 }
+  .ok { color:#14804A } .no { color:#D63B52 }
+  /* peças em formato de post/story (body.piece) */
+  body.piece { position:relative }
+  .t-hook { font-family:'Outfit'; font-weight:800; letter-spacing:-.035em; line-height:1 }
+</style></head><body>
+<div id="root"></div>
+<script>
+const qs = new URLSearchParams(location.search), PAGE = qs.get('p') || 'capa'
+const C = { pink:'#FF5FA2', butter:'#FFD84D', sky:'#5BC8F5', mint:'#7EE0B5', cream:'#FFF8EC', ink:'#2A1B3D' }
+const WA = '<svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>'
+// confete: pecinhas (retângulo, bolinha, estrela, ziguezague) em posições fixas
+function confetti(list, scale = 1) {
+  return list.map(([x, y, kind, col, r, s = 1]) => {
+    const k = scale * s, c = C[col] || col
+    if (kind === 'r') return `<div class="conf" style="left:${x}px;top:${y}px;width:${40*k}px;height:${16*k}px;border-radius:${8*k}px;background:${c};transform:rotate(${r}deg)"></div>`
+    if (kind === 'd') return `<div class="conf" style="left:${x}px;top:${y}px;width:${22*k}px;height:${22*k}px;border-radius:50%;background:${c}"></div>`
+    if (kind === 's') return `<div class="conf" style="left:${x}px;top:${y}px;width:${44*k}px;height:${44*k}px;background:${c};clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);transform:rotate(${r}deg)"></div>`
+    return `<svg class="conf" style="left:${x}px;top:${y}px;transform:rotate(${r}deg)" width="${56*k}" height="${24*k}" viewBox="0 0 56 24"><path d="M4 14 q8 -14 16 0 t16 0 t16 0" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round"/></svg>`
+  }).join('')
+}
+const CF1 = [[90,120,'r','butter',-24],[300,70,'d','sky',0],[1380,110,'r','mint',32],[1490,260,'s','butter',10],[110,760,'s','sky',-8],[250,880,'r','pink',18],[1420,820,'d','pink',0],[1250,900,'r','sky',-30],[760,60,'z','mint',-14],[1100,60,'d','butter',0]]
+const LOGO = (n, w, extra = '') => `<img src="logos/confete-${n}.svg" style="width:${w}px;${extra}">`
+const pageHead = (n, t) => `<div class="pg"><div class="mono">${n} · ${t}</div></div><div class="foot"><span>Confete · Manual de marca</span><span>v1 · rascunho para aprovação</span></div>`
+const pages = {}
+/* ============================ 01 CAPA ============================ */
+pages.capa = () => `
+  <div class="abs" style="inset:0;background:linear-gradient(180deg,#FFF8EC,#FFEFD8)"></div>${confetti(CF1, 1.3)}
+  <div class="abs" style="left:0;width:1600px;top:230px;text-align:center">${LOGO('principal', 1060, 'margin:0 auto')}</div>
+  <div class="abs acc" style="left:0;width:1600px;text-align:center;top:620px;font-size:52px;color:var(--pink)">referência em convites personalizados infantis</div>
+  <div class="abs mono" style="left:0;width:1600px;text-align:center;top:740px;font-size:20px;opacity:.7">Manual de marca · versão 1 · rascunho para aprovação</div>
+  <div class="abs hand" style="left:0;width:1600px;text-align:center;top:800px;font-size:40px">confetedigital.com.br · @meuconfetedigital</div>`
+/* ============================ 02 LOGO ============================ */
+pages.logo = () => `${pageHead('02', 'Logo e versões')}
+  <div class="abs h1" style="left:60px;top:88px">O logo</div>
+  <div class="card" style="left:60px;top:200px;width:700px;height:360px;background:var(--cream);border:3px dashed rgba(42,27,61,.12);display:grid;place-items:center">${LOGO('principal', 600)}</div>
+  <div class="abs note" style="left:60px;top:584px;width:700px"><b>Versão principal.</b> Letras bolhudas em rosa com sombra em degraus (manteiga e céu) e confete ao redor. Use sempre que houver espaço e fundo claro (creme ou branco).</div>
+  <div class="card" style="left:800px;top:200px;width:360px;height:170px;background:var(--pink);display:grid;place-items:center;padding:10px">${LOGO('creme', 320)}</div>
+  <div class="card" style="left:1180px;top:200px;width:360px;height:170px;background:var(--butter);display:grid;place-items:center;padding:10px">${LOGO('mono-tinta', 320)}</div>
+  <div class="card" style="left:800px;top:390px;width:360px;height:170px;background:var(--ink);display:grid;place-items:center;padding:10px">${LOGO('mono-branco', 320)}</div>
+  <div class="card" style="left:1180px;top:390px;width:360px;height:170px;background:var(--sky);display:grid;place-items:center;padding:10px">${LOGO('mono-tinta', 320)}</div>
+  <div class="abs note" style="left:800px;top:584px;width:740px"><b>Sobre cor ou foto:</b> versão creme sobre rosa, ou monocromática (tinta ou branca) sobre manteiga, céu, menta, escuro ou fotos. Nunca a principal sobre fundo colorido: ela perde o contraste.</div>
+  <div class="abs mono" style="left:60px;top:690px;font-size:16px;opacity:.6">Ícone (avatar do perfil, favicon, capa de destaque)</div>
+  <div class="abs" style="left:60px;top:726px;display:flex;gap:28px">
+    ${['principal', 'butter', 'tinta'].map(v => `<div style="width:190px;height:190px;border-radius:50%;overflow:hidden;box-shadow:0 10px 26px rgba(42,27,61,.16)"><img src="logos/confete-icone-${v}.svg" style="width:100%;height:100%"></div>`).join('')}
+    <div class="note" style="width:620px;align-self:center;margin-left:12px"><b>Só o "c".</b> O Instagram corta em círculo: a letra fica no centro, com folga. Preferência: o ícone <b>rosa</b> como foto do perfil.</div></div>`
+/* ============================ 03 USO ============================ */
+pages.uso = () => `${pageHead('03', 'Espaço, tamanho e erros')}
+  <div class="abs h1" style="left:60px;top:88px">Como usar</div>
+  <div class="abs mono" style="left:60px;top:200px;font-size:16px;opacity:.6">Espaço de respiro</div>
+  <div class="card" style="left:60px;top:236px;width:640px;height:330px;display:grid;place-items:center;background:#fff">
+    <div style="position:relative;padding:50px;border:3px dashed var(--sky)">${LOGO('principal', 440)}
+      <div class="mono abs" style="left:6px;top:6px;font-size:12px;color:var(--sky)">x</div><div class="mono abs" style="right:6px;bottom:6px;font-size:12px;color:var(--sky)">x</div></div></div>
+  <div class="abs note" style="left:60px;top:582px;width:640px;font-size:19px"><b>x = altura do "o"</b> do logo. Mantenha esse espaço livre em volta, sem texto, foto ou borda de peça encostando.</div>
+  <div class="abs mono" style="left:760px;top:200px;font-size:16px;opacity:.6">Tamanho mínimo</div>
+  <div class="card" style="left:760px;top:236px;width:780px;height:150px;display:flex;align-items:center;gap:50px">
+    <div style="text-align:center">${LOGO('principal', 200)}<div class="tag">200 px · digital</div></div>
+    <div style="text-align:center">${LOGO('principal', 130)}<div class="tag">130 px · mínimo</div></div>
+    <div style="text-align:center"><div style="width:48px;height:48px;border-radius:50%;overflow:hidden;margin:0 auto"><img src="logos/confete-icone-principal.svg" style="width:100%"></div><div class="tag">ícone 48 px</div></div></div>
+  <div class="abs note" style="left:760px;top:408px;width:780px">Abaixo de 130 px de largura, troque para o <b>ícone "c"</b>. Em reels, o logo aparece no quadro final, grande, e como marca pequena no canto só se não cobrir o rosto nem os botões do Instagram.</div>
+  <div class="abs mono" style="left:60px;top:664px;font-size:16px;opacity:.6">Não faça</div>
+  <div class="abs" style="left:60px;top:698px;display:flex;gap:22px">
+    <div class="card" style="position:relative;width:350px;height:190px;padding:10px;display:grid;place-items:center;overflow:hidden"><div style="transform:scaleX(1.5) scaleY(.7)">${LOGO('principal', 220)}</div><div class="abs no" style="right:14px;top:8px;font-size:30px;font-weight:800">✕</div></div>
+    <div class="card" style="position:relative;width:350px;height:190px;padding:10px;display:grid;place-items:center;background:var(--sky)"><div>${LOGO('principal', 250)}</div><div class="abs no" style="right:14px;top:8px;font-size:30px;font-weight:800">✕</div></div>
+    <div class="card" style="position:relative;width:350px;height:190px;padding:10px;display:grid;place-items:center;overflow:hidden"><div style="filter:hue-rotate(160deg)">${LOGO('principal', 250)}</div><div class="abs no" style="right:14px;top:8px;font-size:30px;font-weight:800">✕</div></div>
+    <div class="card" style="position:relative;width:350px;height:190px;padding:10px;display:grid;place-items:center;overflow:hidden"><div style="transform:rotate(-14deg)">${LOGO('principal', 250, 'filter:drop-shadow(8px 10px 0 #2A1B3D)')}</div><div class="abs no" style="right:14px;top:8px;font-size:30px;font-weight:800">✕</div></div></div>
+  <div class="abs note" style="left:60px;top:902px;width:1480px;font-size:18px">Não esticar ou achatar · não usar a versão principal sobre cor (use a creme ou mono) · não trocar as cores · não girar nem adicionar sombras e contornos.</div>`
+/* ============================ 04 PALETA ============================ */
+pages.paleta = () => `${pageHead('04', 'Cores')}
+  <div class="abs h1" style="left:60px;top:88px">Paleta</div>
+  ${[['Rosa chiclete', '#FF5FA2', '255 · 95 · 162', 'cor da marca · 35%', '#2A1B3D'], ['Manteiga', '#FFD84D', '255 · 216 · 77', 'destaque · sombra · 15%', '#2A1B3D'], ['Céu', '#5BC8F5', '91 · 200 · 245', 'apoio · 10%', '#2A1B3D'], ['Menta', '#7EE0B5', '126 · 224 · 181', 'apoio · 10%', '#2A1B3D'], ['Creme', '#FFF8EC', '255 · 248 · 236', 'fundo · 25%', '#2A1B3D'], ['Tinta', '#2A1B3D', '42 · 27 · 61', 'texto · escuro · 5%', '#fff']].map(([n, h, rgb, u, fg], i) => `<div class="sw" style="left:${60 + i * 252}px;top:200px;background:${h};color:${fg};${h === '#FFF8EC' ? 'border:3px solid rgba(42,27,61,.12)' : ''}"><div class="n">${n}</div><div class="m">${h}<br>RGB ${rgb}<br>${u}</div></div>`).join('')}
+  <div class="abs mono" style="left:60px;top:540px;font-size:16px;opacity:.6">Texto sobre cor · contraste (mínimo 4,5 : 1 para texto pequeno)</div>
+  ${[['tinta', '#2A1B3D', 'rosa', '#FF5FA2', '5,6', 1], ['tinta', '#2A1B3D', 'manteiga', '#FFD84D', '11,5', 1], ['tinta', '#2A1B3D', 'céu', '#5BC8F5', '8,3', 1], ['tinta', '#2A1B3D', 'menta', '#7EE0B5', '10,0', 1], ['tinta', '#2A1B3D', 'creme', '#FFF8EC', '15,0', 1], ['branco', '#fff', 'tinta', '#2A1B3D', '15,9', 1], ['branco', '#fff', 'rosa', '#FF5FA2', '2,8', 0], ['rosa', '#FF5FA2', 'creme', '#FFF8EC', '2,7', 0]].map(([fn, fh, bn, bh, r, ok], i) => `<div style="position:absolute;left:${60 + (i % 4) * 380}px;top:${580 + Math.floor(i / 4) * 130}px;width:358px;height:112px;border-radius:24px;background:${bh};color:${fh};padding:16px 20px;display:flex;flex-direction:column;justify-content:space-between;${bh === '#FFF8EC' ? 'border:3px solid rgba(42,27,61,.12)' : ''}"><div style="font:800 30px Outfit">${fn} em ${bn}</div><div style="font:700 15px 'JetBrains Mono'">${r} : 1 &nbsp; ${ok ? '✓ texto de qualquer tamanho' : '✕ só título gigante (40 px+)'}</div></div>`).join('')}
+  <div class="abs note" style="left:60px;top:850px;width:1480px;font-size:19px"><b>Regra:</b> texto pequeno é sempre <b>tinta</b> (ou branco sobre tinta). Branco sobre rosa só em título grande e negrito, com sombra. Rosa sobre creme só em título. O verde do botão do WhatsApp (#22C55E) é exceção, por reconhecimento.</div>`
+/* ============================ 05 TIPOGRAFIA ============================ */
+pages.tipo = () => `${pageHead('05', 'Tipografia')}
+  <div class="abs h1" style="left:60px;top:88px">Fontes</div>
+  <div class="card" style="left:60px;top:200px;width:730px;height:230px"><div class="tag">Bagel Fat One · logo e títulos curtos</div><div class="disp" style="font-size:112px;line-height:1.1;color:var(--pink);text-shadow:4px 4px 0 var(--butter),8px 8px 0 var(--sky)">sua festa</div></div>
+  <div class="card" style="left:810px;top:200px;width:730px;height:230px"><div class="tag">Fraunces itálico · palavra-chave</div><div class="acc" style="font-size:108px;line-height:1.1;color:var(--pink)">palavra-chave</div></div>
+  <div class="card" style="left:60px;top:450px;width:730px;height:200px"><div class="tag">Outfit 800 · hook, legenda e botões · tracking apertado</div><div style="font:800 58px/1.05 Outfit;letter-spacing:-.035em;margin-top:4px">Confirme em 1 minuto</div><div style="font:500 26px Outfit;margin-top:6px">Outfit 500 · texto corrido e informações</div></div>
+  <div class="card" style="left:810px;top:450px;width:730px;height:200px"><div class="tag">Caveat · notas à mão e setas</div><div class="hand" style="font-size:78px;line-height:1.05;color:var(--pink);transform:rotate(-3deg);margin-top:6px">olha que fofo! ↘</div></div>
+  <div class="abs mono" style="left:60px;top:672px;font-size:16px;opacity:.6">Hierarquia (tela de 1080 px de largura)</div>
+  <div class="card" style="left:60px;top:704px;width:1480px;height:236px;display:flex;gap:36px;align-items:center;padding:20px 30px">
+    <div style="width:460px"><div class="t-hook" style="font-size:44px;line-height:1.15">Imagina um convite<br>assim pra <span class="mark acc" style="color:#fff;font-weight:700;letter-spacing:-.01em;z-index:1">sua festa</span></div></div>
+    <div style="width:500px;font:700 15px/1.6 'JetBrains Mono';letter-spacing:0">HOOK · Outfit 800, 96 a 130 px<br>PALAVRA-CHAVE · Fraunces itálico, marcador rosa<br>LEGENDA · Outfit 800, 56 a 64 px, 2 linhas<br>CORPO · Outfit 500, 36 a 42 px<br>ROTULO · mono 24 a 28 px, caixa-alta</div>
+    <div style="width:400px" class="note" style="font-size:18px">A palavra-chave vem <b>uma por tela</b>, sempre em Fraunces itálico (branca sobre marcador rosa, ou rosa sobre creme). Fontes gratuitas do Google Fonts (licença livre).</div></div>`
+/* ============================ 06 ELEMENTOS ============================ */
+pages.elementos = () => `${pageHead('06', 'Elementos de assinatura')}
+  <div class="abs h1" style="left:60px;top:88px">Assinaturas</div>
+  <div class="card" style="left:60px;top:200px;width:480px;height:200px"><div class="tag">Confete · 4 formas, 4 cores</div><div style="position:relative;height:130px">${confetti([[10,30,'r','pink',-24],[80,70,'d','butter',0],[130,20,'s','sky',8],[210,60,'z','mint',-10],[300,20,'r','butter',30],[370,70,'d','pink',0],[400,20,'s','mint',-6]], 1.2)}</div></div>
+  <div class="card" style="left:560px;top:200px;width:480px;height:200px"><div class="tag">Botão do WhatsApp</div><div style="margin-top:22px"><span class="btn">${WA}Chama no WhatsApp</span></div></div>
+  <div class="card" style="left:1060px;top:200px;width:480px;height:200px"><div class="tag">Pílulas e etiquetas</div><div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="pill" style="background:var(--butter)">novo!</span><span class="pill" style="background:var(--mint)">sem app ✓</span><span class="pill" style="background:var(--sky)">em 1 minuto</span><span class="pill" style="background:var(--ink);color:#fff">passo 2/4</span></div></div>
+  <div class="card" style="left:60px;top:420px;width:480px;height:230px"><div class="tag">Selo circular</div><div style="position:relative;height:160px"><svg width="150" height="150" viewBox="0 0 150 150" style="position:absolute;left:10px;top:6px"><circle cx="75" cy="75" r="72" fill="#FF5FA2"/><defs><path id="cc" d="M75,75 m-52,0 a52,52 0 1,1 104,0 a52,52 0 1,1 -104,0"/></defs><text font-family="JetBrains Mono" font-weight="700" font-size="13" letter-spacing="1.6" fill="#fff"><textPath href="#cc">CONVITE DIGITAL • SEM APP •  </textPath></text><text x="75" y="88" text-anchor="middle" font-size="42">🎉</text></svg><svg width="150" height="150" viewBox="0 0 150 150" style="position:absolute;left:190px;top:6px"><polygon points="75,4 90,40 128,26 112,60 146,78 110,92 120,132 84,116 70,148 56,112 20,130 34,92 4,72 38,60 22,24 62,38" fill="#FFD84D"/><text x="75" y="84" text-anchor="middle" font-family="Outfit" font-weight="800" font-size="26" fill="#2A1B3D" transform="rotate(-8 75 75)">NOVO!</text></svg></div></div>
+  <div class="card" style="left:560px;top:420px;width:480px;height:230px"><div class="tag">Marcador de palavra · nota à mão</div><div style="margin-top:14px;font:800 62px Outfit;letter-spacing:-.03em">sua <span class="mark acc" style="color:#fff;z-index:1">festa</span></div><div class="hand" style="font-size:44px;color:var(--pink);transform:rotate(-4deg);margin-top:6px">sem app, sem cadastro →</div></div>
+  <div class="card" style="left:1060px;top:420px;width:480px;height:230px;background:linear-gradient(135deg,#FFE3F0,#E3F6FF)"><div class="tag">Card de vidro (iOS)</div><div class="gc" style="--ac:#FF5FA2;left:26px;top:60px"><i>📊</i><span>Tudo contado, ao vivo</span></div><div class="gc" style="--ac:#5BC8F5;left:90px;top:136px"><i>👨‍👩‍👧</i><span>Resposta por família</span></div></div>
+  <div class="card" style="left:60px;top:670px;width:480px;height:230px"><div class="tag">Indicador de passos (reels)</div><div style="margin-top:18px;display:inline-flex;align-items:center;gap:14px;background:rgba(255,255,255,.9);border-radius:36px;padding:10px 24px 10px 12px;box-shadow:0 10px 26px rgba(42,27,61,.14)"><span style="width:48px;height:48px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center;font:800 22px Outfit">2/4</span><span><span class="mono" style="font-size:12px;opacity:.6;display:block">passo 02</span><span style="font:800 24px Outfit">a gente monta</span></span><span style="display:flex;gap:6px;margin-left:10px"><i style="width:30px;height:8px;border-radius:5px;background:var(--pink)"></i><i style="width:30px;height:8px;border-radius:5px;background:var(--pink)"></i><i style="width:30px;height:8px;border-radius:5px;background:rgba(42,27,61,.14)"></i><i style="width:30px;height:8px;border-radius:5px;background:rgba(42,27,61,.14)"></i></span></div></div>
+  <div class="card" style="left:560px;top:670px;width:480px;height:230px"><div class="tag">Barra de rodapé (posts)</div><div style="margin-top:20px;border:2px solid var(--ink);border-radius:14px;display:flex;font:700 13px 'JetBrains Mono';letter-spacing:.08em;text-transform:uppercase"><span style="padding:12px 14px;border-right:2px solid var(--ink);flex:1">convites<br>infantis</span><span style="padding:12px 14px;border-right:2px solid var(--ink);flex:1">sem app<br>sem cadastro</span><span style="padding:12px 14px;flex:1">@meuconfetedigital</span></div></div>
+  <div class="card" style="left:1060px;top:670px;width:480px;height:230px"><div class="tag">Sombra em degraus</div><div class="disp" style="font-size:96px;line-height:1.1;color:var(--pink);text-shadow:4px 4px 0 var(--butter),8px 8px 0 var(--sky);margin-top:6px">olá!</div></div>`
+/* ============================ 07 POSTS ============================ */
+pages.posts = () => `${pageHead('07', 'Posts e carrosséis (4:5)')}
+  <div class="abs h1" style="left:60px;top:88px">Posts</div>
+  ${[0, 1, 2].map(i => `<div class="abs" style="left:${60 + i * 500}px;top:190px;width:460px;height:640px;border-radius:26px;overflow:hidden;box-shadow:0 20px 50px rgba(42,27,61,.2)"><iframe src="?p=post${i + 1}&frame=1" style="width:1080px;height:1350px;border:0;transform:scale(${460 / 1080});transform-origin:0 0"></iframe></div>`).join('')}
+  <div class="abs note" style="left:60px;top:850px;width:1480px;font-size:20px"><b>Capa</b> com hook em duas camadas e o painel na frente do título · <b>miolo</b> com cards de vidro e um assunto por slide · <b>fechamento</b> com botão do WhatsApp e a logo. Fundo creme, uma cor forte por peça, confete como assinatura.</div>`
+/* ============================ 08 STORIES E PERFIL ============================ */
+pages.stories = () => `${pageHead('08', 'Perfil, stories e destaques')}
+  <div class="abs h1" style="left:60px;top:88px">Perfil e stories</div>
+  <div class="abs" style="left:60px;top:190px;width:360px;height:640px;border-radius:26px;overflow:hidden;box-shadow:0 20px 50px rgba(42,27,61,.2)"><iframe src="?p=story1&frame=1" style="width:1080px;height:1920px;border:0;transform:scale(${360 / 1080});transform-origin:0 0"></iframe></div>
+  <div class="abs" style="left:450px;top:190px;width:360px;height:640px;border-radius:26px;overflow:hidden;box-shadow:0 20px 50px rgba(42,27,61,.2)"><iframe src="?p=story2&frame=1" style="width:1080px;height:1920px;border:0;transform:scale(${360 / 1080});transform-origin:0 0"></iframe></div>
+  <div class="card" style="left:850px;top:190px;width:690px;height:290px">
+    <div style="display:flex;gap:26px;align-items:center"><div style="width:150px;height:150px;border-radius:50%;overflow:hidden;box-shadow:0 8px 20px rgba(42,27,61,.2);flex:none"><img src="logos/confete-icone-principal.svg" style="width:100%"></div>
+    <div><div style="font:800 28px Outfit">Confete | Convites Infantis</div><div style="font:500 22px/1.35 Outfit;margin-top:6px">Convite digital com a história do seu bebê 🦁🦋<br>Confirmação por família + painel ao vivo<br>👇 Chama no WhatsApp</div><div class="tag" style="margin-top:8px;opacity:.5">bio · 106 caracteres</div></div></div></div>
+  <div class="card" style="left:850px;top:500px;width:690px;height:330px"><div class="tag">Capas dos destaques (círculo)</div>
+    <div style="display:flex;gap:26px;margin-top:20px;justify-content:space-between">
+      ${[['✨', 'Como funciona', C.butter], ['🎨', 'Temas', C.sky], ['📊', 'Painel', C.mint], ['💬', 'Dúvidas', C.pink]].map(([e, t, bg]) => `<div style="text-align:center"><div style="width:130px;height:130px;border-radius:50%;background:${bg};display:grid;place-items:center;font-size:60px;outline:5px solid ${C.pink};outline-offset:5px">${e}</div><div style="font:700 19px Outfit;margin-top:14px">${t}</div></div>`).join('')}</div></div>
+  <div class="abs note" style="left:850px;top:852px;width:690px;font-size:19px">Stories e capas seguem a mesma lógica dos posts, em 9:16, com o conteúdo longe das faixas do topo (~14%) e de baixo (~20%). Cada destaque tem capa de uma cor da paleta com o emoji no centro.</div>`
+/* ============================ 09 REELS ============================ */
+pages.reels = () => `${pageHead('09', 'Reels e motion')}
+  <div class="abs h1" style="left:60px;top:88px">Reels</div>
+  <div class="abs" style="left:60px;top:190px;width:340px;height:604px;border-radius:26px;overflow:hidden;box-shadow:0 20px 50px rgba(42,27,61,.2)"><iframe src="?p=reel1&frame=1" style="width:1080px;height:1920px;border:0;transform:scale(${340 / 1080});transform-origin:0 0"></iframe></div>
+  <div class="abs" style="left:420px;top:190px;width:340px;height:604px;border-radius:26px;overflow:hidden;box-shadow:0 20px 50px rgba(42,27,61,.2)"><iframe src="?p=reel2&frame=1" style="width:1080px;height:1920px;border:0;transform:scale(${340 / 1080});transform-origin:0 0"></iframe></div>
+  <div class="card" style="left:800px;top:190px;width:740px;height:300px"><div class="tag">Estrutura de 15 a 30 s</div>
+    <div style="display:flex;gap:10px;margin-top:20px">${[['0 a 2 s', 'Hook', 'duas camadas, no alto', C.pink, '#fff'], ['2 a 10 s', 'Cenas', 'uma ideia por tela, 1 a 1,5 s', C.butter, C.ink], ['10 a 24 s', 'Prova', 'painel, WhatsApp, cards de vidro', C.sky, C.ink], ['últimos 4 s', 'Chamada', 'botão + logo + link na bio', C.mint, C.ink]].map(([t, n, d, bg, fg]) => `<div style="flex:1;background:${bg};color:${fg};border-radius:22px;padding:16px 14px;min-height:190px"><div class="mono" style="font-size:12px">${t}</div><div style="font:800 28px Outfit;margin:6px 0">${n}</div><div style="font:500 16px/1.3 Outfit">${d}</div></div>`).join('')}</div></div>
+  <div class="card" style="left:800px;top:500px;width:360px;height:310px;padding:22px"><div class="tag">Movimento</div><div class="note" style="font-size:16px;margin-top:8px;line-height:1.42">• Entrada com <b>blur + deslocamento curto</b>, "pop" com leve estouro de escala<br>• Cards de vidro em <b>cascata</b> (60 a 120 ms)<br>• Troca por <b>varredura de cor</b> (rosa → creme)<br>• <b>Confete</b> explode no "confirmado"<br>• Fundo claro, nunca preto</div></div>
+  <div class="card" style="left:1180px;top:500px;width:360px;height:310px;padding:22px"><div class="tag">Legenda e som</div><div class="note" style="font-size:16px;margin-top:8px;line-height:1.42">• Legenda <b>2 linhas</b>, Outfit 800, apertada, abaixo do queixo ou no terço inferior<br>• Palavra de ênfase em <b>Fraunces itálico</b><br>• Ritmo ~90 BPM, whoosh nas trocas, pop nos cards, clique ao digitar<br>• Loudness −14 LUFS · música com crédito</div></div>
+  <div class="abs note" style="left:60px;top:830px;width:1480px;font-size:18px">Livre de sobreposição: topo (14%) e base (20%) do 9:16 e a faixa direita de 120 px (curtir e comentar). A marca em movimento sempre termina com a logo, o botão do WhatsApp e "link na bio".</div>`
+/* ============================ 10 VOZ ============================ */
+pages.voz = () => `${pageHead('10', 'Voz e regras')}
+  <div class="abs h1" style="left:60px;top:88px">Como a Confete fala</div>
+  <div class="card" style="left:60px;top:200px;width:480px;height:330px"><div class="tag">Tom</div><div class="note" style="margin-top:12px;font-size:23px;line-height:1.5"><b>Calorosa, direta e divertida.</b><br>Fala com a mãe (e o pai), não com "cliente". Frases curtas, uma ideia por vez, um emoji que ajuda, nunca em excesso. Sem jargão técnico: "painel", "lembrete", "convite", "lista".</div></div>
+  <div class="card" style="left:560px;top:200px;width:480px;height:330px"><div class="tag ok">Diga assim</div><div class="note" style="margin-top:12px;font-size:21px;line-height:1.55">“Seus convidados só digitam o nome.”<br>“A gente monta tudo pra você.”<br>“Quem não respondeu? 1 toque.”<br>“Sem app. Sem cadastro.”<br>“Chama no WhatsApp.”</div></div>
+  <div class="card" style="left:1060px;top:200px;width:480px;height:330px"><div class="tag no">Evite</div><div class="note" style="margin-top:12px;font-size:21px;line-height:1.55">“Solução inovadora de gestão de eventos.”<br>“Oferta imperdível!!!”<br>“Garanta já o seu.”<br>“Testado em 100 festas.”<br>Gírias e palavrões</div></div>
+  <div class="card" style="left:60px;top:550px;width:1480px;height:350px;background:var(--ink);color:#fff"><div class="tag" style="color:var(--butter);opacity:1">Regras que valem sempre</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 50px;margin-top:16px;font:500 21px/1.4 Outfit">
+      <div>• <b>Não prometer preço nem prazo</b> em peça nenhuma; isso se responde no WhatsApp.</div><div>• <b>Só afirmar o que é verdade:</b> "mais de 100 convidados numa festa real", não "100 festas".</div>
+      <div>• <b>Gratuidade de crianças:</b> dizer "controle de gratuidades"; nunca afirmar que criança até 5 anos é separada.</div><div>• <b>Não citar "um ano"</b> em reels e anúncios (a marca serve para qualquer idade).</div>
+      <div>• <b>Fotos de bebês são de IA:</b> marcar "conteúdo gerado por IA" quando a rede pedir.</div><div>• <b>Foco infantil:</b> a Confete não faz comunicação de casamento.</div>
+      <div>• <b>Música com crédito</b> na legenda (licença CC BY, quando for o caso).</div><div>• <b>Referências</b> inspiram o estilo; nunca copiar texto, foto ou marca de terceiros.</div></div></div>`
+/* ============================ PEÇAS (posts, stories, reels) ============================ */
+const HOOK = (l1, kw, size = 104) => `<div class="t-hook" style="font-size:${size}px;color:${C.ink}">${l1}<br><span class="mark acc" style="color:#fff;font-weight:700;letter-spacing:-.01em;z-index:1;font-size:${size * 1.1}px">${kw}</span></div>`
+const bgOrbs = (w, h) => `<div class="abs" style="inset:0;background:radial-gradient(circle at 15% 12%,rgba(255,95,162,.16),transparent 45%),radial-gradient(circle at 90% 30%,rgba(91,200,245,.18),transparent 48%),radial-gradient(circle at 25% 100%,rgba(255,216,77,.22),transparent 50%),#FFF8EC"></div>`
+pages.post1 = () => `${bgOrbs()}${confetti([[60,60,'r','butter',-22],[930,90,'s','sky',8],[980,520,'r','mint',32],[70,720,'d','pink',0],[890,1180,'z','butter',-14]], 1.5)}
+  <div class="abs mono" style="left:70px;top:60px;font-size:24px;opacity:.55">convites infantis · @meuconfetedigital</div>
+  <div class="abs" style="left:70px;top:150px;width:940px">${HOOK('Imagina um convite<br>assim pra', 'sua festa', 108)}</div>
+  <div class="frame" style="left:330px;top:560px;width:560px;height:700px;border-radius:44px;border:10px solid #fff;transform:rotate(3deg)"><img src="img/j-5-hero.jpg"></div>
+  <div class="gc" style="--ac:#FF5FA2;left:50px;top:660px"><i>📸</i><span>Fotos do seu bebê<br>na história</span></div>
+  <div class="gc" style="--ac:#5BC8F5;left:50px;top:880px"><i>💌</i><span>“Você está<br>convidado”</span></div>
+  <div class="sel" style="left:80px;top:1090px;width:210px;height:210px;background:var(--butter);transform:rotate(-10deg);font:800 40px/1 'Bagel Fat One';text-align:center;color:var(--ink)">sem app!</div>
+  <div class="abs hand" style="left:620px;top:1270px;font-size:48px;color:var(--pink);transform:rotate(-4deg)">arrasta pro lado →</div>`
+pages.post2 = () => `${bgOrbs()}${confetti([[950,70,'r','pink',20],[60,110,'s','mint',-6],[990,760,'d','butter',0],[80,1220,'r','sky',-20]], 1.5)}
+  <div class="abs mono" style="left:70px;top:60px;font-size:24px;opacity:.55">02 · tudo contado, ao vivo</div>
+  <div class="abs" style="left:70px;top:130px;width:940px">${HOOK('Quem foi, quem ainda', 'não respondeu', 96)}</div>
+  <div class="frame" style="left:270px;top:480px;width:600px;height:780px;border-radius:44px;background:#fff"><img src="img/a-1-visao.jpg" style="object-position:top;height:1300px"></div>
+  <div class="gc" style="--ac:#7EE0B5;left:40px;top:600px"><i>✅</i><span>Confirmados</span></div>
+  <div class="gc" style="--ac:#FF5FA2;right:40px;top:760px"><i>⏳</i><span>Aguardando</span></div>
+  <div class="gc" style="--ac:#5BC8F5;left:40px;top:960px"><i>👨‍👩‍👧</i><span>Por família</span></div>
+  <div class="gc" style="--ac:#FFD84D;right:40px;top:1120px"><i>⏰</i><span>Lembrete em 1 toque</span></div>`
+pages.post3 = () => `${bgOrbs()}${confetti(CF1.map(([x, y, k, c, r]) => [x * 0.66, y * 1.2, k, c, r]), 1.7)}
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:250px">${HOOK('Quer um desses', 'na sua festa?', 120)}</div>
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:690px"><span class="btn" style="height:130px;font-size:50px;padding:0 60px;gap:20px">${WA.replace('34', '70').replace('34', '70')}Chama no WhatsApp</span></div>
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:880px;font:800 44px Outfit">👆 Link na bio</div>
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:1010px">${LOGO('principal', 560, 'margin:0 auto')}</div>`
+pages.story1 = () => `${bgOrbs()}${confetti([[80,260,'r','butter',-22],[900,300,'s','sky',8],[950,820,'r','mint',32],[70,1180,'d','pink',0],[870,1500,'z','butter',-14]], 1.6)}
+  <div class="abs" style="left:60px;top:300px;width:960px;text-align:center">${HOOK('Seus convidados', 'só digitam o nome', 96)}</div>
+  <div class="frame" style="left:220px;top:700px;width:640px;height:880px;border-radius:50px;border:10px solid #fff;transform:rotate(-2deg)"><img src="img/j-1-entrada.jpg"></div>
+  <div class="gc" style="--ac:#FF5FA2;left:40px;top:860px"><i>⌨️</i><span>Só o<br>nome</span></div>
+  <div class="gc" style="--ac:#7EE0B5;right:40px;top:1250px"><i>👨‍👩‍👧</i><span>Família<br>toda</span></div>`
+pages.story2 = () => `${bgOrbs()}${confetti([[100,300,'s','mint',-6],[920,360,'r','pink',24],[80,1500,'r','sky',-20],[900,1560,'d','butter',0]], 1.6)}
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:420px">${HOOK('Quer um desses', 'na sua festa?', 112)}</div>
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:900px"><span class="btn" style="height:150px;font-size:52px;padding:0 64px;gap:22px">${WA.replace('34', '76').replace('34', '76')}Chama no WhatsApp</span></div>
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:1110px;font:800 46px Outfit"><span style="font-size:64px">☝️</span><br>Link na bio</div>
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:1290px">${LOGO('principal', 600, 'margin:0 auto')}</div>`
+pages.reel1 = () => `${bgOrbs()}${confetti([[70,260,'r','butter',-22],[900,240,'s','sky',8],[960,900,'r','mint',32],[60,1300,'d','pink',0],[880,1560,'z','butter',-14]], 1.6)}
+  <div class="abs" style="left:50px;top:210px;width:980px;text-align:center">${HOOK('Imagina um convite', 'assim', 118)}</div>
+  <div class="abs" style="left:50px;top:560px;width:980px;text-align:center;font:800 118px 'Outfit';letter-spacing:-.04em;line-height:1">pra sua festa</div>
+  <div class="frame" style="left:240px;top:760px;width:600px;height:860px;border-radius:48px;opacity:.97;-webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent)"><img src="img/j-5-hero.jpg"></div>
+  <div class="gc" style="--ac:#FF5FA2;left:20px;top:900px"><i>📸</i><span>Fotos do<br>bebê</span></div>
+  <div class="gc" style="--ac:#5BC8F5;right:20px;top:1160px"><i>🦋</i><span>Emojis do<br>tema</span></div>
+  <div class="abs" style="left:100px;width:880px;text-align:center;top:1640px;font:800 60px/1.05 Outfit;letter-spacing:-.035em;color:${C.ink}">Sem app e sem cadastro</div>`
+pages.reel2 = () => `${bgOrbs()}${confetti([[90,400,'s','butter',-6],[920,360,'r','pink',24],[70,1450,'r','sky',-20],[920,1500,'d','mint',0]], 1.6)}
+  <div class="abs" style="left:50px;top:200px;width:980px;display:flex;justify-content:center"><span style="display:inline-flex;align-items:center;gap:16px;background:rgba(255,255,255,.92);border-radius:44px;padding:12px 30px 12px 14px;box-shadow:0 10px 30px rgba(42,27,61,.16)"><span style="width:64px;height:64px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center;font:800 28px Outfit">2/4</span><span><span class="mono" style="font-size:15px;opacity:.6;display:block">passo 02</span><span style="font:800 32px Outfit">a gente monta</span></span><span style="display:flex;gap:7px;margin-left:12px"><i style="width:40px;height:10px;border-radius:6px;background:var(--pink)"></i><i style="width:40px;height:10px;border-radius:6px;background:var(--pink)"></i><i style="width:40px;height:10px;border-radius:6px;background:rgba(42,27,61,.14)"></i><i style="width:40px;height:10px;border-radius:6px;background:rgba(42,27,61,.14)"></i></span></span></div>
+  <div class="abs" style="left:50px;top:400px;width:980px;text-align:center">${HOOK('você recebe o', 'painel', 120)}</div>
+  <div class="frame" style="left:240px;top:760px;width:600px;height:860px;border-radius:48px;background:#fff;-webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent)"><img src="img/a-1-visao.jpg" style="height:1300px"></div>
+  <div class="gc" style="--ac:#7EE0B5;left:20px;top:900px"><i>✅</i><span>48/100<br>confirmados</span></div>
+  <div class="gc" style="--ac:#FFD84D;right:20px;top:1170px"><i>⏰</i><span>Lembrete<br>em 1 toque</span></div>`
+document.body.className = qs.get('frame') ? 'piece' : 'board'
+if (['post1', 'post2', 'post3'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1350px;position:relative'
+if (['story1', 'story2', 'reel1', 'reel2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1920px;position:relative'
+if (!pages[PAGE]) throw new Error('pagina?')
+document.getElementById('root').innerHTML = pages[PAGE]()
+window.ready = Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = r)), ...[...document.querySelectorAll('iframe')].map(f => new Promise(r => { f.onload = () => setTimeout(r, 1200) }))])
+</script></body></html>
