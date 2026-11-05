@@ -94,7 +94,9 @@ O que elas têm em comum, e o que vale levar para a marca:
 ## DECISÕES DA MARCA (registro)
 
 - **Proposta escolhida: 1 "bombom" (chiclete pop).** Linha visual: rosa chiclete #FF5FA2, manteiga #FFD84D, céu #5BC8F5, menta #7EE0B5, creme #FFF8EC, tinta #2A1B3D; Bagel Fat One (títulos/logo), Fraunces itálico (palavra-chave), Outfit (textos/botões), Caveat (notas à mão). Lâmina: `convites/marketing/marca/` (`marca.html?p=1`).
-- **O NOME PODE MUDAR.** O dono quer manter a linha visual do bombom e talvez só trocar o nome. Até ele definir, **não escrever "bombom" nem @ em peças finais** (usar espaço reservado). Antes de adotar qualquer nome: checar INPI, @ no Instagram e domínio.
+- **NOME ESCOLHIDO: Confete** (decisão do dono, 2026-11-05). Posicionamento: **ser referência em convites personalizados infantis.** O foco é 100% festa infantil; casamento fica fora da marca por ora (o produto de casamento existe no sistema, mas não entra na comunicação; se voltar, pensar em marca ou linha própria, não na Confete).
+- **Pendências do nome (do dono):** consulta no INPI (classes 35, 41 e 42), @ no Instagram (ex.: `@confete.convites`, `@confetedigital`) e domínio em registro.br. Até confirmar, o nome pode aparecer em rascunhos e testes, mas **não publicar nada de forma definitiva** sem essas checagens, e não escrever @ que ainda não existe.
+- A linha visual continua a **bombom/candy** com o confete como elemento de assinatura (confete flutuando, estrelinhas, papel picado nas cores da paleta).
 - **Não impacta os convites já existentes** (temas Safari e Jardim ficam como estão). A marca vale para posts, stories, reels, capas e anúncios.
 
 ## REFERÊNCIAS DE EDIÇÃO DE REELS (pasta `reels/`)
