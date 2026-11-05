@@ -1,0 +1,4 @@
+const { chromium } = require('playwright'); const D = __dirname + '/'; const fs = require('fs')
+;(async () => { const b = await chromium.launch({ args: ['--allow-file-access-from-files'] }); const c = await b.newContext({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 }); fs.mkdirSync(D + 'out/destaques-v2', { recursive: true })
+  for (const [n, f] of [['st_como', 'story-como-funciona'], ['st_quem', 'story-quem-somos'], ['st_dep', 'story-depoimentos']]) { const p = await c.newPage(); const e = []; p.on('pageerror', x => e.push(String(x))); await p.goto(`file://${D}kit.html?p=${n}&frame=1`); await p.evaluate(() => window.ready); await p.waitForTimeout(400); await p.screenshot({ path: `${D}out/destaques-v2/${f}.png` }); await p.close(); if (e.length) console.log(n, e) }
+  await b.close() })()

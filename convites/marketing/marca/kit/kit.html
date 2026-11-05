@@ -335,10 +335,29 @@ const CAR = {
    <div class="abs hand" style="left:0;width:1080px;text-align:center;top:1080px;font-size:58px;color:#2A1B3D">a gente responde rapidinho 💛</div>`,
 }
 Object.assign(pages, CAR)
+/* ===== DESTAQUES: 1 story cada (1080x1920) ===== */
+const DEP = [['Amigaaa que convite lindo 😍 muito caprichado, dá pra ver o carinho em cada detalhe ❤️', '19:42'], ['Genteee que coisa mais linda esse convite 🥹 muito delicado, amei demais!!', '20:15'], ['Que convite perfeitooo! Muito lindo e diferente, vcs arrasaram nos detalhes 🥰✨', '21:03']]
+pages.st_dep = () => `${SOLID('#FF5FA2')}${confetti([[930, 300, 's', 'butter', 8], [60, 1540, 'r', 'sky', -18]], 1.5)}
+  <div class="abs" style="left:70px;top:290px;width:940px;text-align:center">${H2('O que os convidados', 'estão dizendo', 92, true)}</div>
+  <div class="abs" style="left:90px;top:610px;width:900px;border-radius:50px;overflow:hidden;background:#efeae2;box-shadow:0 30px 60px rgba(42,27,61,.25);border:11px solid #FFF8EC">
+    <div style="height:108px;background:#008069;color:#fff;display:flex;align-items:center;gap:18px;padding:0 28px;font:800 32px Outfit"><div style="width:64px;height:64px;border-radius:50%;background:#FFD84D;display:grid;place-items:center;font-size:34px">💬</div><div>Mensagens dos convidados<div style="font:500 22px Outfit;opacity:.85">sobre o convite da festa</div></div></div>
+    <div style="padding:26px 24px 30px;display:flex;flex-direction:column;gap:22px">
+      ${DEP.map(([t, h], i) => `<div style="align-self:flex-start;max-width:780px;background:#fff;color:#111;border-radius:${i ? 28 : 8}px 28px 28px 28px;padding:18px 22px 10px;box-shadow:0 4px 12px rgba(0,0,0,.10);font:500 34px/1.32 Outfit;position:relative">${t}<div style="text-align:right;font-size:21px;color:rgba(17,17,17,.45);margin-top:4px">${h}</div><span style="position:absolute;right:16px;bottom:-22px;background:#fff;border-radius:20px;padding:2px 10px;font-size:24px;box-shadow:0 2px 6px rgba(0,0,0,.15)">❤️</span></div>`).join('')}
+    </div></div>
+  <div class="abs hand" style="left:0;width:1080px;text-align:center;top:1460px;font-size:50px;color:#2A1B3D">mensagens reais de convidados 💛</div>`
+pages.st_como = () => `${SOLID('#FFD84D')}${confetti([[930, 300, 's', 'pink', 8], [60, 1540, 'r', 'sky', -18]], 1.5)}
+  <div class="abs" style="left:70px;top:290px;width:940px;text-align:center">${H2('Como funciona', 'em 4 passos', 104)}</div>
+  ${[['📸', 'Você manda as fotos, a data e a lista de convidados'], ['🎨', 'A gente cria o convite e a história, no tema da festa'], ['💌', 'Você envia no WhatsApp, com o nome de cada convidado'], ['✅', 'Acompanha quem vai e quem não vai, ao vivo']].map(([i, t], k) => `<div class="row2" style="top:${620 + k * 200}px;font-size:36px;padding:26px 30px;gap:22px"><span style="width:76px;height:76px;border-radius:50%;background:#FF5FA2;color:#fff;display:grid;place-items:center;font:800 40px 'Bagel Fat One';flex:none">${k + 1}</span><span style="flex:1">${t}</span><i style="font-size:50px">${i}</i></div>`).join('')}
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:1440px"><span class="btn" style="height:110px;font-size:42px;padding:0 50px;gap:18px">${WA.replace('34', '56').replace('34', '56')}Chama no WhatsApp</span></div>`
+pages.st_quem = () => `${SOLID('#5BC8F5')}${confetti([[930, 300, 'r', 'butter', 18], [60, 1540, 's', 'pink', -8]], 1.5)}
+  <div class="abs" style="left:0;width:1080px;text-align:center;top:290px"><div style="width:210px;height:210px;border-radius:50%;overflow:hidden;margin:0 auto;box-shadow:0 14px 34px rgba(42,27,61,.22);border:8px solid #FFF8EC"><img src="logos/confete-icone-principal.svg" style="width:100%;height:100%"></div></div>
+  <div class="abs" style="left:70px;top:560px;width:940px;text-align:center">${H2('Prazer,', 'somos a Confete', 104)}</div>
+  <div class="abs" style="left:90px;top:860px;width:900px;background:#FFF8EC;border-radius:44px;padding:44px 48px;box-shadow:0 18px 40px rgba(42,27,61,.16);font:500 38px/1.4 Outfit;color:#2A1B3D">A Confete nasceu numa <b>festa de verdade</b>. Criamos o convite da nossa filha com a história dela, e a família amou tanto que decidimos fazer o mesmo pra outras mães. 💛</div>
+  <div class="abs" style="left:90px;top:1270px;width:900px;display:flex;flex-wrap:wrap;gap:14px;justify-content:center">${PILLS('🧸 feito com carinho, um por um', '#FFF8EC')}${PILLS('🎨 no tema da sua festa', '#FFD84D')}${PILLS('💬 atendimento no WhatsApp', '#FFF8EC')}</div>`
 document.body.className = qs.get('frame') ? 'piece' : 'board'
 if (['ad1', 'ad2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1080px;position:relative;overflow:hidden'
 if (/^c\ds\d$/.test(PAGE) || ['post1', 'post2', 'post3'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1350px;position:relative'
-if (['story1', 'story2', 'story3', 'reel1', 'reel2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1920px;position:relative'
+if (['st_dep', 'st_como', 'st_quem', 'story1', 'story2', 'story3', 'reel1', 'reel2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1920px;position:relative'
 if (!pages[PAGE]) throw new Error('pagina?')
 document.getElementById('root').innerHTML = pages[PAGE]()
 window.ready = Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = r)), ...[...document.querySelectorAll('iframe')].map(f => new Promise(r => { f.onload = () => setTimeout(r, 1200) }))])
