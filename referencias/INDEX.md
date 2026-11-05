@@ -110,6 +110,22 @@ Duas capturas de anúncios de edição/IA no Instagram (talking head). O que lev
 7. Para o NOSSO conteúdo (sem pessoa falando): aplicar a mesma lógica: hook em 2 linhas (sans bold + serifa itálica na palavra-chave) na parte de cima, legenda curta embaixo, painel/bebê no centro grande, cortes rápidos. Cores da marca (bombom), não as das capturas.
 - Não copiar rostos, perfis ou textos dessas capturas.
 
+
+### Referências de reels 3 a 7: cards "iOS de vidro", fundo animado e passo a passo
+
+Cinco capturas de dois criadores (edição com IA / Claude Code). Valem para **estilo de motion e de hook**. O que levar:
+
+1. **Cards com pegada iOS (glassmorphism claro).** Cantos bem arredondados (~28 a 40 px num 1080), fundo cinza-claro translúcido com blur, sombra suave, cabeçalho com 3 bolinhas (vermelho/amarelo/verde) quando é "janela", mini-cabeçalho em fonte mono pequena. Itens em lista com ícone de pasta/checkbox, **linha destacada em verde-lima**, selos pequenos ("Publicado", "3 PASTAS"). Servem para mostrar o painel, a lista de convidados, o WhatsApp e as etapas **como se fossem telas flutuando**.
+2. **Cards entrando por trás/ao lado da pessoa ou do objeto principal.** Ref 4: dois cards de vídeo inclinados e desfocados flutuam atrás da cabeça, em escala diferente (profundidade). Ref 3: o card ocupa o topo e a cabeça aparece por baixo dele. No nosso caso: painel/convite/WhatsApp flutuando atrás do bebê ou do celular, com leve rotação e parallax.
+3. **Carrossel de imagens rolando no fundo.** Imagens/telas em colunas que sobem ou descem lentamente atrás do conteúdo (fundo animado), levemente desfocadas, para dar movimento sem roubar o foco.
+4. **Hook em duas camadas.** Linha 1 em sans bold branca, **palavra-chave em serifa itálica grande em verde-lima** (ref 4 e 6: "com Claude", "Claude Code"), com sombra suave. Em fundo claro (ref 5), o título é preto, e a palavra-chave em serifa itálica fica **sobre um marcador/pílula de cor** (retângulo arredondado verde-lima atrás). Traduzir para a marca: marcador em manteiga/rosa/menta do bombom.
+5. **Legenda em duas linhas**, sans bold branca, **tracking bem apertado**, centrada na faixa logo abaixo do queixo, com a última palavra ou a palavra de ênfase em **serifa itálica colorida** maior (ref 4: "Todo criador que eu conheço tá / editando vídeo / *com Claude*").
+6. **Indicador de progresso em pílula no topo** ("2/4  PASSO 02  instale os repositórios" + barra de 4 segmentos). Ótimo para o nosso "Como funciona em 4 passos": número em círculo colorido, rótulo em mono pequeno, título do passo em sans bold.
+7. **Tela cheia com fundo gradiente claro** (verde-limão para pêssego) para os passos "em tela", com janela de navegador/terminal em cima, e rótulo em pílula branca no canto inferior do card (ref 5: "FFmpeg / CORTES E ÁUDIO"). Os chips de status (✓ remotion ✓ ffmpeg ○ whisper) mostram o estado de cada item em pílulas brancas com ícone circular.
+8. **Enquadramento:** rosto grande, olhar na câmera, meio-corpo, fundo com luz quente. O card fica na faixa **do queixo para baixo** ou no topo, **nunca cobrindo os olhos**. Cuidado com a faixa lateral direita (curtir/comentar) e a inferior (usuário/legenda do Instagram): conteúdo importante a ~120 px da direita e acima de ~20% da base.
+9. **Cor:** verde-lima forte (#B6F23C aproximado) como cor de destaque única sobre tons quentes/neutros. Para a marca bombom, trocar o verde-lima pelo rosa chiclete (e usar manteiga/menta como secundárias), mantendo a mesma função.
+- Sem copiar rostos, perfis, textos ou a identidade desses criadores.
+
 ## Como adicionar mais
 1. Envie a imagem na conversa e diga **o que gostou** nela.
 2. O Claude salva em `referencias/<posts|reels|stories|carrosseis|capas|outros>/`, reduz o peso (até ~2 MB), registra a linha na tabela, faz commit e push.
