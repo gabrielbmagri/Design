@@ -1,0 +1,157 @@
+{
+ "voz": "pt-BR-ThalitaMultilingualNeural",
+ "rate": "+6%",
+ "pitch": "+0Hz",
+ "linhas": [
+  {
+   "id": "l1",
+   "cena": "A",
+   "chunks": [
+    [
+     "Imagina um convite",
+     "behind"
+    ],
+    [
+     "que conta {{a história}} do seu bebê,",
+     "top"
+    ],
+    [
+     "com as {{fotinhas}} dele,",
+     "behind"
+    ]
+   ]
+  },
+  {
+   "id": "l2",
+   "cena": "A",
+   "chunks": [
+    [
+     "e todo {{personalizado}}",
+     "top"
+    ],
+    [
+     "no tema da festa.",
+     "behind"
+    ]
+   ]
+  },
+  {
+   "id": "l3",
+   "cena": "B",
+   "chunks": [
+    [
+     "Ele chega no {{WhatsApp}}",
+     "behind"
+    ],
+    [
+     "com o {{nome}} de cada convidado.",
+     "top"
+    ]
+   ]
+  },
+  {
+   "id": "l4",
+   "cena": "B",
+   "chunks": [
+    [
+     "E todo mundo se sente {{único}}.",
+     "top"
+    ]
+   ]
+  },
+  {
+   "id": "l5",
+   "cena": "C",
+   "chunks": [
+    [
+     "É só {{digitar o nome}}:",
+     "behind"
+    ],
+    [
+     "{{sem app}}, sem cadastro.",
+     "top"
+    ],
+    [
+     "Até a {{vovó}} consegue!",
+     "behind"
+    ]
+   ]
+  },
+  {
+   "id": "l6",
+   "cena": "D",
+   "chunks": [
+    [
+     "E você descobre,",
+     "behind"
+    ],
+    [
+     "{{antes mesmo}} da festa,",
+     "top"
+    ],
+    [
+     "quem vai e {{quem não vai}}.",
+     "behind"
+    ]
+   ]
+  },
+  {
+   "id": "l7",
+   "cena": "E",
+   "chunks": [
+    [
+     "Adultos, crianças,",
+     "behind"
+    ],
+    [
+     "vagas do {{papai e da mamãe}}:",
+     "top"
+    ],
+    [
+     "tudo {{contadinho}}.",
+     "behind"
+    ]
+   ]
+  },
+  {
+   "id": "l8",
+   "cena": "F",
+   "chunks": [
+    [
+     "Aquela {{tia}}",
+     "behind"
+    ],
+    [
+     "que esqueceu de responder?",
+     "top"
+    ],
+    [
+     "{{Um toque}}, e o lembrete chega.",
+     "behind"
+    ]
+   ]
+  },
+  {
+   "id": "l9",
+   "cena": "G",
+   "chunks": [
+    [
+     "Quer um desses",
+     "mid"
+    ],
+    [
+     "na festa do {{seu pequeno}}?",
+     "mid"
+    ],
+    [
+     "Chama no WhatsApp,",
+     "btn"
+    ],
+    [
+     "o link tá na bio.",
+     "bio"
+    ]
+   ]
+  }
+ ]
+}

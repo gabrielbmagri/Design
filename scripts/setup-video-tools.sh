@@ -4,7 +4,7 @@
 set -euo pipefail
 
 echo "→ yt-dlp (use só para conteúdo seu ou com permissão)"
-python3 -m pip install -q yt-dlp
+python3 -m pip install -q yt-dlp edge-tts kokoro-onnx soundfile
 
 echo "→ HyperFrames e Remotion (CLI)"
 npm i -g hyperframes @remotion/cli remotion

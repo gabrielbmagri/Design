@@ -1,0 +1,876 @@
+{
+ "voz": "pt-BR-ThalitaMultilingualNeural",
+ "dur": 34.44,
+ "linhas": [
+  {
+   "id": "l1",
+   "cena": "A",
+   "chunks": [
+    {
+     "txt": "Imagina um convite",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "Imagina",
+       "kw": false,
+       "t": 0.048,
+       "d": 0.472
+      },
+      {
+       "w": "um",
+       "kw": false,
+       "t": 0.52,
+       "d": 0.071
+      },
+      {
+       "w": "convite",
+       "kw": false,
+       "t": 0.59,
+       "d": 0.578
+      }
+     ],
+     "t": 0.048,
+     "end": 1.168
+    },
+    {
+     "txt": "que conta {{a história}} do seu bebê,",
+     "pos": "top",
+     "words": [
+      {
+       "w": "que",
+       "kw": false,
+       "t": 1.168,
+       "d": 0.094
+      },
+      {
+       "w": "conta",
+       "kw": false,
+       "t": 1.262,
+       "d": 0.342
+      },
+      {
+       "w": "a",
+       "kw": true,
+       "t": 1.605,
+       "d": 0.012
+      },
+      {
+       "w": "história",
+       "kw": true,
+       "t": 1.616,
+       "d": 0.342
+      },
+      {
+       "w": "do",
+       "kw": false,
+       "t": 1.958,
+       "d": 0.059
+      },
+      {
+       "w": "seu",
+       "kw": false,
+       "t": 2.017,
+       "d": 0.165
+      },
+      {
+       "w": "bebê,",
+       "kw": false,
+       "t": 2.182,
+       "d": 0.413
+      }
+     ],
+     "t": 1.168,
+     "end": 2.5949999999999998
+    },
+    {
+     "txt": "com as {{fotinhas}} dele,",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "com",
+       "kw": false,
+       "t": 2.748,
+       "d": 0.094
+      },
+      {
+       "w": "as",
+       "kw": false,
+       "t": 2.843,
+       "d": 0.094
+      },
+      {
+       "w": "fotinhas",
+       "kw": true,
+       "t": 2.937,
+       "d": 0.531
+      },
+      {
+       "w": "dele,",
+       "kw": false,
+       "t": 3.468,
+       "d": 0.377
+      }
+     ],
+     "t": 2.748,
+     "end": 3.8449999999999998
+    }
+   ],
+   "t": 0.048,
+   "end": 3.8449999999999998
+  },
+  {
+   "id": "l2",
+   "cena": "A",
+   "chunks": [
+    {
+     "txt": "e todo {{personalizado}}",
+     "pos": "top",
+     "words": [
+      {
+       "w": "e",
+       "kw": false,
+       "t": 3.998,
+       "d": 0.118
+      },
+      {
+       "w": "todo",
+       "kw": false,
+       "t": 4.116,
+       "d": 0.283
+      },
+      {
+       "w": "personalizado",
+       "kw": true,
+       "t": 4.399,
+       "d": 0.743
+      }
+     ],
+     "t": 3.998,
+     "end": 5.142
+    },
+    {
+     "txt": "no tema da festa.",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "no",
+       "kw": false,
+       "t": 5.142,
+       "d": 0.13
+      },
+      {
+       "w": "tema",
+       "kw": false,
+       "t": 5.272,
+       "d": 0.2
+      },
+      {
+       "w": "da",
+       "kw": false,
+       "t": 5.472,
+       "d": 0.118
+      },
+      {
+       "w": "festa.",
+       "kw": false,
+       "t": 5.59,
+       "d": 0.448
+      }
+     ],
+     "t": 5.142,
+     "end": 6.038
+    }
+   ],
+   "t": 3.998,
+   "end": 6.038
+  },
+  {
+   "id": "l3",
+   "cena": "B",
+   "chunks": [
+    {
+     "txt": "Ele chega no {{WhatsApp}}",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "Ele",
+       "kw": false,
+       "t": 6.369,
+       "d": 0.2
+      },
+      {
+       "w": "chega",
+       "kw": false,
+       "t": 6.569,
+       "d": 0.33
+      },
+      {
+       "w": "no",
+       "kw": false,
+       "t": 6.899,
+       "d": 0.071
+      },
+      {
+       "w": "WhatsApp",
+       "kw": true,
+       "t": 6.97,
+       "d": 0.613
+      }
+     ],
+     "t": 6.369,
+     "end": 7.583
+    },
+    {
+     "txt": "com o {{nome}} de cada convidado.",
+     "pos": "top",
+     "words": [
+      {
+       "w": "com",
+       "kw": false,
+       "t": 7.583,
+       "d": 0.177
+      },
+      {
+       "w": "o",
+       "kw": false,
+       "t": 7.76,
+       "d": 0.024
+      },
+      {
+       "w": "nome",
+       "kw": true,
+       "t": 7.784,
+       "d": 0.283
+      },
+      {
+       "w": "de",
+       "kw": false,
+       "t": 8.067,
+       "d": 0.118
+      },
+      {
+       "w": "cada",
+       "kw": false,
+       "t": 8.185,
+       "d": 0.295
+      },
+      {
+       "w": "convidado.",
+       "kw": false,
+       "t": 8.479,
+       "d": 0.637
+      }
+     ],
+     "t": 7.583,
+     "end": 9.116
+    }
+   ],
+   "t": 6.369,
+   "end": 9.116
+  },
+  {
+   "id": "l4",
+   "cena": "B",
+   "chunks": [
+    {
+     "txt": "E todo mundo se sente {{único}}.",
+     "pos": "top",
+     "words": [
+      {
+       "w": "E",
+       "kw": false,
+       "t": 9.435,
+       "d": 0.094
+      },
+      {
+       "w": "todo",
+       "kw": false,
+       "t": 9.529,
+       "d": 0.283
+      },
+      {
+       "w": "mundo",
+       "kw": false,
+       "t": 9.812,
+       "d": 0.33
+      },
+      {
+       "w": "se",
+       "kw": false,
+       "t": 10.142,
+       "d": 0.13
+      },
+      {
+       "w": "sente",
+       "kw": false,
+       "t": 10.272,
+       "d": 0.401
+      },
+      {
+       "w": "único",
+       "kw": true,
+       "t": 10.673,
+       "d": 0.413
+      }
+     ],
+     "t": 9.435,
+     "end": 11.086
+    }
+   ],
+   "t": 9.435,
+   "end": 11.086
+  },
+  {
+   "id": "l5",
+   "cena": "C",
+   "chunks": [
+    {
+     "txt": "É só {{digitar o nome}}:",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "É",
+       "kw": false,
+       "t": 11.403,
+       "d": 0.071
+      },
+      {
+       "w": "só",
+       "kw": false,
+       "t": 11.474,
+       "d": 0.189
+      },
+      {
+       "w": "digitar",
+       "kw": true,
+       "t": 11.663,
+       "d": 0.424
+      },
+      {
+       "w": "o",
+       "kw": true,
+       "t": 12.087,
+       "d": 0.024
+      },
+      {
+       "w": "nome",
+       "kw": true,
+       "t": 12.111,
+       "d": 0.318
+      }
+     ],
+     "t": 11.403,
+     "end": 12.429
+    },
+    {
+     "txt": "{{sem app}}, sem cadastro.",
+     "pos": "top",
+     "words": [
+      {
+       "w": "sem",
+       "kw": true,
+       "t": 12.653,
+       "d": 0.318
+      },
+      {
+       "w": "app",
+       "kw": true,
+       "t": 12.972,
+       "d": 0.271
+      },
+      {
+       "w": "sem",
+       "kw": false,
+       "t": 13.432,
+       "d": 0.2
+      },
+      {
+       "w": "cadastro.",
+       "kw": false,
+       "t": 13.632,
+       "d": 0.566
+      }
+     ],
+     "t": 12.653,
+     "end": 14.198
+    },
+    {
+     "txt": "Até a {{vovó}} consegue!",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "Até",
+       "kw": false,
+       "t": 14.528,
+       "d": 0.413
+      },
+      {
+       "w": "a",
+       "kw": false,
+       "t": 14.941,
+       "d": 0.059
+      },
+      {
+       "w": "vovó",
+       "kw": true,
+       "t": 15.0,
+       "d": 0.366
+      },
+      {
+       "w": "consegue!",
+       "kw": false,
+       "t": 15.366,
+       "d": 0.613
+      }
+     ],
+     "t": 14.528,
+     "end": 15.979
+    }
+   ],
+   "t": 11.403,
+   "end": 15.979
+  },
+  {
+   "id": "l6",
+   "cena": "D",
+   "chunks": [
+    {
+     "txt": "E você descobre,",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "E",
+       "kw": false,
+       "t": 16.31,
+       "d": 0.094
+      },
+      {
+       "w": "você",
+       "kw": false,
+       "t": 16.404,
+       "d": 0.283
+      },
+      {
+       "w": "descobre,",
+       "kw": false,
+       "t": 16.687,
+       "d": 0.566
+      }
+     ],
+     "t": 16.31,
+     "end": 17.253
+    },
+    {
+     "txt": "{{antes mesmo}} da festa,",
+     "pos": "top",
+     "words": [
+      {
+       "w": "antes",
+       "kw": true,
+       "t": 17.454,
+       "d": 0.307
+      },
+      {
+       "w": "mesmo",
+       "kw": true,
+       "t": 17.76,
+       "d": 0.354
+      },
+      {
+       "w": "da",
+       "kw": false,
+       "t": 18.114,
+       "d": 0.118
+      },
+      {
+       "w": "festa,",
+       "kw": false,
+       "t": 18.232,
+       "d": 0.472
+      }
+     ],
+     "t": 17.454,
+     "end": 18.704
+    },
+    {
+     "txt": "quem vai e {{quem não vai}}.",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "quem",
+       "kw": false,
+       "t": 18.833,
+       "d": 0.224
+      },
+      {
+       "w": "vai",
+       "kw": false,
+       "t": 19.057,
+       "d": 0.354
+      },
+      {
+       "w": "e",
+       "kw": false,
+       "t": 19.411,
+       "d": 0.071
+      },
+      {
+       "w": "quem",
+       "kw": true,
+       "t": 19.482,
+       "d": 0.189
+      },
+      {
+       "w": "não",
+       "kw": true,
+       "t": 19.671,
+       "d": 0.165
+      },
+      {
+       "w": "vai",
+       "kw": true,
+       "t": 19.836,
+       "d": 0.318
+      }
+     ],
+     "t": 18.833,
+     "end": 20.154
+    }
+   ],
+   "t": 16.31,
+   "end": 20.154
+  },
+  {
+   "id": "l7",
+   "cena": "E",
+   "chunks": [
+    {
+     "txt": "Adultos, crianças,",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "Adultos,",
+       "kw": false,
+       "t": 20.472,
+       "d": 0.708
+      },
+      {
+       "w": "crianças,",
+       "kw": false,
+       "t": 21.321,
+       "d": 0.637
+      }
+     ],
+     "t": 20.472,
+     "end": 21.958000000000002
+    },
+    {
+     "txt": "vagas do {{papai e da mamãe}}:",
+     "pos": "top",
+     "words": [
+      {
+       "w": "vagas",
+       "kw": false,
+       "t": 22.123,
+       "d": 0.425
+      },
+      {
+       "w": "do",
+       "kw": false,
+       "t": 22.547,
+       "d": 0.106
+      },
+      {
+       "w": "papai",
+       "kw": true,
+       "t": 22.653,
+       "d": 0.483
+      },
+      {
+       "w": "e",
+       "kw": true,
+       "t": 23.137,
+       "d": 0.106
+      },
+      {
+       "w": "da",
+       "kw": true,
+       "t": 23.243,
+       "d": 0.083
+      },
+      {
+       "w": "mamãe",
+       "kw": true,
+       "t": 23.325,
+       "d": 0.413
+      }
+     ],
+     "t": 22.123,
+     "end": 23.738
+    },
+    {
+     "txt": "tudo {{contadinho}}.",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "tudo",
+       "kw": false,
+       "t": 23.962,
+       "d": 0.236
+      },
+      {
+       "w": "contadinho",
+       "kw": true,
+       "t": 24.198,
+       "d": 0.637
+      }
+     ],
+     "t": 23.962,
+     "end": 24.835
+    }
+   ],
+   "t": 20.472,
+   "end": 24.835
+  },
+  {
+   "id": "l8",
+   "cena": "F",
+   "chunks": [
+    {
+     "txt": "Aquela {{tia}}",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "Aquela",
+       "kw": false,
+       "t": 25.166,
+       "d": 0.389
+      },
+      {
+       "w": "tia",
+       "kw": true,
+       "t": 25.555,
+       "d": 0.425
+      }
+     ],
+     "t": 25.166,
+     "end": 25.98
+    },
+    {
+     "txt": "que esqueceu de responder?",
+     "pos": "top",
+     "words": [
+      {
+       "w": "que",
+       "kw": false,
+       "t": 25.98,
+       "d": 0.083
+      },
+      {
+       "w": "esqueceu",
+       "kw": false,
+       "t": 26.062,
+       "d": 0.483
+      },
+      {
+       "w": "de",
+       "kw": false,
+       "t": 26.546,
+       "d": 0.071
+      },
+      {
+       "w": "responder?",
+       "kw": false,
+       "t": 26.616,
+       "d": 0.554
+      }
+     ],
+     "t": 25.98,
+     "end": 27.169999999999998
+    },
+    {
+     "txt": "{{Um toque}}, e o lembrete chega.",
+     "pos": "behind",
+     "words": [
+      {
+       "w": "Um",
+       "kw": true,
+       "t": 27.501,
+       "d": 0.189
+      },
+      {
+       "w": "toque",
+       "kw": true,
+       "t": 27.689,
+       "d": 0.401
+      },
+      {
+       "w": "e",
+       "kw": false,
+       "t": 28.255,
+       "d": 0.094
+      },
+      {
+       "w": "o",
+       "kw": false,
+       "t": 28.35,
+       "d": 0.024
+      },
+      {
+       "w": "lembrete",
+       "kw": false,
+       "t": 28.373,
+       "d": 0.519
+      },
+      {
+       "w": "chega.",
+       "kw": false,
+       "t": 28.892,
+       "d": 0.472
+      }
+     ],
+     "t": 27.501,
+     "end": 29.364
+    }
+   ],
+   "t": 25.166,
+   "end": 29.364
+  },
+  {
+   "id": "l9",
+   "cena": "G",
+   "chunks": [
+    {
+     "txt": "Quer um desses",
+     "pos": "mid",
+     "words": [
+      {
+       "w": "Quer",
+       "kw": false,
+       "t": 29.693,
+       "d": 0.165
+      },
+      {
+       "w": "um",
+       "kw": false,
+       "t": 29.858,
+       "d": 0.141
+      },
+      {
+       "w": "desses",
+       "kw": false,
+       "t": 30.0,
+       "d": 0.401
+      }
+     ],
+     "t": 29.693,
+     "end": 30.401
+    },
+    {
+     "txt": "na festa do {{seu pequeno}}?",
+     "pos": "mid",
+     "words": [
+      {
+       "w": "na",
+       "kw": false,
+       "t": 30.401,
+       "d": 0.165
+      },
+      {
+       "w": "festa",
+       "kw": false,
+       "t": 30.566,
+       "d": 0.33
+      },
+      {
+       "w": "do",
+       "kw": false,
+       "t": 30.896,
+       "d": 0.071
+      },
+      {
+       "w": "seu",
+       "kw": true,
+       "t": 30.967,
+       "d": 0.165
+      },
+      {
+       "w": "pequeno",
+       "kw": true,
+       "t": 31.132,
+       "d": 0.483
+      }
+     ],
+     "t": 30.401,
+     "end": 31.615000000000002
+    },
+    {
+     "txt": "Chama no WhatsApp,",
+     "pos": "btn",
+     "words": [
+      {
+       "w": "Chama",
+       "kw": false,
+       "t": 31.935,
+       "d": 0.366
+      },
+      {
+       "w": "no",
+       "kw": false,
+       "t": 32.301,
+       "d": 0.071
+      },
+      {
+       "w": "WhatsApp,",
+       "kw": false,
+       "t": 32.372,
+       "d": 0.637
+      }
+     ],
+     "t": 31.935,
+     "end": 33.009
+    },
+    {
+     "txt": "o link tá na bio.",
+     "pos": "bio",
+     "words": [
+      {
+       "w": "o",
+       "kw": false,
+       "t": 33.174,
+       "d": 0.059
+      },
+      {
+       "w": "link",
+       "kw": false,
+       "t": 33.233,
+       "d": 0.377
+      },
+      {
+       "w": "tá",
+       "kw": false,
+       "t": 33.61,
+       "d": 0.118
+      },
+      {
+       "w": "na",
+       "kw": false,
+       "t": 33.728,
+       "d": 0.106
+      },
+      {
+       "w": "bio.",
+       "kw": false,
+       "t": 33.834,
+       "d": 0.283
+      }
+     ],
+     "t": 33.174,
+     "end": 34.117000000000004
+    }
+   ],
+   "t": 29.693,
+   "end": 34.117000000000004
+  }
+ ]
+}
