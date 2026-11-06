@@ -373,9 +373,7 @@ pages.wa_capa = () => `<svg class="abs" style="inset:0" width="1920" height="108
 /* ===== CAPA WHATSAPP BUSINESS v2 (2000x880): centro-baixo livre para a foto de perfil ===== */
 pages.wa_capa2 = () => `<svg class="abs" style="inset:0" width="2000" height="880" viewBox="0 0 2000 880"><polygon points="0,0 2000,0 2000,250 0,380" fill="#FFD84D"/><polygon points="0,380 2000,250 2000,620 0,560" fill="#5BC8F5"/><polygon points="0,560 2000,620 2000,880 0,880" fill="#FF5FA2"/></svg>
   ${confetti([[90,70,'s','pink',8],[1830,90,'r','pink',-20],[110,330,'d','butter',0],[1860,380,'s','butter',10],[600,60,'r','sky',24],[1380,50,'d','sky',0]], 1.5)}
-  <div class="abs" style="left:0;width:2000px;text-align:center;top:34px"><div style="background:#FFF8EC;display:inline-block;border-radius:64px;padding:20px 52px 10px;box-shadow:0 18px 40px rgba(42,27,61,.2)">${LOGO('principal', 560)}</div></div>
-  <div class="abs" style="left:46px;top:560px;width:600px"><span style="white-space:nowrap;display:inline-flex;align-items:center;gap:14px;height:104px;padding:0 36px;border-radius:60px;background:#FFF8EC;font:800 42px 'Outfit';letter-spacing:-.02em;color:#2A1B3D;box-shadow:0 14px 30px rgba(42,27,61,.2)">📸 Com as fotinhas dele</span></div>
-  <div class="abs" style="left:1354px;top:560px;width:600px;text-align:right"><span style="white-space:nowrap;display:inline-flex;align-items:center;gap:14px;height:104px;padding:0 36px;border-radius:60px;background:#FFF8EC;font:800 42px 'Outfit';letter-spacing:-.02em;color:#2A1B3D;box-shadow:0 14px 30px rgba(42,27,61,.2)">💌 Nome de cada um</span></div>`
+  <div class="abs" style="left:0;width:2000px;text-align:center;top:34px">${LOGO('mono-tinta', 600)}</div>`
 document.body.className = qs.get('frame') ? 'piece' : 'board'
 if (['ad1', 'ad2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1080px;position:relative;overflow:hidden'
 if (/^c\ds\d$/.test(PAGE) || ['post1', 'post2', 'post3'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1350px;position:relative'
