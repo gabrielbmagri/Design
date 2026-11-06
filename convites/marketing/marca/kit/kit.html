@@ -372,8 +372,7 @@ pages.wa_capa = () => `<svg class="abs" style="inset:0" width="1920" height="108
   <div class="abs" style="left:0;width:1920px;text-align:center;top:690px"><div style="display:inline-block;background:#FFF8EC;border-radius:70px;padding:26px 60px;box-shadow:0 18px 40px rgba(42,27,61,.2);font:800 60px 'Outfit';letter-spacing:-.03em;color:#2A1B3D">Convites que contam a <span class="mark acc" style="color:#fff;font-weight:700;letter-spacing:-.01em;z-index:1;font-size:70px">história do seu bebê</span></div></div>`
 /* ===== CAPA WHATSAPP BUSINESS v2 (2000x880): centro-baixo livre para a foto de perfil ===== */
 pages.wa_capa2 = () => `<svg class="abs" style="inset:0" width="2000" height="880" viewBox="0 0 2000 880"><polygon points="0,0 2000,0 2000,250 0,380" fill="#FFD84D"/><polygon points="0,380 2000,250 2000,620 0,560" fill="#5BC8F5"/><polygon points="0,560 2000,620 2000,880 0,880" fill="#FF5FA2"/></svg>
-  ${confetti([[90,70,'s','pink',8],[1830,90,'r','pink',-20],[110,330,'d','butter',0],[1860,380,'s','butter',10],[600,60,'r','sky',24],[1380,50,'d','sky',0]], 1.5)}
-  <div class="abs" style="left:0;width:2000px;text-align:center;top:34px">${LOGO('mono-tinta', 600)}</div>`
+  ${confetti([[90,70,'s','pink',8],[1830,90,'r','pink',-20],[110,330,'d','butter',0],[1860,380,'s','butter',10],[600,60,'r','sky',24],[1380,50,'d','sky',0]], 1.5)}`
 document.body.className = qs.get('frame') ? 'piece' : 'board'
 if (['ad1', 'ad2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1080px;position:relative;overflow:hidden'
 if (/^c\ds\d$/.test(PAGE) || ['post1', 'post2', 'post3'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1350px;position:relative'
