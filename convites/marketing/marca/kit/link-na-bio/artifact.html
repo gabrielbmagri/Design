@@ -1,0 +1,45 @@
+<title>Confete Link na Bio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: coluna única centrada, logo no terço superior, dois botões grandes; fundo liso céu com confete, igual ao story "Quem somos". */
+:root { --sky:#5BC8F5; --cream:#FFF8EC; --ink:#2A1B3D; --pink:#FF5FA2; --butter:#FFD84D; --mint:#7EE0B5; --wa:#25D366; --font:'Outfit',system-ui,sans-serif; color-scheme:light }
+html,body { min-height:100%; }
+body { background:var(--sky); color:var(--ink); font-family:var(--font); padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); padding-block:0; overflow-x:hidden }
+main { min-height:100svh; max-width:460px; margin:0 auto; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-block:14svh 40px; gap:40px; position:relative; z-index:1 }
+.logo { --s:min(40vw,168px); width:var(--s); height:var(--s); flex:none; border-radius:50%; overflow:hidden; border:7px solid var(--cream); box-shadow:0 14px 34px rgba(42,27,61,.22); background:var(--pink) }
+.logo svg { display:block; width:100%; height:100% }
+.links { width:100%; display:grid; gap:16px }
+.btn { display:flex; align-items:center; justify-content:center; gap:12px; min-height:68px; padding:0 24px; border-radius:999px; font-weight:800; font-size:clamp(17px,4.9vw,22px); letter-spacing:-.01em; color:var(--ink); text-decoration:none; box-shadow:0 12px 26px rgba(42,27,61,.18); transition:transform .15s }
+.btn:hover { transform:translateY(-2px) } .btn:active { transform:scale(.98) }
+.btn:focus-visible { outline:4px solid var(--ink); outline-offset:3px }
+.btn.wa { background:var(--wa) } .btn.ex { background:var(--cream) }
+.btn svg { width:28px; height:28px; flex:none }
+.conf { position:fixed; z-index:0; pointer-events:none }
+@media (prefers-reduced-motion:reduce) { .btn { transition:none } }
+</style>
+<script>
+// Troque aqui antes de publicar: número do WhatsApp (só dígitos, com 55 + DDD) e o endereço da demonstração.
+window.CONFETE = { whatsapp: '55DDDNUMERO', exemplo: 'https://claude.ai/artifact/QadJguVKc35nX6WgcPVBB7' }
+</script>
+<i class="conf" aria-hidden="true" style="left:78%;top:11%;width:60px;height:24px;border-radius:12px;background:var(--butter);transform:rotate(14deg)"></i>
+<i class="conf" aria-hidden="true" style="left:7%;top:84%;width:56px;height:56px;background:var(--pink);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)"></i>
+<i class="conf" aria-hidden="true" style="left:86%;top:76%;width:26px;height:26px;border-radius:50%;background:var(--butter)"></i>
+<i class="conf" aria-hidden="true" style="left:12%;top:18%;width:22px;height:22px;border-radius:50%;background:var(--mint)"></i>
+<i class="conf" aria-hidden="true" style="left:68%;top:90%;width:54px;height:22px;border-radius:11px;background:var(--cream);transform:rotate(-20deg)"></i>
+<main>
+  <div class="logo" role="img" aria-label="Confete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024"><rect width="1024" height="1024" fill="#FF5FA2"/><path d="M227.20000000000002 2.4000000000000004Q164.8 2.4000000000000004 116.80000000000001 -23.6Q68.8 -49.6 41.6 -97.6Q14.4 -145.6 14.4 -210.4Q14.4 -275.2 41.6 -323.20000000000005Q68.8 -371.20000000000005 117.20000000000002 -397.6Q165.60000000000002 -424.0 228.8 -424.0Q278.40000000000003 -424.0 316.40000000000003 -413.6Q354.40000000000003 -403.20000000000005 376.40000000000003 -382.40000000000003Q398.40000000000003 -361.6 398.40000000000003 -330.40000000000003Q398.40000000000003 -292.8 379.20000000000005 -271.6Q360.0 -250.4 324.0 -250.4Q300.0 -250.4 276.4 -257.6Q252.8 -264.8 216.0 -264.8Q185.60000000000002 -264.8 164.8 -255.20000000000002Q144.0 -245.60000000000002 144.0 -220.0Q144.0 -193.60000000000002 164.8 -182.0Q185.60000000000002 -170.4 216.0 -170.4Q240.8 -170.4 257.6 -175.2Q274.40000000000003 -180.0 289.6 -184.8Q304.8 -189.60000000000002 324.0 -189.60000000000002Q364.8 -189.60000000000002 384.4 -166.0Q404.0 -142.4 404.0 -105.60000000000001Q404.0 -74.4 380.8 -50.0Q357.6 -25.6 317.6 -11.600000000000001Q277.6 2.4000000000000004 227.20000000000002 2.4000000000000004Z" transform="translate(308.79999999999995,768.0)" fill="#FFD84D"/><path d="M227.20000000000002 2.4000000000000004Q164.8 2.4000000000000004 116.80000000000001 -23.6Q68.8 -49.6 41.6 -97.6Q14.4 -145.6 14.4 -210.4Q14.4 -275.2 41.6 -323.20000000000005Q68.8 -371.20000000000005 117.20000000000002 -397.6Q165.60000000000002 -424.0 228.8 -424.0Q278.40000000000003 -424.0 316.40000000000003 -413.6Q354.40000000000003 -403.20000000000005 376.40000000000003 -382.40000000000003Q398.40000000000003 -361.6 398.40000000000003 -330.40000000000003Q398.40000000000003 -292.8 379.20000000000005 -271.6Q360.0 -250.4 324.0 -250.4Q300.0 -250.4 276.4 -257.6Q252.8 -264.8 216.0 -264.8Q185.60000000000002 -264.8 164.8 -255.20000000000002Q144.0 -245.60000000000002 144.0 -220.0Q144.0 -193.60000000000002 164.8 -182.0Q185.60000000000002 -170.4 216.0 -170.4Q240.8 -170.4 257.6 -175.2Q274.40000000000003 -180.0 289.6 -184.8Q304.8 -189.60000000000002 324.0 -189.60000000000002Q364.8 -189.60000000000002 384.4 -166.0Q404.0 -142.4 404.0 -105.60000000000001Q404.0 -74.4 380.8 -50.0Q357.6 -25.6 317.6 -11.600000000000001Q277.6 2.4000000000000004 227.20000000000002 2.4000000000000004Z" transform="translate(292.79999999999995,752.0)" fill="#FFF8EC"/><rect x="182" y="172" width="36" height="16" rx="7" fill="#FFD84D" transform="rotate(-25 200 180)"/><rect x="802" y="152" width="36" height="16" rx="7" fill="#5BC8F5" transform="rotate(30 820 160)"/><rect x="862" y="792" width="36" height="16" rx="7" fill="#7EE0B5" transform="rotate(-20 880 800)"/><circle cx="150" cy="780" r="13" fill="#FFD84D"/><circle cx="770" cy="880" r="13" fill="#FFF8EC"/><circle cx="300" cy="90" r="13" fill="#7EE0B5"/></svg></div>
+  <nav class="links" aria-label="Links da Confete">
+    <a class="btn wa" id="b-wa" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="#2A1B3D" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>Dúvidas e orçamento</a>
+    <a class="btn ex" id="b-ex" href="#" target="_blank" rel="noopener"><span aria-hidden="true">💌</span>Veja um convite de exemplo</a>
+  </nav>
+</main>
+<script>
+(function () {
+  var c = window.CONFETE || {};
+  var msg = 'Oi! Vim pelo Instagram e quero saber mais sobre o convite 💛';
+  document.getElementById('b-wa').href = 'https://wa.me/' + c.whatsapp + '?text=' + encodeURIComponent(msg);
+  document.getElementById('b-ex').href = c.exemplo || '#';
+})();
+</script>
