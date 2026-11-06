@@ -26,7 +26,14 @@ mkdirSync(join(OUT, 'exemplo/og'), { recursive: true })
 cpSync(join(KIT, 'out/og/exemplo.jpg'), join(OUT, 'exemplo/og/convite.jpg'))
 cpSync(join(KIT, 'out/og/link.jpg'), join(OUT, 'og/link.jpg'))
 writeFileSync(join(OUT, 'index.html'), readFileSync(join(KIT, 'link-na-bio/index.html'), 'utf8').replaceAll('https://confetedigital.com.br', BASE))
-cpSync('public/favicon.svg', join(OUT, 'favicon.svg'))
+// ícone da Confete (o "c") na aba do navegador e no atalho do celular, nas duas páginas
+const ICONS = `<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">`
+for (const f of ['favicon.svg', 'favicon.ico', 'favicon-32.png', 'apple-touch-icon.png', 'icon-512.png']) cpSync(join(KIT, 'favicon', f), join(OUT, f))
+rmSync(join(OUT, 'exemplo/favicon.svg'), { force: true })
+for (const p of ['index.html', 'exemplo/index.html']) {
+  const f = join(OUT, p)
+  writeFileSync(f, readFileSync(f, 'utf8').replace(/<link rel="icon"[^>]*>/g, '').replace('</head>', ICONS + '\n</head>'))
+}
 writeFileSync(join(OUT, 'robots.txt'), 'User-agent: *\nAllow: /\n')
 
 const size = (d) => readdirSync(d, { recursive: true }).reduce((n, f) => { const p = join(d, f); return n + (statSync(p).isFile() ? statSync(p).size : 0) }, 0)
