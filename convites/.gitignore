@@ -3,7 +3,6 @@ dist
 dist-clientes
 .stage
 .env*.local
-.firebase
 *.log
 service-account*.json
 vite.config.ts.timestamp-*
@@ -14,3 +13,6 @@ firebase.*.json
 clients/*
 !clients/_modelo
 dist-vitrine
+dist-site
+.firebase
+!firebase.site.json

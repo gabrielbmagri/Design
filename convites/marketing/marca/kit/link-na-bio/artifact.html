@@ -20,8 +20,8 @@ main { min-height:100svh; max-width:460px; margin:0 auto; display:flex; flex-dir
 @media (prefers-reduced-motion:reduce) { .btn { transition:none } }
 </style>
 <script>
-// Troque aqui antes de publicar: número do WhatsApp (só dígitos, com 55 + DDD) e o endereço da demonstração.
-window.CONFETE = { whatsapp: '55DDDNUMERO', exemplo: 'https://claude.ai/artifact/QadJguVKc35nX6WgcPVBB7' }
+// Links da página: WhatsApp Business da Confete e a demonstração do convite.
+window.CONFETE = { whatsapp: 'https://wa.me/message/KFSYBZDQKULED1', exemplo: 'https://claude.ai/artifact/QadJguVKc35nX6WgcPVBB7' }
 </script>
 <i class="conf" aria-hidden="true" style="left:78%;top:11%;width:60px;height:24px;border-radius:12px;background:var(--butter);transform:rotate(14deg)"></i>
 <i class="conf" aria-hidden="true" style="left:7%;top:84%;width:56px;height:56px;background:var(--pink);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)"></i>
@@ -38,8 +38,7 @@ window.CONFETE = { whatsapp: '55DDDNUMERO', exemplo: 'https://claude.ai/artifact
 <script>
 (function () {
   var c = window.CONFETE || {};
-  var msg = 'Oi! Vim pelo Instagram e quero saber mais sobre o convite 💛';
-  document.getElementById('b-wa').href = 'https://wa.me/' + c.whatsapp + '?text=' + encodeURIComponent(msg);
+  document.getElementById('b-wa').href = c.whatsapp;
   document.getElementById('b-ex').href = c.exemplo || '#';
 })();
 </script>

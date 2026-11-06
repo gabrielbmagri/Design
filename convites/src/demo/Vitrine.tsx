@@ -3,9 +3,7 @@ import { __resetDemo } from './firestore'
 import { PRESET_KEY, currentPreset } from './seed'
 
 /** Demonstração para clientes: só o convite. Alterna menino/menina e mostra sozinha a convidada "Maria" entrando no convite dela. */
-const CONTACT = (import.meta.env.VITE_DEMO_WA as string | undefined)
-  ? `https://wa.me/${import.meta.env.VITE_DEMO_WA}?text=${encodeURIComponent('Oi! Vi a demonstração do convite e quero um pra festa do meu filho 💛')}`
-  : 'https://instagram.com/meuconfetedigital'
+const CONTACT = (import.meta.env.VITE_DEMO_WA_URL as string | undefined) || 'https://instagram.com/meuconfetedigital'
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const setValue = (el: HTMLInputElement, v: string) => {
   Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(el, v)
@@ -34,6 +32,9 @@ export default function Vitrine() {
       const ok = () => alive.current
       const input = await waitFor(() => document.querySelector<HTMLInputElement>('#nome'), ok)
       if (!input || !ok()) return
+      // os convidados de exemplo entram em segundo plano: espera estarem prontos antes de digitar
+      const ready = () => { try { return Object.keys(JSON.parse(localStorage.getItem('convite-demo-db') || '{}')['events/principal/guests'] || {}).length >= 8 } catch { return false } }
+      await waitFor(() => ready(), ok, 20000)
       setTip('A Maria recebeu o link no WhatsApp e abriu o convite 💌')
       await sleep(2600)
       if (!ok()) return

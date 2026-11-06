@@ -373,9 +373,21 @@ pages.wa_capa = () => `<svg class="abs" style="inset:0" width="1920" height="108
 /* ===== CAPA WHATSAPP BUSINESS v2 (2000x880): centro-baixo livre para a foto de perfil ===== */
 pages.wa_capa2 = () => `<svg class="abs" style="inset:0" width="2000" height="880" viewBox="0 0 2000 880"><polygon points="0,0 2000,0 2000,250 0,380" fill="#FFD84D"/><polygon points="0,380 2000,250 2000,620 0,560" fill="#5BC8F5"/><polygon points="0,560 2000,620 2000,880 0,880" fill="#FF5FA2"/></svg>
   ${confetti([[90,70,'s','pink',8],[1830,90,'r','pink',-20],[110,330,'d','butter',0],[1860,380,'s','butter',10],[600,60,'r','sky',24],[1380,50,'d','sky',0]], 1.5)}`
+/* ===== IMAGENS DE PRÉVIA (WhatsApp/Instagram) 1200x630 ===== */
+pages.og_link = () => `<svg class="abs" style="inset:0" width="1200" height="630" viewBox="0 0 1200 630"><polygon points="0,0 1200,0 1200,190 0,280" fill="#FFD84D"/><polygon points="0,280 1200,190 1200,440 0,380" fill="#5BC8F5"/><polygon points="0,380 1200,440 1200,630 0,630" fill="#FF5FA2"/></svg>
+  ${confetti([[70,50,'s','pink',8],[1080,70,'r','pink',-20],[90,520,'r','butter',18],[1070,500,'s','butter',6]], 1.2)}
+  <div class="abs" style="left:0;width:1200px;text-align:center;top:70px">${LOGO('mono-tinta', 560)}</div>
+  <div class="abs" style="left:100px;width:1000px;text-align:center;top:300px;font:800 54px/1.1 'Outfit';letter-spacing:-.03em;color:#2A1B3D">Convites infantis que contam<br>a história do seu bebê</div>`
+pages.og_exemplo = () => `${SOLID('#FFD84D')}
+  ${confetti([[1100,50,'s','pink',8],[640,560,'r','sky',-18]], 1.2)}
+  <div class="abs" style="left:70px;top:90px;width:560px">${H2('Veja um convite', 'de verdade', 72)}</div>
+  <div class="abs t-hook" style="left:70px;top:340px;width:520px;font-size:34px;letter-spacing:-.02em;line-height:1.2;font-weight:700">A Maria digita o nome e entra na história do bebê.</div>
+  ${TILT('j-5-hero.jpg', 690, 60, 260, 440, -5)}${TILT('g-5-hero.jpg', 920, 110, 260, 440, 6)}
+  <div class="abs" style="left:70px;top:520px">${LOGO('mono-tinta', 260)}</div>`
 document.body.className = qs.get('frame') ? 'piece' : 'board'
 if (['ad1', 'ad2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1080px;position:relative;overflow:hidden'
 if (/^c\ds\d$/.test(PAGE) || ['post1', 'post2', 'post3'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1350px;position:relative'
+if (PAGE === 'og_link' || PAGE === 'og_exemplo') document.body.style.cssText = 'width:1200px;height:630px;position:relative;overflow:hidden'
 if (PAGE === 'wa_capa2') document.body.style.cssText = 'width:2000px;height:880px;position:relative;overflow:hidden'
 if (PAGE === 'wa_capa') document.body.style.cssText = 'width:1920px;height:1080px;position:relative;overflow:hidden'
 if (['ad_story', 'st_dep', 'st_como', 'st_quem', 'story1', 'story2', 'story3', 'reel1', 'reel2'].includes(PAGE)) document.body.style.cssText = 'width:1080px;height:1920px;position:relative'
