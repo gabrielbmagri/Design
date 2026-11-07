@@ -1,0 +1,4 @@
+{"voz":"pt-BR-ThalitaMultilingualNeural","rate":"+4%","pitch":"+0Hz","linhas":[
+ {"id":"l1","cena":"A","chunks":[["E se o convite","top"],["fosse um desenho","top"],["com o {{seu filho}}?","top"]]},
+ {"id":"l2","cena":"B","chunks":[["Ele abre o convite…","top"],["e a festa {{começa!}}","top"]]},
+ {"id":"l3","cena":"C","chunks":[["Chama a gente no {{WhatsApp}}!","top"]]}]}
