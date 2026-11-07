@@ -8,19 +8,19 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#06142E;font-fam
 .L{position:absolute;inset:0}
 #blur{position:absolute;inset:0;background:radial-gradient(90% 60% at 50% 30%,#FFFFFF 0%,#EAF0FA 55%,#D3DEF0 100%)}
 .cam{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;transform-origin:0 0}
-.cam img{position:absolute;left:0;top:0;width:1080px;height:1920px;filter:contrast(1.07) saturate(1.14) brightness(1.02)}
+.cam img{position:absolute;left:0;top:0;width:1080px;height:1920px}
 #camA{box-shadow:0 30px 80px rgba(0,0,0,.45)}
 /* frase gigante atrás da pessoa */
 .big{position:absolute;left:0;right:0;text-align:center;opacity:0;will-change:transform}
 .big .a{display:block;font:400 250px/0.86 Anton;color:#0B1F4D;letter-spacing:.005em;text-transform:uppercase}
 .big .b{display:block;font:800 165px/0.9 Fraunces;font-style:italic;letter-spacing:-.02em;margin-top:-6px;
-  color:#2F62D0}
+  color:#fff;-webkit-text-stroke:5px #0B1F4D;paint-order:stroke fill;text-shadow:0 10px 30px rgba(11,31,77,.35)}
 /* fotos que saem de trás */
 .pc{position:absolute;width:390px;height:520px;background:#fff;padding:14px 14px 14px;border-radius:26px;box-shadow:0 26px 60px rgba(4,16,40,.45);opacity:0}
 .pc img{width:100%;height:100%;object-fit:cover;border-radius:16px;display:block}
 /* b-roll tela cheia */
 .br{position:absolute;inset:0;overflow:hidden;opacity:0}
-.br img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:contrast(1.06) saturate(1.12)}
+.br img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .br::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,20,46,.25) 0%,rgba(6,20,46,0) 25%,rgba(6,20,46,0) 55%,rgba(6,20,46,.55) 100%)}
 /* legenda */
 #capbg{position:absolute;left:0;right:0;bottom:0;height:900px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.38));pointer-events:none}
@@ -49,12 +49,12 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#06142E;font-fam
 <div class="big" id="big1" style="top:300px"><span class="a">Bairro</span><span class="b">da Luz</span></div>
 <div class="big" id="big2" style="top:575px"><span class="a" style="font-size:168px">Compromisso</span></div>
 <div class="big" id="big3" style="top:300px"><span class="a">Vamos</span><span class="b">pra cima!</span></div>
-<div class="pc" id="pc1"><img src="assets/balcao.jpg"></div>
-<div class="pc" id="pc2"><img src="assets/vendedor.jpg"></div>
+<div class="pc" id="pc1"><img src="assets/balcao_cine.jpg"></div>
+<div class="pc" id="pc2"><img src="assets/vendedor_cine.jpg"></div>
 <div class="cam" id="camB"><img id="fB"></div>
-<div class="br" id="br1"><img src="assets/caminhada.jpg"></div>
-<div class="br" id="br2"><img src="assets/rua.jpg" style="object-position:40% 50%"></div>
-<div class="br" id="br3"><img src="assets/abraco.jpg"></div>
+<div class="br" id="br1"><img src="assets/caminhada_cine.jpg"></div>
+<div class="br" id="br2"><img src="assets/rua_cine.jpg" style="object-position:40% 50%"></div>
+<div class="br" id="br3"><img src="assets/abraco_cine.jpg"></div>
 <div id="capbg"></div>
 <div class="tag" id="tag1" style="left:60px;top:1020px"><div class="ic">FR</div><div><div class="n">Felipinho Ravis</div><div class="r">deputado estadual</div></div></div>
 <div class="tag" id="tag2" style="right:60px;top:1020px"><div class="ic">DR</div><div><div class="n">Dudu Reina</div><div class="r">prefeito</div></div></div>
@@ -139,7 +139,7 @@ function tag(el,t,a,b,dir){ const pin=back(C(P(t,a,.45))), pout=eio(P(t,b-.3,.3)
 const fA=$('fA'),fB=$('fB'),blur=$('blur')
 window.render=function(t){
   const fi=Math.min(NF,Math.floor(Math.min(t,TV-.001)*30)+1), n=String(fi).padStart(5,'0')
-  fA.src='fr/'+n+'.jpg'; fB.src='mask/'+n+'.png'; 
+  fA.src='fr2/'+n+'.jpg'; fB.src='mask2/'+n+'.png'; 
   const c=camAt(t); applyCam($('camA'),c); applyCam($('camB'),c)
   bigText($('big1'),t,4.45,6.75); bigText($('big2'),t,20.32,22.37); bigText($('big3'),t,36.5,TE+.2)
   photoCard($('pc1'),t,10.3,13.25,-1,-7,300); photoCard($('pc2'),t,10.75,13.25,1,6,360)

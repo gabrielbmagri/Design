@@ -8,3 +8,8 @@ Vídeo bruto: álbum compartilhado do iCloud (720p). Etapas, scripts em `projeto
 5. `reel.html` + `frames.cjs`: composição (zoom, frases, fotos, legendas, logo) renderizada quadro a quadro.
 6. `mix.py`: voz + "Inspired" (Kevin MacLeod, CC BY 4.0) com ducking + efeitos; loudnorm −14 LUFS.
 O MP4 final fica fora do git.
+
+## Versão 2 (céu + cor de cinema)
+7. `look.py` / `run_look.py`: quadros ampliados para 1080×1920 (Lanczos + nitidez leve); céu nublado recolorido em azul com nuvens
+   (preserva grade e postes), cor de cinema leve (contraste suave, sombras frias, luzes quentes, vinheta) e o mesmo nas fotos.
+   Grão de filme sutil no encode final.
