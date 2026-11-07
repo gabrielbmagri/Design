@@ -1,0 +1,178 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@1,9..144,700;1,9..144,800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+<script src="words.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#06142E;font-family:Outfit,sans-serif}
+#stage{position:absolute;inset:0;overflow:hidden}
+.L{position:absolute;inset:0}
+#blur{position:absolute;inset:0;background:radial-gradient(90% 60% at 50% 30%,#FFFFFF 0%,#EAF0FA 55%,#D3DEF0 100%)}
+.cam{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;transform-origin:0 0}
+.cam img{position:absolute;left:0;top:0;width:1080px;height:1920px;filter:contrast(1.07) saturate(1.14) brightness(1.02)}
+#camA{box-shadow:0 30px 80px rgba(0,0,0,.45)}
+/* frase gigante atrás da pessoa */
+.big{position:absolute;left:0;right:0;text-align:center;opacity:0;will-change:transform}
+.big .a{display:block;font:400 250px/0.86 Anton;color:#0B1F4D;letter-spacing:.005em;text-transform:uppercase}
+.big .b{display:block;font:800 165px/0.9 Fraunces;font-style:italic;letter-spacing:-.02em;margin-top:-6px;
+  color:#2F62D0}
+/* fotos que saem de trás */
+.pc{position:absolute;width:390px;height:520px;background:#fff;padding:14px 14px 14px;border-radius:26px;box-shadow:0 26px 60px rgba(4,16,40,.45);opacity:0}
+.pc img{width:100%;height:100%;object-fit:cover;border-radius:16px;display:block}
+/* b-roll tela cheia */
+.br{position:absolute;inset:0;overflow:hidden;opacity:0}
+.br img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:contrast(1.06) saturate(1.12)}
+.br::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,20,46,.25) 0%,rgba(6,20,46,0) 25%,rgba(6,20,46,0) 55%,rgba(6,20,46,.55) 100%)}
+/* legenda */
+#capbg{position:absolute;left:0;right:0;bottom:0;height:900px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.38));pointer-events:none}
+#cap{position:absolute;left:60px;right:60px;top:1250px;text-align:center;font:800 86px/1.08 Outfit;letter-spacing:-.035em;color:#fff;text-shadow:0 4px 22px rgba(0,0,0,.55),0 1px 3px rgba(0,0,0,.5)}
+#cap .w{display:inline-block;margin:0 .1em;will-change:transform}
+#cap .k{font-family:Fraunces,serif;font-style:italic;font-weight:800;letter-spacing:-.01em;font-size:1.06em;padding:0 .16em;border-radius:.2em;background:#2F62D0;text-shadow:none;box-shadow:0 8px 24px rgba(10,30,80,.35)}
+/* placas de nome */
+.tag{position:absolute;display:flex;align-items:center;gap:22px;padding:22px 34px 22px 22px;border-radius:34px;background:rgba(255,255,255,.80);backdrop-filter:blur(18px);box-shadow:0 20px 50px rgba(6,20,46,.35);opacity:0}
+.tag .ic{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#2F62D0,#0B1F4D);display:flex;align-items:center;justify-content:center;color:#fff;font:900 34px Outfit}
+.tag .n{font:900 52px/1 Outfit;letter-spacing:-.03em;color:#0B1F4D}
+.tag .r{font:600 30px/1.2 Outfit;color:#2F62D0;margin-top:6px;letter-spacing:.01em}
+/* logo */
+#logo{position:absolute;width:150px;height:150px;left:40px;top:150px;transform-origin:0 0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.35));will-change:transform}
+#logo img{width:100%;height:100%}
+#shine{position:absolute;inset:0;border-radius:50%;overflow:hidden;opacity:0}
+#shine::before{content:'';position:absolute;top:-20%;bottom:-20%;width:30%;left:-40%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));transform:skewX(-18deg)}
+#end{position:absolute;inset:0;opacity:0;background:radial-gradient(120% 70% at 50% 45%,#16357A 0%,#0B1F4D 45%,#050F26 100%)}
+#ring{position:absolute;left:50%;top:860px;width:700px;height:700px;margin:-350px 0 0 -350px;border-radius:50%;border:3px solid rgba(143,182,245,.6);opacity:0}
+#name{position:absolute;left:0;right:0;top:1290px;text-align:center;color:#fff;font:900 76px Outfit;letter-spacing:.32em;opacity:0;text-indent:.32em}
+#sub{position:absolute;left:0;right:0;top:1395px;text-align:center;color:#8FB6F5;font:600 34px Outfit;letter-spacing:.24em;opacity:0;text-indent:.24em}
+.sp{position:absolute;width:10px;height:10px;border-radius:50%;background:#CFE0FF;box-shadow:0 0 16px #8FB6F5;opacity:0}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+</style></head><body><div id="stage">
+<div id="blur"></div>
+<div class="cam" id="camA"><img id="fA"></div>
+<div class="big" id="big1" style="top:300px"><span class="a">Bairro</span><span class="b">da Luz</span></div>
+<div class="big" id="big2" style="top:575px"><span class="a" style="font-size:168px">Compromisso</span></div>
+<div class="big" id="big3" style="top:300px"><span class="a">Vamos</span><span class="b">pra cima!</span></div>
+<div class="pc" id="pc1"><img src="assets/balcao.jpg"></div>
+<div class="pc" id="pc2"><img src="assets/vendedor.jpg"></div>
+<div class="cam" id="camB"><img id="fB"></div>
+<div class="br" id="br1"><img src="assets/caminhada.jpg"></div>
+<div class="br" id="br2"><img src="assets/rua.jpg" style="object-position:40% 50%"></div>
+<div class="br" id="br3"><img src="assets/abraco.jpg"></div>
+<div id="capbg"></div>
+<div class="tag" id="tag1" style="left:60px;top:1020px"><div class="ic">FR</div><div><div class="n">Felipinho Ravis</div><div class="r">deputado estadual</div></div></div>
+<div class="tag" id="tag2" style="right:60px;top:1020px"><div class="ic">DR</div><div><div class="n">Dudu Reina</div><div class="r">prefeito</div></div></div>
+<div id="cap"></div>
+<div id="end"><div id="ring"></div><div id="name">YURI TECA</div></div>
+<div id="logo"><img src="assets/logo.png"><div id="shine"></div></div>
+<div id="flash"></div>
+</div>
+<script>
+const NF=1130, TV=NF/30, TE=37.45, TOTAL=40.6
+const $=id=>document.getElementById(id)
+const C=(x,a=0,b=1)=>Math.min(b,Math.max(a,x))
+const P=(t,a,d)=>C((t-a)/d)
+const eo=x=>1-Math.pow(1-x,3), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2
+const back=x=>{const c1=1.7,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)}
+const lerp=(a,b,x)=>a+(b-a)*x
+window.TOTAL=TOTAL
+// ---------- câmera (zoom de aproximação / recuo) ----------
+// modo F = rosto (origem no rosto), modo K = cartão recuado (origem embaixo)
+const FACE=[620,640], CARD=[540,1920]
+const B=[0,5.5,10.333,15.267,15.967,22.367,28.8,32.167,32.5,35.1,99]
+function camAt(t){
+  // devolve [s, ox, oy]
+  const f=(s)=>[s,...FACE], k=[.8,...CARD]
+  const mix=(A,Bb,x)=>[lerp(A[0],Bb[0],x),lerp(A[1],Bb[1],x),lerp(A[2],Bb[2],x)]
+  if(t<B[1]){ let v=mix(f(1.28),f(1.0),eo(P(t,0,.75))); v=mix(v,f(1.1),P(t,.75,3.4)); return mix(v,k,eio(P(t,4.15,.45))) }
+  if(t<B[2]){ if(t<9.9) return k; return f(1.15+.02*P(t,9.9,.5)) }
+  if(t<B[3]){ let v=f(1.0); return mix(v,f(1.16),eio(P(t,13.3,.45))) }
+  if(t<B[4]) return f(1.3)
+  if(t<B[5]){ let v=f(1.04+.03*P(t,15.97,4)); return mix(v,k,eio(P(t,19.95,.45))) }
+  if(t<B[6]){ let v=mix(f(1.32),f(1.05),eo(P(t,22.37,.6))); return mix(v,f(1.13),P(t,23,5.8)) }
+  if(t<B[7]){ return f(t<29.6?1.0:1.18) }
+  if(t<B[8]) return f(1.3)
+  if(t<B[9]) return f(1.0+.12*eio(P(t,32.6,2.4)))
+  let v=f(1.22); v=mix(v,k,eio(P(t,36.3,.4)))
+  // final: cartão encolhe e some
+  const e=eio(P(t,TE,.9)); return [lerp(v[0],.55,e),v[1],lerp(v[2],1500,e)]
+}
+function applyCam(el,c,blurPx){ const [s,ox,oy]=c; el.style.transform=`translate(${ox*(1-s)}px,${oy*(1-s)}px) scale(${s})`; el.style.borderRadius=s<1?(44/s)+'px':'0' }
+// ---------- legendas ----------
+const KW=new Set('sabadão praça castro alves luz caminhando ruas moradores demandas compromisso felipinho ravis dudu reina benefícios melhorias carinho cima'.split(' '))
+const clean=w=>w.toLowerCase().replace(/[^a-zà-ú]/g,'')
+const W=WORDS.map(x=>({...x,k:KW.has(clean(x.w))}))
+W.forEach((x,i)=>{ if(clean(x.w)==='bairro'&&W[i+2]&&clean(W[i+2].w)==='luz') x.k=true; if(clean(x.w)==='da'&&W[i+1]&&clean(W[i+1].w)==='luz'&&clean(W[i-1].w)==='bairro')x.k=true; if(clean(x.w)==='pra'&&W[i+1]&&clean(W[i+1].w)==='cima')x.k=true })
+const CH=[];{let cur=[];W.forEach((x,i)=>{const prev=W[i-1]
+  const brk=cur.length>=4||(prev&&/[,.?!]$/.test(prev.w))||(prev&&x.s-prev.e>.35)
+  const keep=prev&&prev.k&&x.k
+  if(cur.length&&brk&&!(keep&&cur.length<5)){CH.push(cur);cur=[]} cur.push(x)});CH.push(cur)}
+CH.forEach((c,i)=>{c.t0=c[0].s-.04;c.t1=i<CH.length-1?Math.min(CH[i+1][0].s-.04,c[c.length-1].e+.6):c[c.length-1].e+.25})
+let curCh=-1
+function caption(t){
+  const cap=$('cap'); let idx=CH.findIndex(c=>t>=c.t0&&t<c.t1)
+  if(t>=TE) idx=-1
+  if(idx!==curCh){curCh=idx; cap.innerHTML= idx<0?'':CH[idx].map((x,j)=>`<span class="w${x.k?' k':''}" id="w${j}">${x.w.replace(/,$/,'')}</span>`).join(' ')}
+  if(idx<0) return
+  CH[idx].forEach((x,j)=>{const el=$('w'+j); const p=P(t,x.s-.05,.14); const ee=back(p)
+    el.style.opacity=p>0?C(p*2.5):0; el.style.transform=`translateY(${(1-ee)*26}px) scale(${.82+.18*ee})`; el.style.filter=`blur(${(1-p)*6}px)`})
+}
+// ---------- elementos ----------
+function bigText(el,t,a,b){ // sobe de trás da pessoa
+  const pin=eo(P(t,a,.42)), pout=P(t,b-.3,.3)
+  el.style.opacity=t<a||t>b?0:C(pin*3)*(1-pout)
+  el.style.transform=`translateY(${(1-pin)*300 - pout*40}px) scale(${.92+.08*pin})`; el.style.filter=`blur(${pout*8}px)`
+}
+function photoCard(el,t,a,b,side,rot,y){
+  const pin=back(C(P(t,a,.55))), pout=eio(P(t,b-.35,.35))
+  const x0=345, x1=side<0?95:595
+  el.style.opacity=t<a||t>b?0:1
+  el.style.top=y+'px'; el.style.left=lerp(lerp(x0,x1,pin),side<0?-500:1100,pout)+'px'
+  el.style.transform=`rotate(${rot*pin}deg) scale(${.7+.3*Math.min(pin,1)})`
+}
+function broll(el,t,a,b,from,to){ // entra deslizando com desfoque, sai deslizando
+  const pin=eio(P(t,a,.32)), pout=eio(P(t,b-.32,.32)), on=t>=a&&t<b
+  el.style.opacity=on?1:0; if(!on)return
+  const x=(1-pin)*from*1080+pout*to*1080
+  el.style.transform=`translateX(${x}px)`; el.style.filter=`blur(${Math.abs(pin<1?(1-pin):pout)*14}px)`
+  el.querySelector('img').style.transform=`scale(${1.06+.08*P(t,a,b-a)})`
+}
+function tag(el,t,a,b,dir){ const pin=back(C(P(t,a,.45))), pout=eio(P(t,b-.3,.3))
+  el.style.opacity=t<a||t>b?0:C(P(t,a,.15))*(1-pout); el.style.transform=`translateY(${(1-pin)*60+pout*20}px) scale(${.85+.15*Math.min(1,pin)})` }
+// ---------- render ----------
+const fA=$('fA'),fB=$('fB'),blur=$('blur')
+window.render=function(t){
+  const fi=Math.min(NF,Math.floor(Math.min(t,TV-.001)*30)+1), n=String(fi).padStart(5,'0')
+  fA.src='fr/'+n+'.jpg'; fB.src='mask/'+n+'.png'; 
+  const c=camAt(t); applyCam($('camA'),c); applyCam($('camB'),c)
+  bigText($('big1'),t,4.45,6.75); bigText($('big2'),t,20.32,22.37); bigText($('big3'),t,36.5,TE+.2)
+  photoCard($('pc1'),t,10.3,13.25,-1,-7,300); photoCard($('pc2'),t,10.75,13.25,1,6,360)
+  broll($('br1'),t,6.62,8.42,1,-1); broll($('br2'),t,8.3,10.0,1,-1); broll($('br3'),t,29.6,31.98,1,-1)
+  tag($('tag1'),t,25.55,28.85); tag($('tag2'),t,27.8,28.85)
+  if(t>27.75){ $('tag1').style.top=(1020-150*eo(P(t,27.75,.35)))+'px' } else $('tag1').style.top='1020px'
+  caption(t)
+  // logo: pequena no canto, voa pro centro no final
+  const lg=$('logo'), le=eio(P(t,TE+.25,.9)), pop=back(C(P(t,.25,.5)))
+  const s=lerp(1,640/150,le), x=lerp(40,540-320,le), y=lerp(150,860-320,le)
+  lg.style.opacity=t<.25?0:C(P(t,.25,.2)); lg.style.transform=`translate(${x-40}px,${y-150}px) scale(${s*(t<1?Math.max(.01,pop):1)}) rotate(${(1-le)*0+ (t<1?(1-C(pop))*-40:0)}deg)`
+  const sh=$('shine'); const sp=P(t,TE+1.25,.8); sh.style.opacity=sp>0&&sp<1?1:0
+  document.documentElement.style.setProperty('--sx',(-40+180*sp)+'%')
+  // fim
+  const en=P(t,TE,.7); $('end').style.opacity=eio(en)
+  const r=P(t,TE+.95,1.1); $('ring').style.opacity=r>0&&r<1?(1-r)*.9:0; $('ring').style.transform=`scale(${.9+.6*eo(r)})`
+  $('name').style.opacity=eo(P(t,TE+1.0,.5)); $('name').style.transform=`translateY(${(1-eo(P(t,TE+1.0,.5)))*30}px)`; $('name').style.letterSpacing=lerp(.5,.32,eo(P(t,TE+1.0,.9)))+'em'
+  
+  document.querySelectorAll('.sp').forEach((d,i)=>{const a=TE+1.0+i*.05, q=P(t,a,1.4), ang=i*2.399, R=330+170*eo(q)
+    d.style.opacity=q>0&&q<1?Math.sin(q*Math.PI):0; d.style.left=(540+Math.cos(ang)*R)+'px'; d.style.top=(860+Math.sin(ang)*R)+'px'})
+  $('flash').style.opacity=0
+}
+// partículas do final
+for(let i=0;i<22;i++){const d=document.createElement('div');d.className='sp';$('end').appendChild(d)}
+// brilho passando na logo
+const st=document.createElement('style');st.textContent='#shine::before{left:var(--sx,-40%)}';document.head.appendChild(st)
+window.decodeVideo=()=>Promise.all([fA,fB].map(i=>i.decode().catch(()=>{})))
+window.collectEvents=async()=>{const ev=[]
+  const add=(t,type)=>ev.push({t:+t.toFixed(3),type})
+  add(4.45,'rise');add(20.32,'rise');add(36.5,'rise')
+  add(10.3,'pop');add(10.75,'pop');add(6.62,'whoosh');add(8.3,'swipe');add(9.7,'swipe');add(29.6,'whoosh');add(31.66,'swipe')
+  add(25.55,'pop');add(27.8,'pop');add(TE,'whoosh');add(TE+.95,'chime');add(.25,'pop')
+  return ev}
+window.ready=document.fonts.ready.then(()=>Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))))
+render(0)
+</script></body></html>
