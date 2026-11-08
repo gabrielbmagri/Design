@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="rec_j/meta.js"></script><script>window.REC_J = window.REC</script>
+<script src="g5/tempos5.js"></script>
+<style>
+  :root { --pink:#FF5FA2; --butter:#FFD84D; --sky:#5BC8F5; --mint:#7EE0B5; --cream:#FFF8EC; --ink:#2A1B3D }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html,body { width:1080px; height:1920px; overflow:hidden; background:#FFD84D; font-family:'Outfit',sans-serif; color:var(--ink) }
+  #stage { position:absolute; inset:0; overflow:hidden }
+  .sc { position:absolute; inset:0; display:none }
+  .abs { position:absolute }
+  .conf { position:absolute }
+  .frame { position:absolute; z-index:2; overflow:hidden; border-radius:60px 60px 0 0; border:12px solid #FFF8EC; border-bottom:0; background:#fff; box-shadow:0 -10px 50px rgba(42,27,61,.18) }
+  .frame img { position:absolute; left:0; top:0; width:100%; object-fit:cover; object-position:top; display:block }
+  .cap { position:absolute; left:40px; width:1000px; text-align:center; font:800 90px/1.06 'Outfit'; letter-spacing:-.035em; color:var(--ink); will-change:transform,opacity,filter; z-index:4 }
+  .cap .w { display:inline-block; will-change:transform,opacity }
+  .mk { position:relative; display:inline-block; padding:0 .2em; margin:0 .02em; font-family:'Fraunces',serif; font-style:italic; font-weight:700; letter-spacing:-.01em; color:var(--mkc,#fff); font-size:1.12em }
+  .mk .bg { position:absolute; inset:.08em 0 .02em; background:var(--mk,var(--pink)); border-radius:.22em; transform-origin:left center; z-index:-1 }
+  .mk .tx { position:relative }
+  .gc { position:absolute; z-index:5; display:flex; align-items:center; gap:16px; padding:20px 28px; border-radius:30px; font:800 31px/1.15 'Outfit'; color:var(--ink);
+    background:linear-gradient(140deg,rgba(255,255,255,.9),rgba(255,255,255,.5)); backdrop-filter:blur(16px) saturate(1.4); border:1.5px solid rgba(255,255,255,.95);
+    box-shadow:0 18px 44px rgba(42,27,61,.18), 0 0 0 1px color-mix(in srgb,var(--ac,#FF5FA2) 38%,transparent), 0 0 34px color-mix(in srgb,var(--ac,#FF5FA2) 26%,transparent), inset 0 1px 0 #fff }
+  .gc i { font-style:normal; font-size:44px }
+  .btn { position:absolute; z-index:5; display:flex; align-items:center; justify-content:center; gap:22px; height:156px; border-radius:90px; font:800 54px 'Outfit'; color:#fff; background:#22C55E; box-shadow:0 22px 50px rgba(20,120,60,.35); white-space:nowrap }
+  .wa { position:absolute; z-index:2; border-radius:56px 56px 0 0; overflow:hidden; background:#efeae2; border:12px solid #FFF8EC; border-bottom:0; box-shadow:0 -10px 50px rgba(42,27,61,.18) }
+  .wa .hd { height:118px; background:#008069; color:#fff; display:flex; align-items:center; gap:22px; padding:0 30px; font-weight:800; font-size:36px }
+  .wa .av { width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#f9a8d4,#fcd34d); display:grid; place-items:center; font-size:38px }
+  .msg { position:absolute; left:20px; right:20px; top:22px; color:#111; background:#d9fdd3; border-radius:30px 30px 30px 8px; padding:12px; box-shadow:0 8px 24px rgba(0,0,0,.14) }
+  .msg .pv { border-radius:22px; overflow:hidden; background:#c5ecc0 } .msg .pv img { width:100%; display:block }
+  .msg .pv .tx { padding:12px 18px 14px } .msg .tt { font-weight:800; font-size:29px } .msg .ds { font-size:23px; color:rgba(17,17,17,.65); margin-top:3px }
+  .msg .tx2 { padding:12px 12px 4px; font-size:28px; line-height:1.28 } .msg .tm { text-align:right; font-size:22px; color:rgba(17,17,17,.45); padding:0 8px 4px }
+  .nm { display:inline-block; font-weight:800; color:#0b6b4f }
+  /* gancho */
+  #hook { background:#000 }
+  #hook img.m { position:absolute; left:50%; top:50%; width:1110px; height:1924px; object-fit:cover; transform-origin:50% 45% }
+  #hk { position:absolute; left:50px; right:50px; top:1060px; text-align:center; font:600 92px/1.02 'Fraunces',serif; letter-spacing:-.025em; color:#FFF3CF;
+    text-shadow:0 3px 0 rgba(0,0,0,.18), 0 6px 26px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.6) }
+  #hk .l { display:block; will-change:transform,opacity }
+  #hk em { font-style:italic; font-weight:700; color:#FFD84D }
+  .tap { position:absolute; z-index:6; width:120px; height:120px; margin:-60px 0 0 -60px; border-radius:50%; background:rgba(42,27,61,.22); border:6px solid rgba(255,255,255,.95); opacity:0 }
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:50 }
+</style></head><body><div id="stage"></div><div id="flash"></div>
+<script>
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x))
+const E = { out: k => 1 - Math.pow(1 - k, 3), io: k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2, back: k => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2) } }
+const P = (t, t0, d) => clamp((t - t0) / d)
+const $ = h => { const d = document.createElement('div'); d.innerHTML = h.trim(); return d.firstElementChild }
+const stage = document.getElementById('stage')
+const EVENTS = new Map(), ev = (t, type) => EVENTS.set(type + '@' + t.toFixed(3), { t: +t.toFixed(3), type })
+const C = { pink:'#FF5FA2', butter:'#FFD84D', sky:'#5BC8F5', mint:'#7EE0B5', cream:'#FFF8EC', ink:'#2A1B3D' }
+const WA = '<svg width="80" height="80" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>'
+const LINES = Object.fromEntries(TL.linhas.map(l => [l.id, l]))
+const HOOK = TL.hook
+const TOTAL = +(TL.dur + .6).toFixed(3)
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[^\w]/g, '')
+function W(id, w, n = 0) { let k = 0; for (const c of LINES[id].chunks) for (const x of c.words) if (norm(x.w) === norm(w) && k++ === n) return x.t; throw new Error('palavra ' + w + ' em ' + id) }
+const confeti = list => list.map(([x, y, kind, c, r]) => kind === 'r' ? `<div class="conf" data-r="${r}" style="left:${x}px;top:${y}px;width:62px;height:25px;border-radius:12px;background:${C[c]};transform:rotate(${r}deg)"></div>` : `<div class="conf" data-r="${r}" style="left:${x}px;top:${y}px;width:66px;height:66px;background:${C[c]};clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);transform:rotate(${r}deg)"></div>`).join('')
+const drift = (el, t) => el.querySelectorAll(':scope > .conf').forEach((c, i) => { c.style.transform = `translate(${Math.sin(t * 1.3 + i) * 14}px,${Math.cos(t * 1.1 + i * 2) * 18}px) rotate(${+c.dataset.r + Math.sin(t * 2 + i) * 14}deg)` })
+
+/* legenda: um trecho por vez, palavra por palavra */
+function capEl(chunk) { const parts = []; let buf = null
+  for (const w of chunk.words) { if (w.kw) { if (!buf) { buf = []; parts.push({ kw: true, ws: buf }) } buf.push(w) } else { buf = null; parts.push({ kw: false, ws: [w] }) } }
+  const html = parts.map(p => p.kw ? `<span class="w mk" data-t="${p.ws[0].t}"><i class="bg"></i><span class="tx">${p.ws.map(w => w.w).join(' ')}</span></span>` : `<span class="w" data-t="${p.ws[0].t}">${p.ws[0].w}</span>`).join(' ')
+  const el = $(`<div class="cap">${html}</div>`); el._c = chunk; return el }
+function capAnim(el, t, tEnd) { const c = el._c, t0 = c.t - .14, out = P(t, tEnd - .16, .16)
+  const vis = t >= t0 - .02 && t < tEnd + .01; el.style.display = vis ? 'block' : 'none'; if (!vis) return
+  const k = E.out(P(t, t0, .38))
+  el.style.transform = `translateY(${(1 - k) * -36 - out * 26}px) scale(${1 - out * .04})`; el.style.opacity = clamp(P(t, t0, .2)) * (1 - out); el.style.filter = `blur(${out * 10 + (1 - clamp(P(t, t0, .25))) * 8}px)`
+  el.querySelectorAll('.w').forEach(w => { const tw = +w.dataset.t - .1, kw = E.out(P(t, tw, .22)); w.style.opacity = kw; w.style.transform = `translateY(${(1 - kw) * 18}px)`
+    if (w.classList.contains('mk')) { const kb = E.back(P(t, tw, .4)); w.querySelector('.bg').style.transform = `scaleX(${clamp(kb, 0, 1.06)}) rotate(-1.6deg)`; w.style.transform += ` scale(${.9 + .1 * kb})` } }) }
+function addCaps(el, ids) { const caps = []
+  for (const id of ids) for (const c of LINES[id].chunks) { const e = capEl(c); e.style.top = '236px'; el.appendChild(e); caps.push(e) }
+  return caps }
+function capsAnim(caps, t, sceneEnd, keepAll) { caps.forEach((e, i) => { const nx = caps[i + 1]; const tEnd = keepAll ? sceneEnd + 1 : (nx ? nx._c.t - .14 : sceneEnd); capAnim(e, t, tEnd) }) }
+function gcAnim(el, t, t0, side, y, tOut = 1e9) { const k = E.back(P(t, t0, .45)), o = P(t, tOut, .25); el.style.opacity = clamp(P(t, t0, .12)) * (1 - o); el.style.top = (y + Math.sin(t * 2 + y) * 6) + 'px'
+  el.style[side < 0 ? 'left' : 'right'] = '28px'; el.style.transform = `translateX(${((1 - k) + o) * 150 * side}px) scale(${.6 + .4 * k})`; el.style.transformOrigin = side < 0 ? 'left center' : 'right center' }
+const riseY = (t, t0) => (1 - E.out(P(t, t0, .5))) * 1250
+const VIDS = []
+function vidPanel(top = 640, h = 1774) { const p = $(`<div class="frame" style="left:130px;top:${top}px;width:820px;height:${1920 - top + 20}px"><img class="v" style="height:${h}px"></div>`); VIDS.push(p.querySelector('.v')); return p }
+function vset(p, rec, dir, tr) { const i = clamp(Math.round(tr * 30), 0, rec.frames.length - 1); const im = p.querySelector('.v'), s = dir + '/' + rec.frames[i]; if (im.getAttribute('src') !== s) im.src = s }
+const imgPanel = (src, top = 640, off = 0) => $(`<div class="frame" style="left:130px;top:${top}px;width:820px;height:${1920 - top + 20}px"><img src="img/${src}" style="height:1780px;top:${off}px"></div>`)
+
+const scenes = []
+function add(key, bg, ids, build, update, a) { const el = $('<div class="sc"></div>'); el.style.background = bg; if (bg === C.pink) { el.style.setProperty('--mk', C.butter); el.style.setProperty('--mkc', C.ink) }
+  stage.appendChild(el); const first = ids.length ? LINES[ids[0]] : null
+  const start = a !== undefined ? a : first.t - .3; const ctx = build(el); ctx.caps = ids.length ? addCaps(el, ids) : []; scenes.push({ key, el, ctx, update, a: start, ids }) }
+function finish() { scenes.forEach((s, i) => { s.b = i + 1 < scenes.length ? scenes[i + 1].a : TOTAL }) }
+
+/* H · gancho: mãe surpresa apontando para a frase */
+add('H', '#000', [], el => { el.id = 'hook'
+  const m = $('<img class="m">'); VIDS.push(m)
+  const hk = $(`<div id="hk"><span class="l">Eu não acredito que achei</span><span class="l">o convite infantil</span><span class="l"><em>mais lindo</em> da internet 😭</span></div>`)
+  el.append(m, hk); return { m, hk, ls: [...hk.querySelectorAll('.l')] } },
+  (c, t) => { const fi = Math.min(41, Math.floor(t * 16) + 1); const s = 'mae_up/' + String(fi).padStart(4, '0') + '.jpg'; if (c.m.getAttribute('src') !== s) c.m.src = s
+    const z = 1.0 + .07 * E.io(P(t, 0, HOOK)) + .05 * (1 - E.out(P(t, 0, .35)))
+    c.m.style.transform = `translate(-50%,-50%) translate(${Math.sin(t * 7) * 4}px,${Math.cos(t * 6) * 4}px) scale(${z})`
+    c.ls.forEach((l, i) => { const k = E.back(P(t, .04 + i * .09, .32)); l.style.opacity = clamp(P(t, .04 + i * .09, .12)); l.style.transform = `translateY(${(1 - k) * 40}px) scale(${.92 + .08 * k})` })
+    ev(0, 'whoosh'); ev(.06, 'pop'); ev(.9, 'tick') }, 0)
+
+/* A · desenho animado: o filho abre o próprio convite */
+add('A', C.butter, ['l1'], el => { el.innerHTML = confeti([[900, 120, 's', 'pink', 8], [60, 1700, 'r', 'sky', -20]])
+  const p = $(`<div class="frame" style="left:130px;top:640px;width:820px;height:1300px"><img class="v" style="height:1300px;object-fit:cover"></div>`); VIDS.push(p.querySelector('.v'))
+  const c1 = $('<div class="gc" style="--ac:#FF5FA2"><i>🎬</i><span>Vira desenho<br>animado</span></div>'), c2 = $('<div class="gc" style="--ac:#5BC8F5"><i>📸</i><span>Feito com as<br>fotos dele</span></div>')
+  el.append(p, c1, c2); return { p, c1, c2 } },
+  (c, t, s) => { const g = t + s.a; c.p.style.transform = `translateY(${riseY(t, .02)}px)`
+    const fi = clamp(Math.floor((0.7 + t * 1.25) * 30) + 1, 1, 152); const src = 'ai10/fr1/' + String(fi).padStart(4, '0') + '.jpg'; const im = c.p.querySelector('.v'); if (im.getAttribute('src') !== src) im.src = src
+    gcAnim(c.c1, g, W('l1', 'desenho') - .05, -1, 1130); gcAnim(c.c2, g, W('l1', 'convite') - .1, 1, 1420)
+    ev(.03, 'whoosh'); ev(.18, 'swipe'); ev(W('l1', 'desenho') - .05 - s.a, 'pop'); ev(W('l1', 'convite') - .1 - s.a, 'chime') })
+
+/* B · versão clássica: a historinha em fotos (gravação real do Jardim) */
+add('B', C.pink, ['l2'], el => { el.innerHTML = confeti([[900, 120, 'r', 'butter', 24], [60, 1700, 's', 'sky', -6]])
+  const p = vidPanel(); const c1 = $('<div class="gc" style="--ac:#FFD84D"><i>🦋</i><span>No tema<br>da festa</span></div>'), c2 = $('<div class="gc" style="--ac:#7EE0B5"><i>📖</i><span>A história<br>dele em fotos</span></div>')
+  el.append(p, c1, c2); return { p, c1, c2 } },
+  (c, t, s) => { const g = t + s.a; c.p.style.transform = `translateY(${riseY(t, .02)}px)`; vset(c.p, REC_J, 'rec_j', 6.9 + t * 1.25)
+    gcAnim(c.c1, g, W('l2', 'clássica') - .05, 1, 1100); gcAnim(c.c2, g, W('l2', 'historinha') - .05, -1, 1380)
+    ev(.03, 'whoosh'); ev(.18, 'swipe'); ev(W('l2', 'clássica') - .05 - s.a, 'pop'); ev(W('l2', 'historinha') - .05 - s.a, 'pop') })
+
+/* C · chega no WhatsApp de cada família */
+add('C', C.sky, ['l3'], el => { el.innerHTML = confeti([[900, 120, 's', 'butter', 8], [60, 1700, 'r', 'pink', -20]])
+  const LN = ['Oi, <span class="nm">Marcela</span>! 🦋', 'A Lara vai comemorar o aniversário e queremos muito você com a gente!', '📅 sábado, 17 de abril · ⏰ 10h', 'Confirme por aqui:', '<span style="color:#1a73e8;text-decoration:underline">festa-da-lara.web.app/c/<span class="nm2">marcela</span></span>']
+  const wa = $(`<div class="wa" style="left:90px;top:640px;width:900px;height:1300px"><div class="hd"><div class="av">🦋</div><div><span class="hn">Tia Marcela</span><div style="font-size:23px;font-weight:500;color:rgba(255,255,255,.8)">online</div></div></div><div style="position:relative;height:1180px"><div class="msg"><div class="pv"><img src="img/og-jardim.jpg"><div class="tx"><div class="tt">Convite da Lara 🦋🌸🐝</div><div class="ds">Toque para ver o convite e confirmar sua presença.</div></div></div><div class="tx2">${LN.map(l => `<div class="ln" style="margin-bottom:6px">${l}</div>`).join('')}<div class="tm">14:02 ✓✓</div></div></div></div></div>`)
+  const c1 = $('<div class="gc" style="--ac:#FFD84D"><i>💌</i><span>Com o nome<br>de cada um</span></div>')
+  el.append(wa, c1); return { wa, c1, lns: [...wa.querySelectorAll('.ln')], nm: wa.querySelector('.nm'), nm2: wa.querySelector('.nm2'), hn: wa.querySelector('.hn') } },
+  (c, t, s) => { const g = t + s.a; c.wa.style.transform = `translateY(${riseY(t, .02)}px)`
+    c.lns.forEach((e, i) => { const k = E.out(P(t, .45 + i * .09, .28)); e.style.opacity = k; e.style.transform = `translateY(${(1 - k) * 12}px)` })
+    const N = [['Marcela', 'Tia Marcela', 'marcela'], ['Beto', 'Tio Beto', 'beto'], ['Lúcia', 'Vovó Lúcia', 'lucia'], ['Carol', 'Dinda Carol', 'carol'], ['Marcela', 'Tia Marcela', 'marcela']]
+    const tn = W('l3', 'cada'), idx = g < tn ? 0 : Math.min(N.length - 1, Math.floor((g - tn) / .3) + 1); const ch = g >= tn ? P((g - tn) % .3, 0, .1) : 1
+    c.nm.textContent = N[idx][0]; c.hn.textContent = N[idx][1]; c.nm2.textContent = N[idx][2]; c.nm.style.transform = `scale(${1 + .25 * (1 - ch)})`; c.nm.style.background = g >= tn && idx < N.length - 1 ? 'rgba(255,216,77,.55)' : 'transparent'
+    gcAnim(c.c1, g, tn, -1, 1500)
+    ev(.03, 'whoosh'); ev(.18, 'swipe'); ev(.45, 'chime'); for (let i = 1; i < N.length; i++) ev(tn - s.a + (i - 1) * .3, 'tick'); ev(tn - s.a, 'pop') })
+
+/* D · confirma em um toque, sem app e sem cadastro */
+add('D', C.butter, ['l4'], el => { el.innerHTML = confeti([[900, 120, 'r', 'pink', 24], [60, 1700, 's', 'mint', -6]])
+  const p = imgPanel('j-4-rsvp.jpg'); const tap = $('<div class="tap"></div>')
+  const c1 = $('<div class="gc" style="--ac:#7EE0B5"><i>👆</i><span>1 toque<br>e pronto</span></div>'), c2 = $('<div class="gc" style="--ac:#FF5FA2"><i>📵</i><span>Sem app e<br>sem cadastro</span></div>')
+  el.append(p, tap, c1, c2); return { p, tap, c1, c2 } },
+  (c, t, s) => { const g = t + s.a; c.p.style.transform = `translateY(${riseY(t, .02)}px)`
+    const tt = W('l4', 'toque') - .15, q = P(g, tt, .5)
+    c.tap.style.left = '300px'; c.tap.style.top = '1328px'
+    c.tap.style.opacity = g >= tt && q < 1 ? (1 - q) : 0; c.tap.style.transform = `scale(${.6 + .9 * E.out(q)})`
+    gcAnim(c.c1, g, tt + .05, 1, 940); gcAnim(c.c2, g, LINES.l4.t + .05, 1, 700)
+    ev(.03, 'whoosh'); ev(.18, 'swipe'); ev(tt - s.a, 'tap'); ev(tt - s.a + .05, 'pop'); ev(LINES.l4.t + .05 - s.a, 'pop') })
+
+/* E · você vê quem vem, sem planilha (painel) */
+add('E', C.sky, ['l5'], el => { el.innerHTML = confeti([[900, 120, 's', 'butter', 8], [60, 1700, 'r', 'pink', -20]])
+  const p = imgPanel('a-1-visao.jpg'); const c1 = $('<div class="gc" style="--ac:#7EE0B5"><i>✅</i><span><b class="n1">0</b> confirmados</span></div>'), c2 = $('<div class="gc" style="--ac:#FFD84D"><i>📋</i><span>Tudo num<br>painel só</span></div>')
+  el.append(p, c1, c2); return { p, c1, c2 } },
+  (c, t, s) => { const g = t + s.a; c.p.style.transform = `translateY(${riseY(t, .02)}px)`; const tv = W('l5', 'quem')
+    gcAnim(c.c1, g, tv - .05, -1, 1100); gcAnim(c.c2, g, W('l5', 'planilha') - .1, 1, 1380)
+    c.c1.querySelector('.n1').textContent = Math.round(48 * E.out(P(g, tv, .8)))
+    ev(.03, 'whoosh'); ev(.18, 'swipe'); ev(tv - .05 - s.a, 'pop'); for (let i = 0; i < 6; i++) ev(tv - s.a + i * .1, 'tick'); ev(W('l5', 'planilha') - .1 - s.a, 'pop') })
+
+/* G · chamada suave */
+add('G', C.pink, ['l6'], el => { el.innerHTML = confeti([[100, 260, 's', 'butter', -6], [920, 320, 'r', 'butter', 24], [80, 1560, 'r', 'sky', -20], [900, 1600, 's', 'sky', 0]])
+  const btn = $(`<div class="btn" style="left:130px;top:1300px;width:820px;opacity:0">${WA}Chama no WhatsApp</div>`), bio = $('<div class="abs" style="left:0;width:1080px;text-align:center;top:1520px;font:800 58px Outfit;color:#2A1B3D;opacity:0;z-index:5"><span style="font-size:80px;display:inline-block">☝️</span><br>o link tá na bio</div>')
+  const burst = Array.from({ length: 28 }, (_, i) => { const e = $(`<div class="conf" style="z-index:6;width:${24 + (i % 3) * 12}px;height:${14 + (i % 2) * 8}px;border-radius:8px;background:${['#FFD84D', '#5BC8F5', '#7EE0B5', '#FFF8EC'][i % 4]};opacity:0"></div>`); e.classList.add('bst'); el.appendChild(e); return e })
+  const k1 = $('<div class="abs" style="z-index:4;left:120px;top:560px;width:380px;height:470px;border-radius:34px;overflow:hidden;border:10px solid #FFF8EC;box-shadow:0 24px 50px rgba(42,27,61,.28)"><img src="ai10/fr1/0120.jpg" style="width:100%;height:100%;object-fit:cover"></div>')
+  const k2 = $('<div class="abs" style="z-index:4;left:580px;top:600px;width:380px;height:470px;border-radius:34px;overflow:hidden;border:10px solid #FFF8EC;box-shadow:0 24px 50px rgba(42,27,61,.28)"><img src="img/j-5-hero.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top"></div>')
+  el.append(k1, k2, btn, bio); return { btn, bio, burst, k1, k2 } },
+  (c, t, s) => { const g = t + s.a, tb = W('l6', 'chama') - .05, tl = tb + .55
+    if (c.caps[1]) c.caps[1].style.top = '1100px'
+    ;[[c.k1, .15, -8, -1], [c.k2, .32, 7, 1]].forEach(([k, d, r, sd]) => { const q = E.back(P(t, d, .5)), o = E.io(P(g, tb - .1, .35)); k.style.opacity = clamp(P(t, d, .12)); k.style.transform = `translate(${(1 - q) * 300 * sd}px,${-o * 110 + Math.sin(t * 2 + d * 9) * 8}px) rotate(${r * q}deg) scale(${(.75 + .25 * q) * (1 - .2 * o)})` })
+    const bk = E.back(P(g, tb, .5)); c.btn.style.opacity = clamp(P(g, tb, .15)); c.btn.style.transform = `scale(${(.7 + .3 * bk) * (1 + .025 * Math.sin(t * 9))})`
+    const kb = E.back(P(g, tl, .45)); c.bio.style.opacity = clamp(P(g, tl, .15)); c.bio.style.transform = `translateY(${(1 - kb) * 60 + Math.sin(t * 7) * 8}px)`
+    c.burst.forEach((e, i) => { const a = (i / c.burst.length) * 6.283 + i, v = 380 + (i % 5) * 130, tt = g - tb, k = Math.max(0, tt); e.style.opacity = tt > 0 && tt < 1.5 ? 1 - P(tt, .7, .8) : 0; e.style.left = 540 + Math.cos(a) * v * (1 - Math.exp(-k * 3)) / 3 + 'px'; e.style.top = 1378 + Math.sin(a) * v * (1 - Math.exp(-k * 3)) / 3 + 700 * k * k * .5 + 'px'; e.style.transform = `rotate(${k * 360 + i * 30}deg)` })
+    ev(.03, 'whoosh'); ev(.15, 'pop'); ev(.32, 'pop'); ev(tb - s.a, 'chime'); ev(tb - s.a, 'pop'); ev(tl - s.a, 'pop') })
+finish()
+
+const T0 = scenes.map(s => s.a)
+function render(t) { t = Math.max(0, Math.min(TOTAL - .001, t))
+  scenes.forEach((sc, idx) => { const next = scenes[idx + 1], end = next ? next.a + .4 : TOTAL + 1; const on = t >= sc.a - .0001 && t < end; sc.el.style.display = on ? 'block' : 'none'
+    if (on) { const k = idx === 0 ? 1 : E.out(P(t, sc.a, .34)); sc.el.style.clipPath = idx === 0 ? 'none' : `inset(${(1 - k) * 100}% 0 0 0)`; sc.el.style.zIndex = idx; const lt = Math.max(0, t - sc.a)
+      sc.update(sc.ctx, lt, sc); drift(sc.el, lt); capsAnim(sc.ctx.caps, t, sc.b, sc.key === 'G') } })
+  // flash curto na virada do gancho para o produto
+  const a = scenes[1].a; document.getElementById('flash').style.opacity = t >= a && t < a + .18 ? (1 - P(t, a, .18)) * .55 : 0 }
+async function collectEvents() { const out = []
+  for (const sc of scenes) { EVENTS.clear(); for (let t = 0; t <= sc.b - sc.a + .3; t += 1 / 20) sc.update(sc.ctx, t, sc); for (const e of EVENTS.values()) { const g = e.t + sc.a; if (e.t >= 0 && g < TOTAL) out.push({ t: +g.toFixed(3), type: e.type }) } }
+  const seen = new Set(); return out.filter(e => { const k = e.type + e.t; if (seen.has(k)) return false; seen.add(k); return true }).sort((a, b) => a.t - b.t) }
+window.render = render; window.TOTAL = TOTAL; window.T0 = T0; window.collectEvents = collectEvents
+window.decodeVideo = () => Promise.all(VIDS.map(i => i.getAttribute('src') && i.decode ? i.decode().catch(() => 0) : 0))
+window.ready = document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.complete ? 1 : new Promise(r => { i.onload = i.onerror = r }))))
+</script></body></html>
