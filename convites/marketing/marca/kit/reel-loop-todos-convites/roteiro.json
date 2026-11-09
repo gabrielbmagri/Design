@@ -1,0 +1,9 @@
+{
+ "voz": "pt-BR-ThalitaMultilingualNeural",
+ "rate": "+8%",
+ "pitch": "+0Hz",
+ "linhas": [
+  {"id": "l1", "cena": "A", "chunks": [["A gente faz o seu", "h"], ["convite {{personalizado!}}", "h"], ["Qualquer tema, do seu jeito.", "sub"]]},
+  {"id": "l2", "cena": "B", "chunks": [["Manda o seu orçamento,", "h"], ["que a gente", "h"], ["{{cobre qualquer preço!}}", "h"]]}
+ ]
+}

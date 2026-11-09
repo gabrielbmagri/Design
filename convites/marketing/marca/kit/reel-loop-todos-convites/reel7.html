@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Cinzel:wght@600;800&family=Fraunces:ital,opsz,wght@1,9..144,700&family=Great+Vibes&family=Outfit:wght@500;700;800&family=Pacifico&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+<script src="g7/tempos7.js"></script>
+<style>
+  :root { --pink:#FF5FA2; --butter:#FFD84D; --sky:#5BC8F5; --mint:#7EE0B5; --cream:#FFF8EC; --ink:#2A1B3D }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html,body { width:1080px; height:1920px; overflow:hidden; background:#FFD84D; font-family:'Outfit',sans-serif; color:var(--ink) }
+  #stage { position:absolute; inset:0; overflow:hidden }
+  .bg { position:absolute; inset:0 }
+  .conf { position:absolute }
+  /* gancho */
+  .hook { position:absolute; left:30px; width:1020px; top:232px; text-align:center; z-index:6 }
+  .hook .ln { display:block; font:800 86px/1.1 'Outfit'; letter-spacing:-.035em; white-space:nowrap }
+  .hook .sub { display:block; margin-top:16px; font:700 46px/1.1 'Outfit'; letter-spacing:-.02em; opacity:.92 }
+  .hook .w { display:inline-block; will-change:transform,opacity }
+  .mk { position:relative; display:inline-block; padding:0 .2em; margin:0 .02em; font-family:'Fraunces',serif; font-style:italic; font-weight:700; letter-spacing:-.01em; font-size:1.1em }
+  .mk .bgm { position:absolute; inset:.08em 0 .02em; border-radius:.22em; transform-origin:left center; z-index:-1 }
+  .mk .tx { position:relative }
+  #p1 .mk { color:#fff } #p1 .mk .bgm { background:var(--pink) }
+  #p2 .mk { color:var(--ink) } #p2 .mk .bgm { background:var(--butter) }
+  /* chips de vidro */
+  .gc { position:absolute; z-index:6; display:flex; align-items:center; gap:12px; padding:14px 26px; border-radius:40px; font:800 34px/1 'Outfit'; color:var(--ink); white-space:nowrap;
+    background:linear-gradient(140deg,rgba(255,255,255,.92),rgba(255,255,255,.55)); backdrop-filter:blur(16px) saturate(1.4); border:1.5px solid rgba(255,255,255,.95);
+    box-shadow:0 14px 34px rgba(42,27,61,.16), inset 0 1px 0 #fff }
+  .gc i { font-style:normal; font-size:38px }
+  .btn { position:absolute; z-index:7; left:130px; width:820px; top:1392px; height:140px; display:flex; align-items:center; justify-content:center; gap:22px; border-radius:90px; font:800 54px 'Outfit'; color:#fff; background:#22C55E; box-shadow:0 22px 50px rgba(20,120,60,.35); white-space:nowrap; opacity:0 }
+  .idea { position:absolute; z-index:7; left:0; width:1080px; top:1410px; display:flex; justify-content:center; opacity:0 }
+  .idea .gc { position:static; font-size:42px; padding:26px 40px }
+  /* carrossel */
+  #band { position:absolute; left:0; top:0; width:1080px; height:1920px; z-index:4; transform:rotate(-3deg); transform-origin:540px 1010px }
+  .card { position:absolute; width:250px; height:330px; border-radius:26px; overflow:hidden; border:6px solid #FFF8EC; box-shadow:0 18px 40px rgba(42,27,61,.28); will-change:transform; text-align:center }
+  .card .in { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px }
+  .bd { position:absolute; right:8px; bottom:8px; z-index:3; padding:5px 11px; border-radius:20px; font:800 15px/1 'Outfit'; letter-spacing:.04em }
+  .bd.v { background:#2A1B3D; color:#fff } .bd.p { background:#fff; color:#2A1B3D; box-shadow:0 2px 8px rgba(0,0,0,.18) }
+  .fr { position:absolute; inset:9px; border:1.5px solid; border-radius:16px; pointer-events:none }
+  .sm { font:700 13px/1.2 'Outfit'; letter-spacing:.22em; text-transform:uppercase }
+  .gv { font-family:'Great Vibes',cursive; line-height:1 } .cz { font-family:'Cinzel',serif } .bf { font-family:'Bagel Fat One',cursive; line-height:1 } .pf { font-family:'Pacifico',cursive; line-height:1.05 }
+  .ph { position:absolute; left:0; top:0; width:100%; height:62%; object-fit:cover }
+  .pb { position:absolute; left:0; right:0; bottom:0; height:38%; display:flex; flex-direction:column; align-items:center; justify-content:center }
+  .flags { position:absolute; top:0; left:-6px; right:-6px; display:flex; justify-content:space-between }
+  .flags b { width:34px; height:40px; clip-path:polygon(0 0,100% 0,50% 100%) }
+</style></head><body><div id="stage">
+  <div class="bg" id="bgA" style="background:#FFD84D"></div>
+  <div class="bg" id="bgB" style="background:#FF5FA2"></div>
+  <div class="bg" id="bgC" style="background:#FFD84D"></div>
+  <div id="deco"></div>
+  <div id="band"></div>
+  <div class="hook" id="p1"></div>
+  <div class="hook" id="p2"></div>
+  <div class="gc" id="c1" style="left:112px;top:574px"><i>📄</i>em PDF</div>
+  <div class="gc" id="c2" style="left:392px;top:574px"><i>🎬</i>em vídeo</div>
+  <div class="gc" id="c3" style="left:700px;top:574px"><i>🎨</i>todo tema</div>
+  <div class="idea" id="idea"><div class="gc"><i>💡</i>Você traz a ideia, a gente cria</div></div>
+  <div class="btn" id="btn"><svg width="76" height="76" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>Chama no WhatsApp</div>
+</div>
+<script>
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x))
+const E = { out: k => 1 - Math.pow(1 - k, 3), io: k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2, back: k => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2) } }
+const P = (t, t0, d) => clamp((t - t0) / d)
+const $ = id => document.getElementById(id)
+const TOTAL = 10, TAU = Math.PI * 2
+const SW = 4.72        // virada tempo 1 → tempo 2
+const END = 9.62       // virada de volta (loop)
+const LINES = Object.fromEntries(TL.linhas.map(l => [l.id, l]))
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[^\w]/g, '')
+function W(id, w, n = 0) { let k = 0; for (const c of LINES[id].chunks) for (const x of c.words) if (norm(x.w) === norm(w) && k++ === n) return x.t; throw new Error(w) }
+
+/* ---------- gancho: palavra por palavra, sincronizado com a voz ---------- */
+function buildHook(el, id) { el.innerHTML = LINES[id].chunks.map(c => { const parts = []; let buf = null
+    for (const w of c.words) { if (w.kw) { if (!buf) { buf = []; parts.push({ kw: 1, ws: buf }) } buf.push(w) } else { buf = null; parts.push({ kw: 0, ws: [w] }) } }
+    return `<span class="${c.pos === 'sub' ? 'sub' : 'ln'}">` + parts.map(p => p.kw ? `<span class="w mk" data-t="${p.ws[0].t}"><i class="bgm"></i><span class="tx">${p.ws.map(w => w.w).join(' ')}</span></span>` : `<span class="w" data-t="${p.ws[0].t}">${p.ws[0].w}</span>`).join(' ') + '</span>' }).join('') }
+function hookAnim(el, t, tOut) { const out = P(t, tOut - .22, .22); el.style.opacity = 1 - out; el.style.transform = `translateY(${-out * 30}px) scale(${1 - out * .04})`; el.style.filter = `blur(${out * 12}px)`
+  el.querySelectorAll('.w').forEach(w => { const tw = +w.dataset.t - .1, k = E.out(P(t, tw, .22)); w.style.opacity = k; let tr = `translateY(${(1 - k) * 22}px)`
+    if (w.classList.contains('mk')) { const kb = E.back(P(t, tw, .42)); w.querySelector('.bgm').style.transform = `scaleX(${clamp(kb, 0, 1.06)}) rotate(-1.6deg)`; tr += ` scale(${.88 + .12 * kb})` }
+    w.style.transform = tr; w.style.filter = `blur(${(1 - k) * 6}px)` }) }
+buildHook($('p1'), 'l1'); buildHook($('p2'), 'l2')
+
+/* ---------- convites do carrossel ---------- */
+const B = (v) => `<span class="bd ${v ? 'v' : 'p'}">${v ? '▶ VÍDEO' : 'PDF'}</span>`
+const flags = cs => `<div class="flags">${Array.from({ length: 8 }, (_, i) => `<b style="background:${cs[i % cs.length]}"></b>`).join('')}</div>`
+const ROW1 = [
+  `<div class="card" style="background:#F7F3EA"><div class="fr" style="border-color:#A9B58E"></div><div class="in"><div style="font-size:30px">🌿</div><div class="sm" style="color:#6B7A4F;margin:6px 0 10px">vamos casar</div><div class="gv" style="font-size:58px;color:#3F4A2E">Marina</div><div class="gv" style="font-size:34px;color:#A9B58E;margin:-4px 0">&amp;</div><div class="gv" style="font-size:58px;color:#3F4A2E">Rafael</div><div class="cz" style="font-size:15px;color:#6B7A4F;margin-top:12px;letter-spacing:.12em">12 · 09 · 2027</div></div>${B(0)}</div>`,
+  `<div class="card" style="background:#FFD84D"><img class="ph" src="ai10/fr1/0120.jpg"><div class="pb" style="background:#FFD84D"><div class="bf" style="font-size:36px;color:#5A3B1A">Théo faz 1!</div><div style="font:700 15px Outfit;color:#7A5320;margin-top:4px">🦁 Safari · sáb · 14h</div></div>${B(1)}</div>`,
+  `<div class="card" style="background:linear-gradient(160deg,#2B1055,#7B2CBF)"><div class="fr" style="border-color:rgba(242,213,138,.6)"></div><div class="in"><div style="font-size:26px">✨</div><div class="cz" style="font-size:34px;font-weight:800;color:#F2D58A;letter-spacing:.2em;margin-top:4px">XV</div><div class="gv" style="font-size:86px;color:#F7E7B5;margin:2px 0 6px">Sofia</div><div class="sm" style="color:#E9D8FF">15 anos · 08 nov</div></div>${B(1)}</div>`,
+  `<div class="card" style="background:#CFEBFA"><div class="in"><div style="font-size:40px">☁️ 🧸 ☁️</div><div style="font:700 20px Outfit;color:#5B8DB8;margin-top:14px">Chá de bebê do</div><div class="bf" style="font-size:52px;color:#2F6FA8;margin:2px 0 10px">Benício</div><div class="sm" style="color:#5B8DB8">dom · 16h</div></div>${B(0)}</div>`,
+  `<div class="card" style="background:#121212"><div class="fr" style="border-color:#C9A24B"></div><div class="in"><div style="font-size:44px">🎓</div><div class="cz" style="font-size:24px;font-weight:800;color:#E3C16F;letter-spacing:.14em;margin-top:10px">FORMATURA</div><div style="font:italic 600 40px 'Playfair Display';color:#fff;margin:4px 0 10px">Medicina</div><div class="sm" style="color:#C9A24B">turma 2027</div></div>${B(1)}</div>`,
+  `<div class="card" style="background:#F28C28">${flags(['#E63946', '#FFD84D', '#2A9D8F', '#fff'])}<div class="in" style="padding-top:44px"><div class="bf" style="font-size:58px;color:#fff;text-shadow:0 4px 0 #B85C00">Arraiá</div><div style="font:800 19px Outfit;color:#5A2A00;margin:6px 0 12px">da Família Souza</div><div style="font-size:34px">🌽 🔥 🎶</div></div>${B(0)}</div>`,
+  `<div class="card" style="background:radial-gradient(120% 90% at 50% 20%,#3A1259,#14081F)"><div class="in"><div style="font-size:40px">🪩</div><div class="pf" style="font-size:46px;color:#FF7AB8;text-shadow:0 0 18px #FF5FA2">Carol</div><div style="font:800 96px/1 Outfit;color:#fff;text-shadow:0 0 22px #5BC8F5,0 0 4px #5BC8F5;letter-spacing:-.04em">30</div><div class="sm" style="color:#CDB8E8;margin-top:6px">sex · 22h</div></div>${B(1)}</div>`,
+  `<div class="card" style="background:#BEE5A0"><div class="in"><div style="font-size:74px;line-height:1">🦖</div><div class="bf" style="font-size:52px;color:#1F5C2E;margin-top:6px">Miguel</div><div style="font:800 21px Outfit;color:#2F7A3F;margin-top:4px">faz 5 anos!</div><div style="font-size:22px;margin-top:8px">🌋 🌴 🥚</div></div>${B(0)}</div>`]
+const ROW2 = [
+  `<div class="card" style="background:#EBDCF7"><img class="ph" src="img/j-5-hero.jpg" style="object-position:top"><div class="pb" style="background:#EBDCF7"><div style="font:italic 700 46px/1 Fraunces;color:#6B3FA0">Lara</div><div style="font:700 15px Outfit;color:#8A63B8;margin-top:5px">🦋 1 aninho · Jardim</div></div>${B(1)}</div>`,
+  `<div class="card" style="background:#FDFBF5"><div class="fr" style="border-color:#D8C28A"></div><div class="in"><div style="font-size:44px">🕊️</div><div class="gv" style="font-size:62px;color:#B08D3C;margin-top:6px">Batizado</div><div class="cz" style="font-size:24px;font-weight:600;color:#7A8FA6;letter-spacing:.24em;margin:6px 0 12px">HELENA</div><div class="sm" style="color:#B08D3C">20 · 12 · 10h</div></div>${B(0)}</div>`,
+  `<div class="card" style="background:linear-gradient(115deg,#FFC2D9 50%,#BFE3FF 50%)"><div class="in"><div class="sm" style="color:#2A1B3D">chá revelação</div><div class="bf" style="font-size:44px;color:#3D7FC4;margin-top:12px">Menino</div><div style="font:800 20px Outfit;color:#2A1B3D">ou</div><div class="bf" style="font-size:44px;color:#E0508F">menina?</div><div style="font-size:34px;margin-top:8px">💙 🩷</div></div>${B(1)}</div>`,
+  `<div class="card" style="background:#F6EFDD"><div class="fr" style="border-color:#C9A24B"></div><div class="in"><div class="cz" style="font-size:100px;font-weight:800;line-height:1;background:linear-gradient(180deg,#E7C873,#A47A1E);-webkit-background-clip:text;background-clip:text;color:transparent">50</div><div class="sm" style="color:#8A6A1E">bodas de ouro</div><div class="gv" style="font-size:42px;color:#5A4514;margin-top:12px">Lúcia &amp; José</div></div>${B(0)}</div>`,
+  `<div class="card" style="background:#0F1E3D"><div class="in" style="align-items:flex-start;text-align:left;padding:22px"><div style="width:54px;height:8px;border-radius:4px;background:#C6F432"></div><div style="font:800 23px Outfit;color:#fff;letter-spacing:.1em;margin-top:16px">INAUGURAÇÃO</div><div style="font:italic 700 38px/1.05 Fraunces;color:#C6F432;margin:6px 0 14px">Studio<br>Aurora</div><div class="sm" style="color:#9FB2D6;font-size:12px">qui · 19h · coquetel</div></div>${B(1)}</div>`,
+  `<div class="card" style="background:#D9785B"><div class="in"><div style="font-size:42px">🍳 🥄</div><div class="pf" style="font-size:40px;color:#FFF3E3;margin-top:12px">Chá de<br>panela</div><div style="font:800 28px Outfit;color:#5A2416;margin-top:8px">da Bia</div></div>${B(0)}</div>`,
+  `<div class="card" style="background:#0E5A3A"><div style="position:absolute;left:0;right:0;top:46px;height:16px;background:#C8282D"></div><div class="in" style="padding-top:40px"><div style="font-size:46px">🎄</div><div class="gv" style="font-size:78px;color:#fff">Natal</div><div class="sm" style="color:#F2D58A;margin-top:6px">em família · Almeida</div></div>${B(0)}</div>`,
+  `<div class="card" style="background:#FFD6E8"><div class="in"><div style="font-size:48px">👑</div><div class="gv" style="font-size:88px;color:#C2417A;margin-top:2px">Alice</div><div style="font:800 20px Outfit;color:#A63A6B">faz 4 anos</div><div class="sm" style="color:#C2417A;margin-top:8px;font-size:12px">reino encantado</div></div>${B(1)}</div>`]
+const STEP = 276, WROW = 8 * STEP
+const band = $('band')
+function mkRow(list) { return list.map(h => { const d = document.createElement('div'); d.innerHTML = h; const c = d.firstElementChild; band.appendChild(c); return c }) }
+const R1 = mkRow(ROW1), R2 = mkRow(ROW2)
+function rowAnim(cards, t, y, dir) { cards.forEach((c, i) => { let x = ((i * STEP + dir * t * WROW / TOTAL) % WROW + WROW) % WROW - STEP * 1.5
+    const d = clamp(Math.abs(x + 125 - 540) / 560), s = 1.1 - .16 * d
+    c.style.transform = `translate(${x}px,${y}px) rotate(${(i % 2 ? 2.2 : -2.2) * (.4 + .6 * d)}deg) scale(${s})`; c.style.zIndex = Math.round(10 - d * 8) }) }
+
+/* ---------- confete de fundo + explosão ---------- */
+const C = ['#FF5FA2', '#5BC8F5', '#7EE0B5', '#FFF8EC', '#FFD84D']
+const deco = $('deco'); const CF = [[90, 150, 's', 1, 8], [930, 120, 'r', 0, 24], [60, 1620, 'r', 1, -20], [940, 1650, 's', 3, 0], [520, 1760, 'r', 2, 12]]
+deco.innerHTML = CF.map(([x, y, k, c, r]) => k === 'r' ? `<div class="conf" data-r="${r}" style="left:${x}px;top:${y}px;width:62px;height:25px;border-radius:12px;background:${C[c]}"></div>` : `<div class="conf" data-r="${r}" style="left:${x}px;top:${y}px;width:66px;height:66px;background:${C[c]};clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)"></div>`).join('')
+const burst = Array.from({ length: 30 }, (_, i) => { const e = document.createElement('div'); e.className = 'conf'; e.style.cssText = `z-index:8;width:${24 + (i % 3) * 12}px;height:${14 + (i % 2) * 8}px;border-radius:8px;background:${['#FFD84D', '#5BC8F5', '#7EE0B5', '#FFF8EC'][i % 4]};opacity:0`; $('stage').appendChild(e); return e })
+
+function render(t) { t = ((t % TOTAL) + TOTAL) % TOTAL
+  // fundo: amarelo → rosa (sobe de baixo) → amarelo (fecha o loop)
+  $('bgB').style.clipPath = `inset(${(1 - E.io(P(t, SW, .34))) * 100}% 0 0 0)`
+  $('bgC').style.clipPath = `inset(0 0 ${(1 - E.io(P(t, END, .36))) * 100}% 0)`
+  deco.querySelectorAll('.conf').forEach((c, i) => { c.style.transform = `translate(${Math.sin(TAU * t / 5 + i) * 14}px,${Math.cos(TAU * t / 10 * 2 + i * 2) * 18}px) rotate(${+c.dataset.r + Math.sin(TAU * t / 5 + i) * 14}deg)` })
+  rowAnim(R1, t, 668, -1); rowAnim(R2, t, 1028, 1)
+  // ganchos
+  const p1 = $('p1'), p2 = $('p2')
+  p1.style.display = t < SW + .05 ? 'block' : 'none'; if (t < SW + .05) hookAnim(p1, t, SW)
+  p2.style.display = t >= SW ? 'block' : 'none'; if (t >= SW) hookAnim(p2, t, END + .1)
+  // chips (sempre na tela, com um pulinho quando a voz fala "qualquer tema")
+  ;[['c1', 0], ['c2', 1], ['c3', 2]].forEach(([id, i]) => { const e = $(id), tp = W('l1', 'qualquer') + i * .12, k = P(t, tp, .4), bump = Math.sin(k * Math.PI) * .14
+    e.style.transform = `translateY(${Math.sin(TAU * t / 5 + i * 2) * 5}px) scale(${1 + bump}) rotate(${[-2, 1.5, -1][i]}deg)` })
+  // rodapé: tempo 1 = "você traz a ideia"; tempo 2 = botão do WhatsApp
+  const idea = $('idea'), ti = W('l1', 'jeito') - .5, ki = E.back(P(t, ti, .45)), oi = P(t, SW - .2, .2)
+  idea.style.opacity = clamp(P(t, ti, .12)) * (1 - oi); idea.style.transform = `translateY(${(1 - ki) * 70 + oi * 30}px) scale(${.8 + .2 * ki})`
+  const btn = $('btn'), tb = W('l2', 'cobre') - .1, kb = E.back(P(t, tb, .5)), ob = P(t, END - .12, .2)
+  btn.style.opacity = clamp(P(t, tb, .14)) * (1 - ob); btn.style.transform = `translateY(${ob * 30}px) scale(${(.7 + .3 * kb) * (1 + .03 * Math.sin(TAU * t * 1.5))})`
+  burst.forEach((e, i) => { const a = (i / burst.length) * TAU + i, v = 420 + (i % 5) * 130, tt = t - tb, k = Math.max(0, tt); e.style.opacity = tt > 0 && tt < 1.5 ? 1 - P(tt, .7, .8) : 0
+    e.style.left = 540 + Math.cos(a) * v * (1 - Math.exp(-k * 3)) / 3 + 'px'; e.style.top = 1460 + Math.sin(a) * v * (1 - Math.exp(-k * 3)) / 3 + 700 * k * k * .5 + 'px'; e.style.transform = `rotate(${k * 360 + i * 30}deg)` }) }
+async function collectEvents() { const ev = [], add = (t, type) => ev.push({ t: +t.toFixed(3), type })
+  add(.03, 'whoosh'); add(W('l1', 'personalizado') - .05, 'pop'); for (let i = 0; i < 3; i++) add(W('l1', 'qualquer') + i * .12, 'tick'); add(W('l1', 'jeito') - .5, 'pop')
+  add(SW - .05, 'whoosh'); add(SW + .12, 'swipe'); add(W('l2', 'cobre') - .1, 'chime'); add(W('l2', 'cobre') - .1, 'pop'); add(W('l2', 'preço'), 'pop'); add(END - .08, 'swipe')
+  return ev.sort((a, b) => a.t - b.t) }
+window.render = render; window.TOTAL = TOTAL; window.T0 = [0, SW]; window.collectEvents = collectEvents
+window.decodeVideo = () => Promise.resolve()
+window.ready = document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.complete ? 1 : new Promise(r => { i.onload = i.onerror = r }))))
+render(0)
+</script></body></html>
