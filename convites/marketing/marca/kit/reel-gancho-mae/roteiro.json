@@ -3,11 +3,95 @@
  "rate": "+8%",
  "pitch": "+0Hz",
  "linhas": [
-  {"id": "l1", "cena": "A", "chunks": [["Seu filho vira {{desenho}}…", "top"], ["e abre o próprio {{convite!}}", "top"]]},
-  {"id": "l2", "cena": "B", "chunks": [["Ou a versão {{clássica}},", "top"], ["com a {{historinha}} dele em fotos.", "top"]]},
-  {"id": "l3", "cena": "C", "chunks": [["Chega no {{WhatsApp}} de cada família,", "top"]]},
-  {"id": "l4", "cena": "D", "chunks": [["todo mundo confirma em {{um toque}}…", "top"]]},
-  {"id": "l5", "cena": "E", "chunks": [["e você vê {{quem vem}},", "top"], ["sem planilha.", "top"]]},
-  {"id": "l6", "cena": "G", "chunks": [["Quer um assim pra festa do seu filho?", "top"], ["{{Chama a gente!}}", "top"]]}
+  {
+   "id": "l1",
+   "cena": "A",
+   "chunks": [
+    [
+     "Seu filho vira {{desenho}}…",
+     "top"
+    ],
+    [
+     "e abre o próprio {{convite!}}",
+     "top"
+    ]
+   ]
+  },
+  {
+   "id": "l2",
+   "cena": "B",
+   "chunks": [
+    [
+     "Ou a versão {{clássica}},",
+     "top"
+    ],
+    [
+     "com a {{historinha}} dele em fotos.",
+     "top"
+    ]
+   ]
+  },
+  {
+   "id": "l3",
+   "cena": "C",
+   "chunks": [
+    [
+     "Chega no {{WhatsApp}} de cada família,",
+     "top"
+    ]
+   ]
+  },
+  {
+   "id": "l4",
+   "cena": "D",
+   "chunks": [
+    [
+     "todo mundo confirma em {{um toque}}…",
+     "top"
+    ]
+   ]
+  },
+  {
+   "id": "l5",
+   "cena": "E",
+   "chunks": [
+    [
+     "e você vê {{quem vem}},",
+     "top"
+    ],
+    [
+     "sem planilha.",
+     "top"
+    ]
+   ]
+  },
+  {
+   "id": "l6",
+   "cena": "G",
+   "chunks": [
+    [
+     "Quer um assim pro seu filho?",
+     "top"
+    ]
+   ]
+  },
+  {
+   "id": "l7",
+   "cena": "G",
+   "chunks": [
+    [
+     "Só {{cinquenta e quatro e noventa}}",
+     "top"
+    ],
+    [
+     "pros {{dez primeiros}}",
+     "top"
+    ],
+    [
+     "que chamarem no {{WhatsApp!}}",
+     "top"
+    ]
+   ]
+  }
  ]
 }
