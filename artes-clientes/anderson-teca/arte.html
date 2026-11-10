@@ -1,86 +1,80 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:ital,wght@0,700;0,800;1,800;1,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:ital,wght@0,500;0,700;0,800;1,800;1,900&display=swap" rel="stylesheet">
 <style>
-  :root { --red:#C4201F; --red2:#9E1414; --deep:#6E0B0B; --yel:#FFC61A; --yel2:#F5A800; --cream:#FFF6E0 }
+  :root { --wine:#5A0A12; --crim:#8E1019; --red:#B5141F; --gold:#F2B705; --cream:#FFF4E2 }
   * { box-sizing:border-box; margin:0; padding:0 }
-  html,body { width:1080px; overflow:hidden; background:var(--red); font-family:'Montserrat',sans-serif }
-  #art { position:relative; width:1080px; overflow:hidden; background:radial-gradient(110% 70% at 50% 34%, #D92B26 0%, var(--red) 42%, var(--red2) 100%) }
+  html,body { width:1080px; overflow:hidden; background:var(--wine); font-family:'Montserrat',sans-serif; color:#fff }
+  #art { position:relative; width:1080px; overflow:hidden;
+    background:radial-gradient(80% 60% at 78% 38%, #C2202A 0%, #9A111B 38%, #6B0A13 72%, #42050B 100%) }
   .abs { position:absolute }
-  #grain { position:absolute; inset:0; opacity:.22; mix-blend-mode:multiply; pointer-events:none }
-  #rays { position:absolute; left:-200px; right:-200px; opacity:.07; background:repeating-conic-gradient(from 0deg at 50% 62%, #fff 0deg 5deg, transparent 5deg 14deg) }
-  /* logo */
-  #logo { display:flex; align-items:center; gap:18px; left:60px }
-  #logo .wm { font:italic 800 62px/1 'Montserrat'; letter-spacing:-.045em; color:#fff }
-  #logo .wm b { color:var(--yel); font-weight:800 }
-  #hash { right:60px; font:italic 800 34px/1 'Montserrat'; letter-spacing:-.03em; color:#fff; opacity:.95 }
-  #hash b { color:var(--yel) }
-  /* etiquetas tipo fita */
-  .tape { display:inline-block; padding:10px 26px 9px; font:800 34px/1 'Montserrat'; letter-spacing:.06em; clip-path:polygon(0 8%,3% 0,97% 4%,100% 0,98.5% 50%,100% 100%,96% 94%,4% 100%,0 92%,1.5% 50%); box-shadow:0 8px 0 rgba(0,0,0,.2) }
-  .tape.w { background:var(--cream); color:var(--red2) } .tape.y { background:var(--yel); color:var(--deep) }
-  #y20 { left:60px; display:flex; align-items:flex-end; gap:22px }
-  #y20 .n { font:italic 800 124px/.8 'Montserrat'; letter-spacing:-.05em; color:#fff; opacity:.92 }
-  #y20 .v { font:italic 800 46px/1 'Montserrat'; color:#fff; opacity:.92; padding-bottom:2px }
-  #big { left:44px; font:italic 900 318px/.8 'Montserrat'; letter-spacing:-.055em; color:#fff; text-shadow:10px 10px 0 var(--deep); white-space:nowrap }
-  #votos { right:56px; font:italic 900 118px/.9 'Montserrat'; letter-spacing:-.04em; color:var(--yel); text-shadow:6px 6px 0 var(--deep) }
-  #duo { left:0; width:1080px; filter:drop-shadow(0 -6px 30px rgba(60,0,0,.45)) }
-  /* selo colado */
-  #seal { width:250px; height:250px; transform:rotate(-9deg); filter:drop-shadow(8px 9px 0 rgba(60,0,0,.45)) }
-  #seal svg { position:absolute; inset:0 }
-  #seal .t { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--deep); text-align:center }
-  #seal .a { font:italic 900 62px/1 'Montserrat'; letter-spacing:-.05em }
-  #seal .b { font:800 22px/1.1 'Montserrat'; letter-spacing:.02em; margin-top:2px }
-  #seal .c { margin-top:9px; padding:6px 14px; border-radius:20px; background:var(--red); color:#fff; font:800 24px/1 'Montserrat' }
-  /* rodapé de papel rasgado */
-  #paper { left:0; width:1080px }
-  #thanks { left:0; width:1080px; text-align:center; font:700 70px/1 'Caveat'; color:var(--red2); transform:rotate(-1.5deg); white-space:nowrap }
-  #tag { left:0; width:1080px; text-align:center; font:italic 800 44px/1 'Montserrat'; letter-spacing:-.03em; color:var(--red) }
-  #tag b { color:var(--deep) }
+  #grain { position:absolute; inset:0; opacity:.2; mix-blend-mode:overlay; pointer-events:none }
+  #ghost { right:-40px; font:italic 900 300px/.82 'Montserrat'; letter-spacing:-.05em; color:transparent; -webkit-text-stroke:2.5px rgba(255,255,255,.16); white-space:nowrap; text-align:right }
+  #glow { width:900px; height:900px; border-radius:50%; background:radial-gradient(circle, rgba(255,120,110,.35), rgba(255,120,110,0) 62%) }
+  #me { z-index:3; width:760px; -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 97%); mask-image:linear-gradient(180deg,#000 72%,transparent 97%);
+    filter:drop-shadow(-24px 10px 40px rgba(40,0,6,.55)) saturate(1.04) }
+  /* logo colada na foto */
+  #logo { z-index:5; display:flex; align-items:center; gap:14px; padding:14px 30px 14px 16px; border-radius:60px; background:rgba(66,5,11,.62); backdrop-filter:blur(14px); border:1.5px solid rgba(255,255,255,.22); box-shadow:0 18px 40px rgba(30,0,4,.45) }
+  #logo .wm { font:italic 800 50px/1 'Montserrat'; letter-spacing:-.045em; color:#fff; white-space:nowrap }
+  #logo .wm b { color:var(--gold); font-weight:800 }
+  /* coluna de dados */
+  #col { left:64px; width:560px }
+  .yr { display:flex; align-items:center; gap:16px }
+  .yr .y { font:800 30px/1 'Montserrat'; letter-spacing:.2em; color:rgba(255,244,226,.9) }
+  .st { padding:9px 18px 8px; border-radius:30px; font:800 22px/1 'Montserrat'; letter-spacing:.12em; text-transform:uppercase }
+  .st.off { border:2px solid rgba(255,244,226,.45); color:rgba(255,244,226,.75) }
+  .st.on { background:var(--gold); color:var(--wine); box-shadow:0 8px 22px rgba(242,183,5,.25) }
+  .n20 { display:flex; align-items:baseline; gap:14px; margin-top:12px }
+  .n20 .n { font:italic 800 104px/.9 'Montserrat'; letter-spacing:-.05em; color:rgba(255,244,226,.78) }
+  .n20 .v { font:italic 800 38px/1 'Montserrat'; color:rgba(255,244,226,.6) }
+  .arrow { margin:16px 0 14px 8px }
+  .n24 .n { font:italic 900 196px/.84 'Montserrat'; letter-spacing:-.06em; color:#fff; text-shadow:0 10px 30px rgba(40,0,6,.45); margin-top:14px; white-space:nowrap }
+  .n24 .v { font:italic 900 70px/1 'Montserrat'; letter-spacing:-.04em; color:#fff; margin-top:4px }
+  .chip { position:relative; z-index:4; display:inline-flex; align-items:center; gap:12px; margin-top:26px; padding:14px 24px; border-radius:22px; background:rgba(255,244,226,.1); border:1.5px solid rgba(255,244,226,.28); font:700 28px/1 'Montserrat'; color:var(--cream) }
+  .chip b { font-weight:800; color:var(--gold) }
+  /* rodapé */
+  #foot { z-index:4; left:0; width:1080px; background:linear-gradient(180deg,rgba(66,5,11,0),rgba(66,5,11,.85) 38%,#42050B) }
+  #thanks { z-index:6; left:64px; right:64px; font:700 68px/1 'Caveat'; color:var(--cream); white-space:nowrap }
+  #rule { z-index:6; left:64px; height:4px; width:120px; border-radius:2px; background:var(--gold) }
+  #tag { z-index:6; left:208px; font:italic 800 34px/1 'Montserrat'; letter-spacing:-.02em; color:var(--cream) }
+  #tag b { color:var(--gold) }
 </style></head><body>
 <div id="art">
-  <div id="rays"></div>
-  <svg id="grain" width="1080" height="1920"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
-  <div class="abs" id="logo"><svg id="check" width="92" height="92" viewBox="-50 -50 100 100"></svg><div class="wm">Anderson<b>Teca</b></div></div>
-  <div class="abs" id="hash">#Amigode<b>todos</b></div>
-  <div class="abs" id="t20"><span class="tape w" style="transform:rotate(-2.5deg)">EM 2020</span></div>
-  <div class="abs" id="y20"><span class="n">2.349</span><span class="v">votos</span></div>
-  <div class="abs" id="t24"><span class="tape y" style="transform:rotate(-3deg)">EM 2024</span></div>
-  <div class="abs" id="big">3.936</div>
-  <div class="abs" id="votos">votos</div>
-  <img class="abs" id="duo" src="work/dupla.png">
-  <svg class="abs" id="paper" viewBox="0 0 1080 900" preserveAspectRatio="none"></svg>
-  <div class="abs" id="seal"><svg viewBox="-50 -50 100 100"></svg><div class="t"><div class="a">+1.587</div><div class="b">VOTOS A MAIS</div><div class="c">▲ 67,6%</div></div></div>
+  <svg id="grain" width="1080" height="1920"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+  <div class="abs" id="ghost">OBRI<br>GADO</div>
+  <div class="abs" id="glow"></div>
+  <img class="abs" id="me" src="work/anderson.png">
+  <div class="abs" id="foot"></div>
+  <div class="abs" id="col">
+    <div class="yr"><span class="y">2020</span><span class="st off">Não eleito</span></div>
+    <div class="n20"><span class="n">2.349</span><span class="v">votos</span></div>
+    <svg class="arrow" width="90" height="70" viewBox="0 0 90 70"><path d="M8 62 C 30 58, 52 44, 70 14" fill="none" stroke="#F2B705" stroke-width="7" stroke-linecap="round"/><path d="M52 16 L72 8 L78 30" fill="none" stroke="#F2B705" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="yr"><span class="y">2024</span><span class="st on">Suplente</span></div>
+    <div class="n24"><div class="n">3.936</div><div class="v">votos</div></div>
+    <div class="chip">▲ <span><b>+1.587 votos</b> · +67,6%</span></div>
+  </div>
+  <div class="abs" id="logo"><svg width="74" height="74" viewBox="-50 -50 100 100" id="check"></svg><div class="wm">Anderson<b>Teca</b></div></div>
   <div class="abs" id="thanks">Obrigado por confiar no nosso trabalho!</div>
+  <div class="abs" id="rule"></div>
   <div class="abs" id="tag">#Amigode<b>todos</b></div>
 </div>
 <script>
 const F = new URLSearchParams(location.search).get('f') || 'feed'
-const L = { feed:  { H:1350, logo:54,  t20:176, y20:232, t24:372, big:432, votos:690, duo:612, paper:1136, seal:[812, 880], thanks:1196, tag:1280, hash:0 },
-            story: { H:1920, logo:300, t20:470, y20:532, t24:712, big:780, votos:1052, duo:972, paper:1540, seal:[812, 1280], thanks:1612, tag:1704, hash:0 } }[F]
+const L = { feed:  { H:1350, ghost:120, glow:[380, 120], me:[345, 300, 860],  logo:[560, 1010], col:96,  foot:[1050, 300], thanks:1180, rule:1268, tag:1256 },
+            story: { H:1920, ghost:260, glow:[340, 520], me:[180, 640, 1000], logo:[540, 1420], col:290, foot:[1480, 440], thanks:1630, rule:1720, tag:1708 } }[F]
 const $ = id => document.getElementById(id), art = $('art')
 art.style.height = L.H + 'px'; document.body.style.height = L.H + 'px'
-$('rays').style.top = '-200px'; $('rays').style.height = (L.H + 200) + 'px'
-$('logo').style.top = L.logo + 'px'; $('hash').style.display = 'none'
-$('t20').style.cssText += `left:60px;top:${L.t20}px`; $('y20').style.top = L.y20 + 'px'
-$('t24').style.cssText += `left:60px;top:${L.t24}px`; $('big').style.top = L.big + 'px'; $('votos').style.top = L.votos + 'px'
-$('duo').style.top = L.duo + 'px'
-$('paper').style.top = L.paper + 'px'; $('paper').style.height = '900px'
-$('seal').style.left = L.seal[0] + 'px'; $('seal').style.top = L.seal[1] + 'px'
-$('thanks').style.top = L.thanks + 'px'; $('tag').style.top = L.tag + 'px'
-// gerador pseudoaleatório fixo (a arte sai sempre igual)
-let sd = 11; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647
-// selo de check (símbolo da campanha): medalhão amarelo ondulado + check branco
+$('ghost').style.top = L.ghost + 'px'
+$('glow').style.left = L.glow[0] + 'px'; $('glow').style.top = L.glow[1] + 'px'
+$('me').style.left = L.me[0] + 'px'; $('me').style.top = L.me[1] + 'px'; $('me').style.width = L.me[2] + 'px'
+$('logo').style.left = L.logo[0] + 'px'; $('logo').style.top = L.logo[1] + 'px'
+$('col').style.top = L.col + 'px'
+$('foot').style.top = L.foot[0] + 'px'; $('foot').style.height = L.foot[1] + 'px'
+$('thanks').style.top = L.thanks + 'px'; $('rule').style.top = L.rule + 'px'; $('tag').style.top = L.tag + 'px'
+// selo de check da campanha (medalhão dourado ondulado)
 const scallop = (R, amp, n) => { let d = ''; for (let i = 0; i <= 240; i++) { const a = i / 240 * Math.PI * 2, r = R * (1 + amp * Math.cos(n * a)); d += (i ? 'L' : 'M') + (r * Math.cos(a)).toFixed(2) + ' ' + (r * Math.sin(a)).toFixed(2) } return d + 'Z' }
-$('check').innerHTML = `<defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE06A"/><stop offset=".55" stop-color="#FFC61A"/><stop offset="1" stop-color="#E79A00"/></linearGradient></defs>
-  <path d="${scallop(43, .075, 10)}" fill="#8A0F0F" opacity=".45" transform="translate(3 4)"/><path d="${scallop(43, .075, 10)}" fill="url(#g1)"/>
-  <path d="M-21 2 L-7 16 L22 -15" fill="none" stroke="#B36F00" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity=".35" transform="translate(1.5 3)"/>
+$('check').innerHTML = `<defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE27A"/><stop offset=".55" stop-color="#F2B705"/><stop offset="1" stop-color="#C98A00"/></linearGradient></defs>
+  <path d="${scallop(43, .075, 10)}" fill="#2a0306" opacity=".45" transform="translate(3 4)"/><path d="${scallop(43, .075, 10)}" fill="url(#g1)"/>
   <path d="M-21 2 L-7 16 L22 -15" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`
-// selo "estrela" colado
-const burst = (R, r, n) => { let d = ''; for (let i = 0; i < n * 2; i++) { const a = i / (n * 2) * Math.PI * 2, q = i % 2 ? r : R; d += (i ? 'L' : 'M') + (q * Math.cos(a)).toFixed(2) + ' ' + (q * Math.sin(a)).toFixed(2) } return d + 'Z' }
-$('seal').querySelector('svg').innerHTML = `<path d="${burst(49, 43, 22)}" fill="#FFC61A"/><circle r="38.5" fill="none" stroke="#9E1414" stroke-width=".9" stroke-dasharray="2.2 2.2"/>`
-// papel rasgado: borda irregular + fibra clara por baixo
-const torn = (y0, amp) => { let d = `M0 900 L0 ${y0}`; let y = y0; for (let x = 0; x <= 1080; x += 9 + rnd() * 16) { y = y0 + (rnd() - .5) * amp + Math.sin(x / 150) * 14 + Math.sin(x / 47) * 6; d += ` L${x.toFixed(0)} ${y.toFixed(1)}` } return d + ` L1080 ${y.toFixed(1)} L1080 900 Z` }
-sd = 11; const dA = torn(34, 20); sd = 29; const dB = torn(20, 18)
-$('paper').innerHTML = `<path d="${dB}" fill="#3a0505" opacity=".28" transform="translate(0 -9)"/><path d="${dB}" fill="#FFF3CF"/><path d="${dA}" fill="#FFC61A"/>`
-window.ready = document.fonts.ready.then(() => $('duo').decode())
+window.ready = document.fonts.ready.then(() => $('me').decode())
 </script></body></html>
