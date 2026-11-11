@@ -32,14 +32,17 @@
   .n24 .v { font:italic 900 70px/1 'Montserrat'; letter-spacing:-.04em; color:#fff; margin-top:4px }
   .chip { position:relative; z-index:4; display:inline-flex; align-items:center; gap:12px; margin-top:26px; padding:14px 24px; border-radius:22px; background:rgba(255,244,226,.1); border:1.5px solid rgba(255,244,226,.28); font:700 28px/1 'Montserrat'; color:var(--cream) }
   .chip b { font-weight:800; color:var(--gold) }
-  /* recorte de papel com a foto de 2020 */
-  #p20 { z-index:2; transform-origin:50% 50%; filter:drop-shadow(10px 14px 18px rgba(30,0,4,.5)) }
+  /* faixa diagonal de papel rasgado com a foto de 2020 */
+  #p20 { z-index:2; transform-origin:50% 50% }
+  #p20 .wrap { position:absolute; inset:0; filter:drop-shadow(8px 12px 16px rgba(30,0,4,.5)) }
+  #p20 .stroke { position:absolute; background:linear-gradient(90deg,#C98A00,#F2B705 30%,#FFD24A 70%,#F2B705) }
   #p20 .back { position:absolute; inset:0; background:#E9D9B8 }
   #p20 .sheet { position:absolute; inset:0; background:#FFF8EA }
   #p20 .ph { position:absolute; overflow:hidden; background:#000 }
-  #p20 .ph img { width:100%; height:100%; object-fit:cover; object-position:50% 32%; display:block; filter:contrast(1.04) saturate(1.05) }
-  #p20 .cap { position:absolute; left:0; right:0; text-align:center; font:700 40px/1 'Caveat'; color:#6B0A13; transform:rotate(-1.5deg) }
-  #p20 .tape { position:absolute; width:124px; height:36px; background:rgba(242,183,5,.82); box-shadow:0 4px 10px rgba(40,0,6,.25); clip-path:polygon(0 12%,4% 0,96% 8%,100% 0,98% 55%,100% 100%,95% 92%,4% 100%,0 88%,2% 50%) }
+  #p20 .ph img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 4%; display:block; filter:contrast(1.05) saturate(1.06) }
+  #p20 .ph::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(60,6,12,.34),rgba(60,6,12,0) 28%) }
+  #p20 .lbl { position:absolute; padding:8px 22px 10px; background:#FFF4DA; color:#6B0A13; font:700 40px/1 'Caveat'; transform:rotate(-3deg); box-shadow:0 6px 14px rgba(30,0,4,.4);
+    clip-path:polygon(0 10%,3% 0,97% 6%,100% 0,99% 55%,100% 100%,95% 93%,3% 100%,0 90%,1.5% 50%) }
   /* rodapé */
   #foot { z-index:4; left:0; width:1080px; background:linear-gradient(180deg,rgba(66,5,11,0),rgba(66,5,11,.85) 38%,#42050B) }
   #thanks { z-index:6; left:64px; right:64px; font:700 68px/1 'Caveat'; color:var(--cream); white-space:nowrap }
@@ -61,7 +64,7 @@
     <div class="n24"><div class="n">3.936</div><div class="v">votos</div></div>
     <div class="chip">▲ <span><b>+1.587 votos</b> · +67,6%</span></div>
   </div>
-  <div class="abs" id="p20"><div class="back"></div><div class="sheet"></div><div class="ph"><img src="work/anderson2020.jpg"></div><div class="cap">em 2020</div><div class="tape"></div></div>
+  <div class="abs" id="p20"><div class="wrap"><div class="stroke"></div><div class="back"></div><div class="sheet"></div><div class="ph"><img src="work/anderson2020.jpg"></div><div class="lbl">em 2020</div></div></div>
   <div class="abs" id="logo"><svg width="74" height="74" viewBox="-50 -50 100 100" id="check"></svg><div class="wm">Anderson<b>Teca</b></div></div>
   <div class="abs" id="thanks">Obrigado por confiar no nosso trabalho!</div>
   <div class="abs" id="rule"></div>
@@ -69,8 +72,8 @@
 </div>
 <script>
 const F = new URLSearchParams(location.search).get('f') || 'feed'
-const L = { feed:  { p20:[684, 60, 330, 3.2], H:1350, ghost:120, glow:[380, 120], me:[345, 300, 860],  logo:[560, 1010], col:96,  foot:[1050, 300], thanks:1180, rule:1268, tag:1256 },
-            story: { p20:[672, 250, 350, 3.2], H:1920, ghost:260, glow:[340, 520], me:[180, 640, 1000], logo:[540, 1420], col:290, foot:[1480, 440], thanks:1630, rule:1720, tag:1708 } }[F]
+const L = { feed:  { p20:[528, 60, 640, 250, -8], H:1350, ghost:120, glow:[380, 120], me:[345, 300, 860],  logo:[560, 1010], col:96,  foot:[1050, 300], thanks:1180, rule:1268, tag:1256 },
+            story: { p20:[498, 205, 660, 270, -8], H:1920, ghost:260, glow:[340, 520], me:[180, 640, 1000], logo:[540, 1420], col:290, foot:[1480, 440], thanks:1630, rule:1720, tag:1708 } }[F]
 const $ = id => document.getElementById(id), art = $('art')
 art.style.height = L.H + 'px'; document.body.style.height = L.H + 'px'
 $('ghost').style.top = L.ghost + 'px'
@@ -93,12 +96,16 @@ const tornPoly = (amp, step) => { const pts = []; const N = 14
   for (let x = 100; x >= 0; x -= step + rnd() * step) pts.push([x, 100 + (rnd() - .5) * amp])
   for (let y = 100; y >= 0; y -= step * 1.6 + rnd() * step) pts.push([(rnd() - .5) * amp, y])
   return 'polygon(' + pts.map(([x, y]) => x.toFixed(1) + '% ' + y.toFixed(1) + '%').join(',') + ')' }
-{ const [l, t, w, rot] = L.p20, pad = 16, ph = Math.round((w - pad * 2) * 0.74), h = pad + ph + 66
+{ const [l, t, w, h, rot] = L.p20, pad = 15
   const e = $('p20'); e.style.cssText += `left:${l}px;top:${t}px;width:${w}px;height:${h}px;transform:rotate(${rot}deg)`
-  e.querySelector('.back').style.clipPath = tornPoly(5.5, 3.2); e.querySelector('.back').style.transform = 'translate(-6px,-5px) rotate(-1.2deg)'
-  sd = 41; e.querySelector('.sheet').style.clipPath = tornPoly(3.6, 2.6)
-  const f = e.querySelector('.ph'); f.style.cssText += `left:${pad}px;top:${pad}px;width:${w - pad * 2}px;height:${ph}px`
-  const c = e.querySelector('.cap'); c.style.top = (pad + ph + 14) + 'px'
-  const tp = e.querySelector('.tape'); tp.style.left = (w / 2 - 70) + 'px'; tp.style.top = '-18px'; tp.style.transform = 'rotate(-4deg)' }
+  const q = e.querySelector('.back'); q.style.clipPath = tornPoly(7, 3); q.style.transform = 'translate(-8px,-6px) rotate(-.8deg)'
+  sd = 41; e.querySelector('.sheet').style.clipPath = tornPoly(4.2, 2.4)
+  const f = e.querySelector('.ph'); f.style.left = (pad + 12) + 'px'; f.style.top = pad + 'px'; f.style.width = (w - pad * 2 - 12) + 'px'; f.style.height = (h - pad * 2) + 'px'
+  f.style.clipPath = 'polygon(9% 0,100% 0,100% 100%,0 100%)'   // corte diagonal na ponta esquerda
+  // faixa dourada de pincel espiando por baixo, como nas referências
+  const st = e.querySelector('.stroke'); sd = 77
+  st.style.left = '-70px'; st.style.width = (w * .78) + 'px'; st.style.top = (h - 26) + 'px'; st.style.height = '58px'
+  st.style.clipPath = tornPoly(30, 4); st.style.transform = 'rotate(.6deg)'
+  const lb = e.querySelector('.lbl'); lb.style.left = '-14px'; lb.style.top = (h - 70) + 'px' }
 window.ready = document.fonts.ready.then(() => $('me').decode())
 </script></body></html>
