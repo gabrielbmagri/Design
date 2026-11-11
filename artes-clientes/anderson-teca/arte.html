@@ -43,8 +43,8 @@
   #stat .k.g { color:#FFC61A } #stat .k.w { color:#FFF4E2 } #stat .k small { font-size:.62em; margin-right:6px; vertical-align:.12em }
   #stat .l { font:700 16px/1 'Montserrat'; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,244,226,.72); white-space:nowrap }
   #stat .d { width:1.5px; align-self:stretch; margin:2px 26px; background:rgba(255,244,226,.34) }
-  #logo { z-index:5; display:flex; align-items:center; gap:14px; padding:14px 30px 14px 16px; border-radius:60px; background:rgba(66,5,11,.62); backdrop-filter:blur(14px); border:1.5px solid rgba(255,255,255,.22); box-shadow:0 18px 40px rgba(30,0,4,.45) }
-  #logo .wm { font:italic 800 50px/1 'Montserrat'; letter-spacing:-.045em; color:#fff; white-space:nowrap }
+  #logo { z-index:5; display:block; text-shadow:0 6px 26px rgba(30,0,4,.7), 0 2px 4px rgba(30,0,4,.5) }
+  #logo .wm { font:italic 800 var(--lfs,50px)/1 'Montserrat'; letter-spacing:-.045em; color:#fff; white-space:nowrap }
   #logo .wm b { color:var(--gold); font-weight:800 }
   #foot { z-index:4; left:0; width:1080px; background:linear-gradient(180deg,rgba(66,5,11,0),rgba(66,5,11,.85) 38%,#42050B) }
   #thanks { z-index:6; left:64px; right:64px; font:700 68px/1 'Caveat'; color:var(--cream); white-space:nowrap }
@@ -67,15 +67,15 @@
     <div class="n24"><div class="n">3.936</div><div class="v">votos</div></div>
   </div>
   <div id="stat"><div class="c"><div class="k g">+1.587</div><div class="l">votos a mais</div></div><div class="d"></div><div class="c"><div class="k w"><small>▲</small>67,6%</div><div class="l">de crescimento</div></div></div>
-  <div class="abs" id="logo"><svg width="74" height="74" viewBox="-50 -50 100 100" id="check"></svg><div class="wm">Anderson<b>Teca</b></div></div>
+  <div class="abs" id="logo"><div class="wm">Anderson<b>Teca</b></div></div>
   <div class="abs" id="thanks">Obrigado por confiar no nosso trabalho!</div>
   <div class="abs" id="rule"></div>
   <div class="abs" id="tag">#Amigode<b>todos</b></div>
 </div>
 <script>
 const F = new URLSearchParams(location.search).get('f') || 'feed'
-const L = { feed:  { H:1350, cut:[500, 270],  ghost:400, photo:[205, 26, 920], top:[88],  col:530, me:[345, 262, 860],  logo:[560, 1010], foot:[1050, 300], thanks:1180, rule:1268, tag:1256 },
-            story: { H:1920, cut:[720, 470],  ghost:760, photo:[120, 70, 1010],  top:[290], col:752, me:[276, 418, 1100], logo:[540, 1420], foot:[1480, 440], thanks:1630, rule:1720, tag:1708 } }[F]
+const L = { feed:  { H:1350, cut:[500, 270],  ghost:400, photo:[205, 26, 920], top:[88],  col:530, me:[345, 262, 860],  logo:[0, 984], logoFs:66, foot:[1050, 300], thanks:1180, rule:1268, tag:1256 },
+            story: { H:1920, cut:[720, 470],  ghost:760, photo:[120, 70, 1010],  top:[290], col:752, me:[276, 418, 1100], logo:[0, 1372], logoFs:92, foot:[1480, 440], thanks:1630, rule:1720, tag:1708 } }[F]
 const $ = id => document.getElementById(id), art = $('art')
 const H = L.H; art.style.height = H + 'px'; document.body.style.height = H + 'px'
 for (const id of ['goldW', 'paperW']) $(id).style.height = H + 'px'
@@ -97,13 +97,8 @@ $('top').style.top = L.top[0] + 'px'
 // 2024 e foto atual
 $('col').style.top = L.col + 'px'
 { const [l, t, w] = L.me, m = $('me'); m.style.left = l + 'px'; m.style.top = t + 'px'; m.style.width = w + 'px' }
-$('logo').style.left = L.logo[0] + 'px'; $('logo').style.top = L.logo[1] + 'px'
+$('logo').style.right = '64px'; $('logo').style.top = L.logo[1] + 'px'; $('logo').style.setProperty('--lfs', L.logoFs + 'px')
 $('foot').style.top = L.foot[0] + 'px'; $('foot').style.height = L.foot[1] + 'px'
 $('thanks').style.top = L.thanks + 'px'; $('rule').style.top = L.rule + 'px'; $('tag').style.top = L.tag + 'px'
-// selo de check da campanha
-const scallop = (R, amp, n) => { let d = ''; for (let i = 0; i <= 240; i++) { const a = i / 240 * Math.PI * 2, r = R * (1 + amp * Math.cos(n * a)); d += (i ? 'L' : 'M') + (r * Math.cos(a)).toFixed(2) + ' ' + (r * Math.sin(a)).toFixed(2) } return d + 'Z' }
-$('check').innerHTML = `<defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE27A"/><stop offset=".55" stop-color="#F2B705"/><stop offset="1" stop-color="#C98A00"/></linearGradient></defs>
-  <path d="${scallop(43, .075, 10)}" fill="#2a0306" opacity=".45" transform="translate(3 4)"/><path d="${scallop(43, .075, 10)}" fill="url(#g1)"/>
-  <path d="M-21 2 L-7 16 L22 -15" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`
 window.ready = document.fonts.ready.then(() => { const r = $('col').getBoundingClientRect(), t0 = art.getBoundingClientRect().top; $('stat').style.top = (r.bottom - t0 + 26) + 'px'; return Promise.all([$('me').decode(), $('p20img').decode()]) })
 </script></body></html>
