@@ -2,51 +2,43 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:ital,wght@0,500;0,700;0,800;1,800;1,900&display=swap" rel="stylesheet">
 <style>
-  :root { --wine:#5A0A12; --crim:#8E1019; --red:#B5141F; --gold:#F2B705; --cream:#FFF4E2 }
+  :root { --wine:#5A0A12; --crim:#8E1019; --gold:#F2B705; --cream:#FFF4E2 }
   * { box-sizing:border-box; margin:0; padding:0 }
   html,body { width:1080px; overflow:hidden; background:var(--wine); font-family:'Montserrat',sans-serif; color:#fff }
   #art { position:relative; width:1080px; overflow:hidden;
-    background:radial-gradient(80% 60% at 78% 38%, #C2202A 0%, #9A111B 38%, #6B0A13 72%, #42050B 100%) }
+    background:radial-gradient(80% 60% at 78% 55%, #C2202A 0%, #9A111B 38%, #6B0A13 72%, #42050B 100%) }
   .abs { position:absolute }
-  #grain { position:absolute; inset:0; opacity:.2; mix-blend-mode:overlay; pointer-events:none }
-  #ghost { right:-40px; font:italic 900 300px/.82 'Montserrat'; letter-spacing:-.05em; color:transparent; -webkit-text-stroke:2.5px rgba(255,255,255,.16); white-space:nowrap; text-align:right }
-  #glow { width:900px; height:900px; border-radius:50%; background:radial-gradient(circle, rgba(255,120,110,.35), rgba(255,120,110,0) 62%) }
-  #me { z-index:3; width:760px; -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 97%); mask-image:linear-gradient(180deg,#000 72%,transparent 97%);
+  #grain { position:absolute; inset:0; opacity:.2; mix-blend-mode:overlay; pointer-events:none; z-index:6 }
+  #ghost { z-index:0; right:-40px; font:italic 900 300px/.82 'Montserrat'; letter-spacing:-.05em; color:transparent; -webkit-text-stroke:2.5px rgba(255,255,255,.14); white-space:nowrap; text-align:right }
+  /* ---- zona de 2020: do corte até o topo, tudo na cor do papel ---- */
+  #goldW, #paperW { position:absolute; left:0; top:0; width:1080px }
+  #goldW { z-index:1 } #paperW { z-index:2; filter:drop-shadow(0 14px 20px rgba(30,0,4,.55)) }
+  #gold { position:absolute; inset:0; background:linear-gradient(90deg,#C98A00,#F2B705 30%,#FFD24A 65%,#F2B705) }
+  #pBack, #paper { position:absolute; inset:0 }
+  #pBack { background:#D9C49B }
+  #paper { background:radial-gradient(90% 120% at 22% 0%, #FFFCF4 0%, #FFF4E2 55%, #F4E3C3 100%); overflow:hidden }
+  #p20img { position:absolute; display:block; mix-blend-mode:multiply; filter:contrast(1.06) saturate(1.08) sepia(.1);
+    -webkit-mask-image:linear-gradient(90deg,transparent 14%,#000 46%), linear-gradient(180deg,transparent 0,#000 13%), linear-gradient(0deg,transparent 0,#000 6%);
+    -webkit-mask-composite:source-in; mask-image:linear-gradient(90deg,transparent 14%,#000 46%), linear-gradient(180deg,transparent 0,#000 13%), linear-gradient(0deg,transparent 0,#000 6%); mask-composite:intersect }
+  #top { position:absolute; left:64px; top:0; width:560px }
+  #top .y { font:800 30px/1 'Montserrat'; letter-spacing:.2em; color:#6B0A13 }
+  #top .n20 { display:flex; align-items:baseline; gap:14px; margin-top:12px }
+  #top .n20 .n { font:italic 800 124px/.9 'Montserrat'; letter-spacing:-.05em; color:#8E1019 }
+  #top .n20 .v { font:italic 800 42px/1 'Montserrat'; color:#8E1019; opacity:.8 }
+  #chip { position:absolute; left:80px; display:inline-flex; align-items:center; gap:12px; padding:15px 26px; border-radius:24px; background:#6B0A13; color:var(--cream); font:700 29px/1 'Montserrat'; transform-origin:0 50%; white-space:nowrap; box-shadow:0 10px 22px rgba(30,0,4,.35) }
+  #chip b { font-weight:800; color:#FFC61A }
+  /* ---- zona atual (2024), em vinho ---- */
+  #me { z-index:3; width:860px; -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 97%); mask-image:linear-gradient(180deg,#000 72%,transparent 97%);
     filter:drop-shadow(-24px 10px 40px rgba(40,0,6,.55)) saturate(1.04) }
-  /* logo colada na foto */
+  #col { z-index:2; left:64px; width:560px }
+  .yr { display:flex; align-items:center; gap:16px }
+  .yr .y { font:800 30px/1 'Montserrat'; letter-spacing:.2em; color:rgba(255,244,226,.92) }
+  .st { padding:9px 18px 8px; border-radius:30px; background:var(--gold); color:var(--wine); font:800 22px/1 'Montserrat'; letter-spacing:.12em; text-transform:uppercase; box-shadow:0 8px 22px rgba(242,183,5,.25) }
+  .n24 .n { font:italic 900 196px/.84 'Montserrat'; letter-spacing:-.06em; color:#fff; text-shadow:0 10px 30px rgba(40,0,6,.45); margin-top:14px; white-space:nowrap }
+  .n24 .v { font:italic 900 70px/1 'Montserrat'; letter-spacing:-.04em; color:#fff; margin-top:4px }
   #logo { z-index:5; display:flex; align-items:center; gap:14px; padding:14px 30px 14px 16px; border-radius:60px; background:rgba(66,5,11,.62); backdrop-filter:blur(14px); border:1.5px solid rgba(255,255,255,.22); box-shadow:0 18px 40px rgba(30,0,4,.45) }
   #logo .wm { font:italic 800 50px/1 'Montserrat'; letter-spacing:-.045em; color:#fff; white-space:nowrap }
   #logo .wm b { color:var(--gold); font-weight:800 }
-  /* coluna de dados */
-  #col { left:64px; width:560px }
-  .yr { display:flex; align-items:center; gap:16px }
-  .yr .y { font:800 30px/1 'Montserrat'; letter-spacing:.2em; color:rgba(255,244,226,.9) }
-  .st { padding:9px 18px 8px; border-radius:30px; font:800 22px/1 'Montserrat'; letter-spacing:.12em; text-transform:uppercase }
-  .st.off { border:2px solid rgba(255,244,226,.45); color:rgba(255,244,226,.75) }
-  .st.on { background:var(--gold); color:var(--wine); box-shadow:0 8px 22px rgba(242,183,5,.25) }
-  .n20 { display:flex; align-items:baseline; gap:14px; margin-top:12px }
-  .n20 .n { font:italic 800 104px/.9 'Montserrat'; letter-spacing:-.05em; color:rgba(255,244,226,.78) }
-  .n20 .v { font:italic 800 38px/1 'Montserrat'; color:rgba(255,244,226,.6) }
-  .gz { position:relative; height:320px }
-  .gz .chip { position:absolute; left:16px; margin:0; transform-origin:0 50% }
-  .gz .ar { position:absolute; transform-origin:0 50% }
-  .n24 .n { font:italic 900 196px/.84 'Montserrat'; letter-spacing:-.06em; color:#fff; text-shadow:0 10px 30px rgba(40,0,6,.45); margin-top:14px; white-space:nowrap }
-  .n24 .v { font:italic 900 70px/1 'Montserrat'; letter-spacing:-.04em; color:#fff; margin-top:4px }
-  .chip { position:relative; z-index:4; display:inline-flex; align-items:center; gap:12px; margin-top:26px; padding:14px 24px; border-radius:22px; background:rgba(255,244,226,.1); border:1.5px solid rgba(255,244,226,.28); font:700 28px/1 'Montserrat'; color:var(--cream) }
-  .chip b { font-weight:800; color:var(--gold) }
-  /* faixa diagonal: camadas de papel + textos que trocam de cor sobre ela */
-  .layer { position:absolute; left:0; top:0; width:1080px }
-  #bBack { background:#DCC9A3 } #bSheet { background:#FFF8EA } #bGold { background:linear-gradient(90deg,#C98A00,#F2B705 35%,#FFD24A 70%,#F2B705) }
-  #bPhoto { position:absolute; overflow:hidden; background:#000; transform-origin:50% 50% }
-  #bPhoto img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 0%; display:block; filter:contrast(1.05) saturate(1.06) }
-  #bPhoto::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(255,248,234,.55),rgba(255,248,234,0) 22%) }
-  #lightW, #darkW { position:absolute; left:0; top:0; width:1080px; z-index:2 }
-  .dk .y { color:#6B0A13 } .dk .st.on { background:#6B0A13; color:#F2B705; box-shadow:none }
-  .dk .n20 .n { color:#8E1019 } .dk .n20 .v { color:#8E1019; opacity:.75 }
-  .dk .n24 .n { color:#5A0A12; text-shadow:none } .dk .n24 .v { color:#5A0A12 }
-  .dk .chip { background:#6B0A13; border-color:#6B0A13; color:#FFF4E2 } .dk .chip b { color:#FFC61A }
-  .dk .ar path { stroke:#8E1019 }
-  /* rodapé */
   #foot { z-index:4; left:0; width:1080px; background:linear-gradient(180deg,rgba(66,5,11,0),rgba(66,5,11,.85) 38%,#42050B) }
   #thanks { z-index:6; left:64px; right:64px; font:700 68px/1 'Caveat'; color:var(--cream); white-space:nowrap }
   #rule { z-index:6; left:64px; height:4px; width:120px; border-radius:2px; background:var(--gold) }
@@ -56,18 +48,18 @@
 <div id="art">
   <svg id="grain" width="1080" height="1920"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
   <div class="abs" id="ghost">OBRI<br>GADO</div>
-  <div class="abs" id="glow"></div>
+  <div id="goldW"><div id="gold"></div></div>
+  <div id="paperW"><div id="pBack"></div><div id="paper">
+    <img id="p20img" src="work/anderson2020.jpg">
+    <div id="top"><div class="y">2020</div><div class="n20"><span class="n">2.349</span><span class="v">votos</span></div></div>
+    <div id="chip">▲ <span><b>+1.587 votos</b> · +67,6%</span></div>
+  </div></div>
   <img class="abs" id="me" src="work/anderson.png">
   <div class="abs" id="foot"></div>
-  <div id="lightW"><div class="abs" id="col">
-    <div class="yr"><span class="y">2020</span></div>
-    <div class="n20"><span class="n">2.349</span><span class="v">votos</span></div>
-    <div class="gz"><div class="chip">▲ <span><b>+1.587 votos</b> · +67,6%</span></div><svg class="ar" width="110" height="40" viewBox="0 0 110 40"><path d="M4 20 H92" stroke="#F2B705" stroke-width="7" stroke-linecap="round"/><path d="M74 6 L98 20 L74 34" fill="none" stroke="#F2B705" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <div class="yr"><span class="y">2024</span><span class="st on">Suplente</span></div>
+  <div class="abs" id="col">
+    <div class="yr"><span class="y">2024</span><span class="st">Suplente</span></div>
     <div class="n24"><div class="n">3.936</div><div class="v">votos</div></div>
-  </div></div>
-  <div id="darkW" class="dk"></div>
-  <div class="layer" id="bBack" style="z-index:1"></div><div class="layer" id="bGold" style="z-index:1"></div><div class="layer" id="bSheet" style="z-index:1"></div><div id="bPhoto" style="z-index:1"><img src="work/anderson2020.jpg"></div>
+  </div>
   <div class="abs" id="logo"><svg width="74" height="74" viewBox="-50 -50 100 100" id="check"></svg><div class="wm">Anderson<b>Teca</b></div></div>
   <div class="abs" id="thanks">Obrigado por confiar no nosso trabalho!</div>
   <div class="abs" id="rule"></div>
@@ -75,58 +67,37 @@
 </div>
 <script>
 const F = new URLSearchParams(location.search).get('f') || 'feed'
-const L = { feed:  { band:{ ang:-7, T:220, px:600, pw:560 }, H:1350, ghost:120, glow:[380, 120], me:[345, 300, 860],  logo:[560, 1010], col:96,  foot:[1050, 300], thanks:1180, rule:1268, tag:1256 },
-            story: { band:{ ang:-7, T:220, px:600, pw:560 }, H:1920, ghost:260, glow:[340, 520], me:[330, 700, 900], logo:[540, 1420], col:290, foot:[1480, 440], thanks:1630, rule:1720, tag:1708 } }[F]
+const L = { feed:  { H:1350, cut:[500, 270],  ghost:400, photo:[205, 26, 920], top:[88],  col:530, me:[345, 262, 860],  logo:[560, 1010], foot:[1050, 300], thanks:1180, rule:1268, tag:1256 },
+            story: { H:1920, cut:[720, 470],  ghost:760, photo:[120, 70, 1010],  top:[290], col:752, me:[276, 418, 1100], logo:[540, 1420], foot:[1480, 440], thanks:1630, rule:1720, tag:1708 } }[F]
 const $ = id => document.getElementById(id), art = $('art')
-art.style.height = L.H + 'px'; document.body.style.height = L.H + 'px'
+const H = L.H; art.style.height = H + 'px'; document.body.style.height = H + 'px'
+for (const id of ['goldW', 'paperW']) $(id).style.height = H + 'px'
 $('ghost').style.top = L.ghost + 'px'
-$('glow').style.left = L.glow[0] + 'px'; $('glow').style.top = L.glow[1] + 'px'
-$('me').style.left = L.me[0] + 'px'; $('me').style.top = L.me[1] + 'px'; $('me').style.width = L.me[2] + 'px'
-$('logo').style.left = L.logo[0] + 'px'; $('logo').style.top = L.logo[1] + 'px'
+// ---- o corte diagonal, de uma ponta à outra ----
+let sd = 5; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647
+const slope = (L.cut[1] - L.cut[0]) / 1140, cutY = x => L.cut[0] + (x + 30) * slope
+const edge = (seed, amp, off, x0 = -30, x1 = 1110) => { sd = seed; const pts = []
+  for (let x = x0; x <= x1; x += 7 + rnd() * 15) pts.push([x, cutY(x) + off + (rnd() - .5) * amp + Math.sin(x / 85 + seed) * amp * .3]); return pts }
+const poly = pts => 'polygon(' + pts.map(([x, y]) => x.toFixed(1) + 'px ' + y.toFixed(1) + 'px').join(',') + ')'
+const above = pts => pts.concat([[1130, -40], [-50, -40]])
+$('paper').style.clipPath = poly(above(edge(41, 13, 0)))
+$('pBack').style.clipPath = poly(above(edge(17, 20, 9)))
+{ const a = edge(77, 14, 30, -30, 1110), b = edge(78, 10, 12, -30, 1110).reverse(); $('gold').style.clipPath = poly(a.concat(b)) }
+// foto de 2020 diluída no papel
+{ const [l, t, w] = L.photo, im = $('p20img'); im.style.cssText += `left:${l}px;top:${t}px;width:${w}px` }
+// textos de 2020 (sobre o papel, em vinho) + chip ao longo do corte
+$('top').style.top = L.top[0] + 'px'
+{ const th = Math.atan(slope), chip = $('chip'); chip.style.transform = `rotate(${th}rad)`; chip.style.top = (cutY(80) - 56 - 28) + 'px' }
+// 2024 e foto atual
 $('col').style.top = L.col + 'px'
+{ const [l, t, w] = L.me, m = $('me'); m.style.left = l + 'px'; m.style.top = t + 'px'; m.style.width = w + 'px' }
+$('logo').style.left = L.logo[0] + 'px'; $('logo').style.top = L.logo[1] + 'px'
 $('foot').style.top = L.foot[0] + 'px'; $('foot').style.height = L.foot[1] + 'px'
 $('thanks').style.top = L.thanks + 'px'; $('rule').style.top = L.rule + 'px'; $('tag').style.top = L.tag + 'px'
-// selo de check da campanha (medalhão dourado ondulado)
+// selo de check da campanha
 const scallop = (R, amp, n) => { let d = ''; for (let i = 0; i <= 240; i++) { const a = i / 240 * Math.PI * 2, r = R * (1 + amp * Math.cos(n * a)); d += (i ? 'L' : 'M') + (r * Math.cos(a)).toFixed(2) + ' ' + (r * Math.sin(a)).toFixed(2) } return d + 'Z' }
 $('check').innerHTML = `<defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE27A"/><stop offset=".55" stop-color="#F2B705"/><stop offset="1" stop-color="#C98A00"/></linearGradient></defs>
   <path d="${scallop(43, .075, 10)}" fill="#2a0306" opacity=".45" transform="translate(3 4)"/><path d="${scallop(43, .075, 10)}" fill="url(#g1)"/>
   <path d="M-21 2 L-7 16 L22 -15" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`
-// monta o recorte: papel rasgado (duas camadas) + foto + fita
-let sd = 5; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647
-const tornPoly = (amp, step) => { const pts = []; const N = 14
-  for (let x = 0; x <= 100; x += step + rnd() * step) pts.push([x, (rnd() - .5) * amp])
-  for (let y = 0; y <= 100; y += step * 1.6 + rnd() * step) pts.push([100 + (rnd() - .5) * amp, y])
-  for (let x = 100; x >= 0; x -= step + rnd() * step) pts.push([x, 100 + (rnd() - .5) * amp])
-  for (let y = 100; y >= 0; y -= step * 1.6 + rnd() * step) pts.push([(rnd() - .5) * amp, y])
-  return 'polygon(' + pts.map(([x, y]) => x.toFixed(1) + '% ' + y.toFixed(1) + '%').join(',') + ')' }
-// ---------- faixa diagonal de ponta a ponta ----------
-function buildBand() { const B = L.band, th = B.ang * Math.PI / 180, ca = Math.cos(th), sa = Math.sin(th)
-  const gz = $('col').querySelector('.gz'), chip = gz.querySelector('.chip'), ar = gz.querySelector('.ar')
-  const gr = gz.getBoundingClientRect(), artTop = art.getBoundingClientRect().top, mid = gr.height / 2
-  B.y60 = (gr.top - artTop) + mid - 20 * Math.tan(th)            // a linha central passa no meio da zona do crescimento
-  chip.style.top = (mid - chip.offsetHeight / 2) + 'px'; chip.style.transform = `rotate(${B.ang}deg)`
-  const cw = chip.offsetWidth + 16; ar.style.left = (16 + cw * ca) + 'px'; ar.style.top = (mid + cw * sa - 20) + 'px'; ar.style.transform = `rotate(${B.ang}deg)`
-  const cy = x => B.y60 + (x - 60) * Math.tan(th)                 // linha central
-  const nx = -sa, ny = ca                                          // normal
-  const edge = (T, off, amp, seed, x0, x1) => { sd = seed; const top = [], bot = []
-    for (let x = x0; x <= x1; x += 8 + rnd() * 16) { const j = () => (rnd() - .5) * amp + Math.sin(x / 90 + seed) * amp * .35
-      top.push([x + nx * (-T / 2 + off + j()), cy(x) + ny * (-T / 2 + off + j())]); bot.push([x + nx * (T / 2 + off + j()), cy(x) + ny * (T / 2 + off + j())]) }
-    return top.concat(bot.reverse()) }
-  const poly = pts => 'polygon(' + pts.map(([x, y]) => x.toFixed(1) + 'px ' + y.toFixed(1) + 'px').join(',') + ')'
-  const path = pts => pts.map(([x, y], i) => (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1)).join(' ') + ' Z'
-  const sheet = edge(B.T, 0, 9, 41, -80, 1160), back = edge(B.T + 18, 4, 14, 17, -80, 1160)
-  const gold = edge(34, B.T / 2 + 18, 14, 77, 640, 1160)
-  const H = L.H; for (const id of ['bBack', 'bGold', 'bSheet']) $(id).style.height = H + 'px'
-  $('bBack').style.clipPath = poly(back); $('bGold').style.clipPath = poly(gold); $('bSheet').style.clipPath = poly(sheet)
-  // foto de 2020 dentro da faixa, encostada na direita, com a ponta esquerda cortada na diagonal
-  const ph = $('bPhoto'), w = B.pw, h = B.T - 30, cx = B.px + w / 2 - 10
-  ph.style.cssText += `left:${cx - w / 2}px;top:${cy(cx) - h / 2}px;width:${w}px;height:${h}px;transform:rotate(${B.ang}deg);clip-path:polygon(7% 0,100% 0,100% 100%,0 100%)`
-  // textos: claros fora da faixa, vinho dentro dela (o mesmo texto em duas camadas, recortadas pelo papel)
-  const full = `M-10 -10 H1090 V${H + 10} H-10 Z `
-  const lw = $('lightW'), dw = $('darkW'); lw.style.height = dw.style.height = H + 'px'
-  lw.style.clipPath = `path(evenodd, '${full}${path(sheet)}')`
-  dw.style.clipPath = `path('${path(sheet)}')`
-  const dc = $('col').cloneNode(true); dc.removeAttribute('id'); dw.appendChild(dc); dc.style.top = $('col').style.top; dc.style.left = '64px'; dc.style.width = '560px' }
-
-window.ready = document.fonts.ready.then(() => { buildBand(); return $('me').decode() })
+window.ready = document.fonts.ready.then(() => Promise.all([$('me').decode(), $('p20img').decode()]))
 </script></body></html>
