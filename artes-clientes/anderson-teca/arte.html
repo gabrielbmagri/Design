@@ -36,6 +36,13 @@
   .st { padding:9px 18px 8px; border-radius:30px; background:var(--gold); color:var(--wine); font:800 22px/1 'Montserrat'; letter-spacing:.12em; text-transform:uppercase; box-shadow:0 8px 22px rgba(242,183,5,.25) }
   .n24 .n { font:italic 900 196px/.84 'Montserrat'; letter-spacing:-.06em; color:#fff; text-shadow:0 10px 30px rgba(40,0,6,.45); margin-top:14px; white-space:nowrap }
   .n24 .v { font:italic 900 70px/1 'Montserrat'; letter-spacing:-.04em; color:#fff; margin-top:4px }
+  #stat { position:absolute; z-index:4; left:64px; display:flex; align-items:center; padding:16px 28px; border-radius:24px;
+    background:linear-gradient(140deg,rgba(255,244,226,.18),rgba(255,244,226,.07)); backdrop-filter:blur(14px); border:1.5px solid rgba(255,244,226,.34); box-shadow:0 16px 36px rgba(30,0,4,.4), inset 0 1px 0 rgba(255,255,255,.25) }
+  #stat .c { display:flex; flex-direction:column; gap:7px }
+  #stat .k { font:italic 800 42px/1 'Montserrat'; letter-spacing:-.04em; white-space:nowrap }
+  #stat .k.g { color:#FFC61A } #stat .k.w { color:#FFF4E2 } #stat .k small { font-size:.62em; margin-right:6px; vertical-align:.12em }
+  #stat .l { font:700 16px/1 'Montserrat'; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,244,226,.72); white-space:nowrap }
+  #stat .d { width:1.5px; align-self:stretch; margin:2px 26px; background:rgba(255,244,226,.34) }
   #logo { z-index:5; display:flex; align-items:center; gap:14px; padding:14px 30px 14px 16px; border-radius:60px; background:rgba(66,5,11,.62); backdrop-filter:blur(14px); border:1.5px solid rgba(255,255,255,.22); box-shadow:0 18px 40px rgba(30,0,4,.45) }
   #logo .wm { font:italic 800 50px/1 'Montserrat'; letter-spacing:-.045em; color:#fff; white-space:nowrap }
   #logo .wm b { color:var(--gold); font-weight:800 }
@@ -52,7 +59,6 @@
   <div id="paperW"><div id="pBack"></div><div id="paper">
     <img id="p20img" src="work/anderson2020.jpg">
     <div id="top"><div class="y">2020</div><div class="n20"><span class="n">2.349</span><span class="v">votos</span></div></div>
-    <div id="chip">▲ <span><b>+1.587 votos</b> · +67,6%</span></div>
   </div></div>
   <img class="abs" id="me" src="work/anderson.png">
   <div class="abs" id="foot"></div>
@@ -60,6 +66,7 @@
     <div class="yr"><span class="y">2024</span><span class="st">Suplente</span></div>
     <div class="n24"><div class="n">3.936</div><div class="v">votos</div></div>
   </div>
+  <div id="stat"><div class="c"><div class="k g">+1.587</div><div class="l">votos a mais</div></div><div class="d"></div><div class="c"><div class="k w"><small>▲</small>67,6%</div><div class="l">de crescimento</div></div></div>
   <div class="abs" id="logo"><svg width="74" height="74" viewBox="-50 -50 100 100" id="check"></svg><div class="wm">Anderson<b>Teca</b></div></div>
   <div class="abs" id="thanks">Obrigado por confiar no nosso trabalho!</div>
   <div class="abs" id="rule"></div>
@@ -85,9 +92,8 @@ $('pBack').style.clipPath = poly(above(edge(17, 20, 9)))
 { const a = edge(77, 14, 30, -30, 1110), b = edge(78, 10, 12, -30, 1110).reverse(); $('gold').style.clipPath = poly(a.concat(b)) }
 // foto de 2020 diluída no papel
 { const [l, t, w] = L.photo, im = $('p20img'); im.style.cssText += `left:${l}px;top:${t}px;width:${w}px` }
-// textos de 2020 (sobre o papel, em vinho) + chip ao longo do corte
+// textos de 2020 (sobre o papel, em vinho)
 $('top').style.top = L.top[0] + 'px'
-{ const th = Math.atan(slope), chip = $('chip'); chip.style.transform = `rotate(${th}rad)`; chip.style.top = (cutY(80) - 56 - 28) + 'px' }
 // 2024 e foto atual
 $('col').style.top = L.col + 'px'
 { const [l, t, w] = L.me, m = $('me'); m.style.left = l + 'px'; m.style.top = t + 'px'; m.style.width = w + 'px' }
@@ -99,5 +105,5 @@ const scallop = (R, amp, n) => { let d = ''; for (let i = 0; i <= 240; i++) { co
 $('check').innerHTML = `<defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE27A"/><stop offset=".55" stop-color="#F2B705"/><stop offset="1" stop-color="#C98A00"/></linearGradient></defs>
   <path d="${scallop(43, .075, 10)}" fill="#2a0306" opacity=".45" transform="translate(3 4)"/><path d="${scallop(43, .075, 10)}" fill="url(#g1)"/>
   <path d="M-21 2 L-7 16 L22 -15" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`
-window.ready = document.fonts.ready.then(() => Promise.all([$('me').decode(), $('p20img').decode()]))
+window.ready = document.fonts.ready.then(() => { const r = $('col').getBoundingClientRect(), t0 = art.getBoundingClientRect().top; $('stat').style.top = (r.bottom - t0 + 26) + 'px'; return Promise.all([$('me').decode(), $('p20img').decode()]) })
 </script></body></html>
