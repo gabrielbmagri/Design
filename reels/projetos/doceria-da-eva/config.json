@@ -1,7 +1,7 @@
 {
  "video": "dl/original.mov",
  "palavras": "words.json",
- "saida": "reels_doceria_da_eva_v4.mp4",
+ "saida": "Reels-Doceria-da-Eva-v3.mp4",
  "velocidade": 1.08,
  "correcoes": {
   "Dosseria": "Doceria",
@@ -118,8 +118,5 @@
   "volume": 0.22
  },
  "esmaecer": 1.8,
- "grao": 5,
- "estilo": {
-  "fundo_alpha": 0.7
- }
+ "grao": 5
 }
