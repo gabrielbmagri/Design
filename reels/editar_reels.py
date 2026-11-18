@@ -383,7 +383,7 @@ fc.append(f"{''.join(mix)}amix=inputs={len(mix)}:normalize=0:duration=first,"
 grao = cfg.get("grao", 5)
 fc.append(f"[0:v]noise=alls={grao}:allf=t,fade=t=out:st={TOTAL - FADE:.2f}:d={FADE:.2f}[v]")
 subprocess.run(["ffmpeg", "-v", "error", "-y", *ins, "-filter_complex", ";".join(fc), "-map", "[v]",
-                "-map", "[a]", "-c:v", "libx264", "-crf", "17", "-preset", "medium", "-pix_fmt", "yuv420p",
+                "-map", "[a]", "-c:v", "libx264", "-crf", "19", "-maxrate", "14M", "-bufsize", "28M", "-preset", "medium", "-pix_fmt", "yuv420p",
                 "-c:a", "aac", "-b:a", "192k", "-t", f"{TOTAL:.3f}", "-movflags", "+faststart", cfg["saida"]],
                check=True)
 print("PRONTO", cfg["saida"], flush=True)
