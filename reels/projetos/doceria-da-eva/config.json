@@ -1,31 +1,125 @@
 {
-  "video": "dl/original.mov",
-  "palavras": "words.json",
-  "saida": "reels_doceria_da_eva.mp4",
-  "velocidade": 1.08,
-  "correcoes": {"Dosseria": "Doceria", "Efésios 3,": "Efésios 3:", "dá uma": "darem uma"},
-  "palavras_chave": [
-    {"t": 7.9,  "text": "Deus é\nbom", "dur": 3.0},
-    {"t": 13.0, "text": "além do\nque pedimos", "dur": 3.2},
-    {"t": 19.9, "text": "Efésios\n3:20", "dur": 3.5, "sub": "INFINITAMENTE MAIS"},
-    {"t": 26.0, "text": "infinitamente\nmais", "dur": 3.4},
-    {"t": 37.9, "text": "sem fama,\ncom propósito", "dur": 3.4},
-    {"t": 47.9, "text": "intercessor", "dur": 3.0},
-    {"t": 51.4, "text": "lanche\nda tarde", "dur": 2.6},
-    {"t": 67.1, "text": "parceria", "dur": 2.2},
-    {"t": 71.4, "text": "o recebido", "dur": 3.6, "sub": "ABRINDO AGORA"},
-    {"t": 87.2, "text": "cenoura\nninho\nnutella", "dur": 3.4},
-    {"t": 93.3, "text": "bem\nrecheado", "dur": 2.4},
-    {"t": 96.0, "text": "sempre\nfresquinho", "dur": 2.6},
-    {"t": 99.7, "text": "encomende\njá", "dur": 3.4, "sub": "ENTREGA EM POUCAS HORAS"},
-    {"t": 104.5, "text": "não vai se\narrepender", "dur": 2.4}
-  ],
-  "cards": [
-    {"imagem": "card_doceria.png", "t": [55.5, 66.9], "y": 330, "largura": 820, "alpha": 0.82},
-    {"imagem": "card_doceria.png", "t": [106.8, 113.6], "y": 330, "largura": 820, "alpha": 0.82}
-  ],
-  "legenda_y": 1300,
-  "pausa_max": 0.45,
-  "silencio_visual": 4.0,
-  "acelerado_dur": 4.5
+ "video": "dl/original.mov",
+ "palavras": "words.json",
+ "saida": "reels_doceria_da_eva_v4.mp4",
+ "velocidade": 1.08,
+ "correcoes": {
+  "Dosseria": "Doceria",
+  "Efésios 3,": "Efésios 3:",
+  "dá uma": "darem uma"
+ },
+ "palavras_chave": [
+  {
+   "t": 7.9,
+   "text": "Deus é\nbom",
+   "dur": 3.0
+  },
+  {
+   "t": 13.0,
+   "text": "além do\nque pedimos",
+   "dur": 3.2
+  },
+  {
+   "t": 19.9,
+   "text": "Efésios\n3:20",
+   "dur": 3.5,
+   "sub": "INFINITAMENTE MAIS"
+  },
+  {
+   "t": 26.0,
+   "text": "infinitamente\nmais",
+   "dur": 3.4
+  },
+  {
+   "t": 37.9,
+   "text": "sem fama,\ncom propósito",
+   "dur": 3.4
+  },
+  {
+   "t": 47.9,
+   "text": "intercessor",
+   "dur": 3.0
+  },
+  {
+   "t": 51.4,
+   "text": "lanche\nda tarde",
+   "dur": 2.6
+  },
+  {
+   "t": 67.1,
+   "text": "parceria",
+   "dur": 2.2
+  },
+  {
+   "t": 71.4,
+   "text": "o recebido",
+   "dur": 3.6,
+   "sub": "ABRINDO AGORA"
+  },
+  {
+   "t": 87.2,
+   "text": "cenoura\nninho\nnutella",
+   "dur": 3.4
+  },
+  {
+   "t": 93.3,
+   "text": "bem\nrecheado",
+   "dur": 2.4
+  },
+  {
+   "t": 96.0,
+   "text": "sempre\nfresquinho",
+   "dur": 2.6
+  },
+  {
+   "t": 99.7,
+   "text": "encomende\njá",
+   "dur": 3.4,
+   "sub": "ENTREGA EM POUCAS HORAS"
+  },
+  {
+   "t": 104.5,
+   "text": "não vai se\narrepender",
+   "dur": 2.4
+  }
+ ],
+ "cards": [
+  {
+   "imagem": "card_doceria.png",
+   "t": [
+    55.5,
+    66.9
+   ],
+   "y": 540,
+   "largura": 1040,
+   "alpha": 0.6,
+   "holograma": true
+  },
+  {
+   "imagem": "card_doceria.png",
+   "t": [
+    106.8,
+    113.6
+   ],
+   "y": 540,
+   "largura": 1040,
+   "alpha": 0.6,
+   "holograma": true
+  }
+ ],
+ "legenda_y": 1180,
+ "pausa_max": 0.45,
+ "silencio_visual": 4.0,
+ "acelerado_dur": 4.5,
+ "palavras_y": 140,
+ "palavras_por_bloco": 5,
+ "musica": {
+  "clima": "aconchego",
+  "volume": 0.22
+ },
+ "esmaecer": 1.8,
+ "grao": 5,
+ "estilo": {
+  "fundo_alpha": 0.7
+ }
 }
