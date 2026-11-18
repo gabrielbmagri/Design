@@ -22,6 +22,27 @@ def save(path, x):
         w.writeframes((x * 32767).astype(np.int16).tobytes())
 
 
+def save_raw(path, x):
+    """Salva sem normalizar (efeitos já no volume certo)."""
+    x = np.clip(x, -1, 1)
+    if x.ndim == 1:
+        x = np.stack([x, x], 1)
+    with wave.open(path, "wb") as w:
+        w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
+        w.writeframes((x * 32767).astype(np.int16).tobytes())
+
+
+def tecla(rng):
+    """Toque de tecla suave (digitação), sem chiado agudo."""
+    n = int(SR * 0.045)
+    t = np.arange(n) / SR
+    nz = rng.standard_normal(n)
+    nz = np.convolve(nz, np.ones(6) / 6, "same")  # tira o agudo
+    click = nz * np.exp(-t * 160) * 0.9
+    thump = np.sin(2 * np.pi * (180 + 60 * rng.random()) * t) * np.exp(-t * 90) * 0.6
+    return (click + thump) * (0.75 + 0.25 * rng.random())
+
+
 def hz(n):  # nota MIDI -> Hz
     return 440 * 2 ** ((n - 69) / 12)
 
@@ -89,8 +110,8 @@ def trilha(dur, clima="aconchego"):
                 j = int((t0 + k * beat / 2) * SR)
                 ln = int(SR * 0.06)
                 nz = rng.standard_normal(ln) * np.exp(-np.arange(ln) / SR * 60)
-                nz = np.diff(nz, prepend=0)  # agudo
-                amp = 0.025 if k % 2 else 0.015
+                nz = np.convolve(nz, np.ones(4) / 4, "same")  # macio
+                amp = 0.018 if k % 2 else 0.01
                 add(L, j, nz * amp); add(R, j, nz * amp * 0.8)
             for k in (0, 2):
                 j = int((t0 + k * beat) * SR)

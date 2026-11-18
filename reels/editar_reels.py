@@ -25,7 +25,7 @@ cfg = json.load(open(sys.argv[1]))
 os.chdir(os.path.dirname(os.path.abspath(sys.argv[1])))
 STY = {  # paleta neutra padrão (trocar em "estilo" no config)
     "texto": "#FFFFFF", "texto_serif": "#F4EEE6",
-    "fundo_palavra": "#7A6652", "fundo_alpha": 0.62, "acento": "#5E4E40",
+    "fundo_palavra": "#F6EFE4", "fundo_alpha": 0.9, "acento": "#EADFCC",
     "fonte_sans": "fonts/Montserrat[wght].ttf", "fonte_serif": "fonts/PlayfairDisplay-Italic[wght].ttf",
     **cfg.get("estilo", {}),
 }
@@ -35,7 +35,7 @@ COR_CINEMA = ("curves=r='0/0.02 0.25/0.25 0.5/0.55 0.75/0.8 1/0.97':"
               "g='0/0.015 0.25/0.225 0.5/0.49 0.75/0.75 1/0.93':"
               "b='0/0.03 0.25/0.19 0.5/0.41 0.75/0.65 1/0.84',"
               "eq=contrast=1.12:saturation=1.0:gamma=0.97,"
-              "vignette=angle=PI/4.6,unsharp=5:5:0.45")
+              "vignette=angle=PI/8,unsharp=5:5:0.45")
 
 
 def font(path, size, weight=None):
@@ -111,6 +111,8 @@ if not os.path.exists(base) or cfg.get("refazer_base"):
             at.append("atempo=2.0"); r /= 2.0
         at.append(f"atempo={r:.4f}")
         vol = ",volume=0.15" if kind == "visual" else ""
+        dd = (s1 - s0) / sp
+        vol += f",afade=t=in:d=0.015,afade=t=out:st={max(dd - 0.02, 0):.3f}:d=0.02"
         f = f"trechos/t{i:02d}.mp4"
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{s0:.3f}", "-t", f"{s1 - s0:.3f}",
                         "-i", cfg["video"], "-map", "0:v:0", "-map", "0:a:0",
@@ -213,27 +215,57 @@ def zoom_at(t):
     return 1.0
 
 
+def kw_layout(k, d):
+    lines = k["text"].split("\n")
+    f = F_BG
+    widest = max(d.textlength(ln, font=f) for ln in lines)
+    if widest > W - 90:
+        f = font(STY["fonte_serif"], int(F_BG.size * (W - 90) / widest), 700)
+    chars, i = [], 0
+    nchar = sum(len(ln) for ln in lines)
+    step = min(0.05, 0.65 / max(nchar, 1))
+    for j, ln in enumerate(lines):
+        x0 = (W - d.textlength(ln, font=f)) / 2
+        for ci, ch in enumerate(ln):
+            if ch.strip():
+                chars.append((ch, x0 + d.textlength(ln[:ci], font=f), j, k["s"] + i * step))
+            i += 1
+    return f, lines, chars
+
+
 def draw_back_layer(t):
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(layer)
+    sd = ImageDraw.Draw(shadow)
     col = hexrgb(STY["fundo_palavra"])
+    any_kw = False
     for k in kws:
         if k["s"] <= t <= k["e"]:
-            a = ease((t - k["s"]) / 0.35) * (1 - ease((t - k["e"] + 0.35) / 0.35))
-            y = k.get("y", cfg.get("palavras_y", 150)) - 40 * (1 - ease((t - k["s"]) / 0.5))
-            lines = k["text"].split("\n")
-            f = F_BG
-            widest = max(d.textlength(ln, font=f) for ln in lines)
-            if widest > W - 90:
-                f = font(STY["fonte_serif"], int(F_BG.size * (W - 90) / widest), 700)
-            for j, ln in enumerate(lines):
-                tw = d.textlength(ln, font=f)
-                d.text(((W - tw) / 2, y + j * f.size * 1.02), ln, font=f,
-                       fill=col + (int(255 * STY["fundo_alpha"] * a),))
+            any_kw = True
+            out_a = 1 - ease((t - k["e"] + 0.35) / 0.35)
+            y = k.get("y", cfg.get("palavras_y", 150))
+            if "_lay" not in k:
+                k["_lay"] = kw_layout(k, d)
+            f, lines, chars = k["_lay"]
+            for ch, x, j, tc in chars:  # cada letra sobe de baixo para cima
+                p = ease((t - tc) / 0.22)
+                if p <= 0:
+                    continue
+                yy = y + j * f.size * 1.02 + 34 * (1 - p)
+                al = p * out_a
+                sd.text((x + 3, yy + 5), ch, font=f, fill=(25, 18, 12, int(150 * al)))
+                d.text((x, yy), ch, font=f, fill=col + (int(255 * STY["fundo_alpha"] * al),))
             if k.get("sub"):
+                last = chars[-1][3] if chars else k["s"]
+                p = ease((t - last - 0.1) / 0.3) * out_a
                 tw = d.textlength(k["sub"], font=F_BG_S)
-                d.text(((W - tw) / 2, y + len(lines) * f.size * 1.02 + 6), k["sub"], font=F_BG_S,
-                       fill=hexrgb(STY["acento"]) + (int(230 * a),))
+                yy = y + len(lines) * f.size * 1.02 + 6 + 14 * (1 - p)
+                sd.text(((W - tw) / 2 + 2, yy + 3), k["sub"], font=F_BG_S, fill=(25, 18, 12, int(140 * p)))
+                d.text(((W - tw) / 2, yy), k["sub"], font=F_BG_S, fill=hexrgb(STY["acento"]) + (int(240 * p),))
+    if any_kw:
+        layer = Image.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(7)), layer)
+        d = ImageDraw.Draw(layer)
     for c in cards:
         if c["s"] <= t <= c["e"]:
             p = (t - c["s"]) / c.get("subida", 0.7)
@@ -370,20 +402,32 @@ if mus:
               f"lowpass=f=9000,aecho=0.8:0.6:60:0.25[m0]")
     fc.append("[m0][voz_sc]sidechaincompress=threshold=0.03:ratio=6:attack=40:release=450[mus]")
     mix.append("[mus]"); k += 1
-sfx_times = [c["s"] for c in cards]
-if sfx_times:
-    subprocess.run([sys.executable, "-I", os.path.join(HERE, "musica.py"), "whoosh", "whoosh.wav"], check=True)
-    for j, st in enumerate(sfx_times):
-        ins += ["-i", "whoosh.wav"]
-        fc.append(f"[{k}:a]aresample=48000,volume=0.55,adelay={int(st * 1000)}|{int(st * 1000)}[s{j}]")
-        mix.append(f"[s{j}]"); k += 1
+sys.path.insert(0, HERE)
+import musica  # noqa: E402
+_d = ImageDraw.Draw(Image.new("RGBA", (8, 8)))
+sfx = np.zeros((int(musica.SR * (TOTAL + 2)), 2))
+rng_s = np.random.default_rng(5)
+for c in cards:
+    w_ = musica.whoosh() * 0.55
+    musica.add(sfx[:, 0], int(c["s"] * musica.SR), w_); musica.add(sfx[:, 1], int(c["s"] * musica.SR), w_)
+for kw in kws:
+    if cfg.get("som_digitacao", True):
+        for ch, x, j, tc in kw_layout(kw, _d)[2]:
+            tk = musica.tecla(rng_s) * cfg.get("volume_digitacao", 0.32)
+            pan = 0.3 + 0.4 * x / W
+            musica.add(sfx[:, 0], int(tc * musica.SR), tk * (1 - pan)); musica.add(sfx[:, 1], int(tc * musica.SR), tk * pan)
+if np.abs(sfx).max() > 0:
+    musica.save_raw("efeitos.wav", sfx)
+    ins += ["-i", "efeitos.wav"]
+    fc.append(f"[{k}:a]aresample=48000[sfx]")
+    mix.append("[sfx]"); k += 1
 FADE = cfg.get("esmaecer", 1.8)
 fc.append(f"{''.join(mix)}amix=inputs={len(mix)}:normalize=0:duration=first,"
           f"afade=t=out:st={TOTAL - FADE - 0.6:.2f}:d={FADE + 0.6:.2f},alimiter=limit=0.95[a]")
 grao = cfg.get("grao", 5)
 fc.append(f"[0:v]noise=alls={grao}:allf=t,fade=t=out:st={TOTAL - FADE:.2f}:d={FADE:.2f}[v]")
 subprocess.run(["ffmpeg", "-v", "error", "-y", *ins, "-filter_complex", ";".join(fc), "-map", "[v]",
-                "-map", "[a]", "-c:v", "libx264", "-crf", "19", "-maxrate", "14M", "-bufsize", "28M", "-preset", "medium", "-pix_fmt", "yuv420p",
+                "-map", "[a]", "-c:v", "libx264", "-crf", "20", "-maxrate", "7M", "-bufsize", "14M", "-preset", "fast", "-pix_fmt", "yuv420p",
                 "-c:a", "aac", "-b:a", "192k", "-t", f"{TOTAL:.3f}", "-movflags", "+faststart", cfg["saida"]],
                check=True)
 print("PRONTO", cfg["saida"], flush=True)

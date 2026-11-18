@@ -24,8 +24,7 @@ sempre vence; quando ele der um ajuste novo, aplique e ofereça gravar aqui como
    para a ordem de leitura bater com a fala. Fica no meio-baixo (y≈1180 de 1920).
 5. **Palavras-chave no fundo, ATRÁS das pessoas e ALTAS** (y≈140), para a cabeça não
    tampar tudo: frases curtas do que está sendo dito (Playfair Display itálico, grande,
-   semitransparente ~70%; em parede clara taupe `#7A6652`, em fundo escuro creme
-   `#F4EEE6`; texto encolhe para caber), recortadas pela segmentação de pessoas.
+   creme CLARO `#F6EFE4` ~90% com sombra suave escura, para aparecer mesmo depois da cor quente de cinema; texto encolhe para caber). Entram LETRA POR LETRA subindo de baixo para cima, com som suave de digitação, recortadas pela segmentação de pessoas.
    Uma a cada ~5–8 s, nos momentos fortes.
 6. **Card do Instagram como HOLOGRAMA** de quem está sendo divulgado: GRANDE (~1040 px
    de largura), surge DE BAIXO com efeito sonoro (whoosh + brilho), treme como
@@ -41,14 +40,14 @@ sempre vence; quando ele der um ajuste novo, aplique e ofereça gravar aqui como
    ambiente do vídeo e a cor da marca divulgada, para não brigar com elas.
 9. **Cor de CINEMA** (referência: `reels/projetos/ref-cor-cinema-tallis.png`):
    meios-tons quentes e encorpados, sombras levemente frias, altas suaves, contraste
-   +, vinheta, nitidez leve e grão. Preset `COR_CINEMA` no `editar_reels.py`.
+   +, vinheta BEM LEVE (`vignette=angle=PI/8`; ele achou a "fumaça preta" das bordas forte demais), nitidez leve e grão. Preset `COR_CINEMA` no `editar_reels.py`.
 10. **Música de fundo que dita o tom sem atrapalhar a narração**: trilha gerada em
     código (`reels/musica.py`, sem direitos autorais; clima `aconchego` = piano de
     feltro, pad quente, ritmo leve, ~84 BPM), ~15 dB abaixo da voz e com ducking
     (abaixa quando falam). Escolher o clima pelo sentimento do vídeo.
 11. **Final com esmaecer para preto** (~1,8 s) enquanto a música baixa; deixar ~1,6 s
     de cauda depois da última fala.
-12. Áudio da voz: passa-alta 80 Hz e loudnorm. Saída 1080×1920, 30 fps, H.264.
+12. Áudio da voz: passa-alta 80 Hz e loudnorm. Saída comprimida para o celular (~60 MB), enviada como anexo. Micro-fade (15–20 ms) em cada emenda de corte para não dar "tic"; nada de chiado agudo nos efeitos (chocalho e teclas sempre macios). Saída 1080×1920, 30 fps, H.264, comprimida para o celular (~60 MB; ele baixa pelo app). Enviar como anexo (`display: attach`).
 
 ## Ferramentas (pasta `reels/` do repositório)
 
