@@ -11,4 +11,4 @@ paredes off-white, sem bagunça, móveis simples e modernos. Planta original man
    Hugging Face: ~5 imagens/dia.
 2. `python3 montar_video.py .` monta `reforma_casa.mp4`.
 
-Status: r1 (sala), r2 (bancada) e r3 (passagem) prontos via Canva. r4–r6 pendentes (cotas do Canva e do Hugging Face esgotadas em 17/11).
+Status: completo em 18/11. r1–r3 via Canva, r4–r6 via FLUX Kontext. Vídeo: `python3 montar_video.py .` (55 s).
