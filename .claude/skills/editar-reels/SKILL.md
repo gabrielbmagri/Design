@@ -49,6 +49,19 @@ sempre vence; quando ele der um ajuste novo, aplique e ofereça gravar aqui como
     de cauda depois da última fala.
 12. Áudio da voz: passa-alta 80 Hz e loudnorm. Saída comprimida para o celular (~60 MB), enviada como anexo. Micro-fade (15–20 ms) em cada emenda de corte para não dar "tic"; nada de chiado agudo nos efeitos (chocalho e teclas sempre macios). Saída 1080×1920, 30 fps, H.264, comprimida para o celular (~60 MB; ele baixa pelo app). Enviar como anexo (`display: attach`).
 
+## Variante: reels "na batida" (barbearia, corte, produto, sem fala)
+
+Quando ele mandar fotos/vídeos curtos de um resultado (ex.: corte de cabelo) e pedir
+"só efeitos e música", SEM narração, SEM legenda e SEM palavras na tela:
+- 10–15 s, trilha phonk/trap com grave (808) gerada por `reels/batida.py` (130 BPM,
+  intro de 4 batidas com riser → drop com impacto → golpe final).
+- `reels/reels_batida.py config.json`: plano a plano na grade da batida, intercalando
+  vídeos e fotos para mostrar todos os ângulos; zoom-soco no bumbo, tremida e separação
+  RGB na caixa, giro com desfoque entre planos, flash no drop e no fim, vibração,
+  dupla exposição (um vídeo "por cima" do outro), CONTORNO DE RAIO elétrico em volta da
+  pessoa (núcleo branco + brilho azul), cor de cinema, grão e esmaecer no fim.
+- Exemplo: `reels/projetos/barbearia-corte/config.json`.
+
 ## Ferramentas (pasta `reels/` do repositório)
 
 - `reels/transcrever.py <video_ou_audio> words.json [medium]`: transcrição palavra a

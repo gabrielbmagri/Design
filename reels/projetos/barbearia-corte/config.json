@@ -1,0 +1,20 @@
+{
+ "fontes": {"v1": "src/v1.mov", "v2": "src/v2.mov", "f1": "src/f1.jpg", "f2": "src/f2.jpg", "f3": "src/f3.jpg"},
+ "trilha": {"bpm": 130, "compassos": 6, "intro": 4},
+ "planos": [
+  {"fonte": "f2", "batidas": 2, "zoom": [1.0, 1.12], "raio": 0.35},
+  {"fonte": "f1", "batidas": 2, "zoom": [1.05, 1.2], "raio": 0.55},
+  {"fonte": "v1", "batidas": 4, "ini": 0.0, "transicao": "giro", "raio": 1.0, "zoom": [1.0, 1.06]},
+  {"fonte": "v2", "batidas": 3, "ini": 0.0, "vel": 0.8, "transicao": "zoom", "sobre": {"fonte": "v1", "ini": 2.0, "alpha": 0.3}},
+  {"fonte": "f3", "batidas": 1, "transicao": "flash", "raio": 0.9, "vibrar": true, "zoom": [1.1, 1.0]},
+  {"fonte": "f1", "batidas": 1, "zoom": [1.15, 1.05]},
+  {"fonte": "f2", "batidas": 1, "zoom": [1.0, 1.12], "vibrar": true},
+  {"fonte": "v2", "batidas": 4, "ini": 3.0, "transicao": "giro", "raio": 1.0},
+  {"fonte": "v1", "batidas": 1, "ini": 2.6, "transicao": "flash", "vibrar": true},
+  {"fonte": "v2", "batidas": 1, "ini": 1.2},
+  {"fonte": "v1", "batidas": 4, "ini": 2.8, "vel": 0.7, "transicao": "zoom", "raio": 0.7, "sobre": {"fonte": "v2", "ini": 0.5, "alpha": 0.35}},
+  {"fonte": "f2", "batidas": 4, "transicao": "giro", "raio": 1.0, "zoom": [1.15, 1.0]}
+ ],
+ "saida": "reels_barbearia_corte.mp4",
+ "esmaecer": 1.0
+}
